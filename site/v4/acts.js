@@ -63,6 +63,7 @@
     $("hud").classList.toggle("hidden", n === 0);
     $("coach").classList.toggle("hidden", n === 0);
     if (n > 0) Guide.setAct(n);
+    setTimeout(() => window.__syncHud && window.__syncHud(), 0);
     $("stage").classList.toggle("dim", n >= 2 && n <= 3);
     $("stage").classList.toggle("gone", n >= 4);
     Stage.setRotate(n <= 1);
@@ -72,7 +73,7 @@
   // ---------- HUD ----------
   function hud() {
     const m = G.mission;
-    $("hud-mission").innerHTML = m ? `${tile(m, "sm")}<div><div class="hud-k">Mission</div><div class="hud-v" style="font-size:15px">${esc(m.mustNot)}</div></div>` : "";
+    $("hud-mission").innerHTML = m ? `${tile(m, "sm")}<div><div class="hud-k">Protecting · ${esc(m.name)}</div><div class="hud-v" style="font-size:15px">${esc(m.mustNot)}</div></div>` : "";
     if (G.liveReserve == null) $("hud-budget").textContent = fmt$(budgetLeft());
     const runtime = (G.liveReserve != null ? G.liveReserve : G.stockDays) / G.threshold;
     $("hud-runtime").textContent = `${Math.round(runtime)} days`;
@@ -102,13 +103,16 @@
     fx(() => gsap.from("#a0-title", { opacity: 0, y: 24, duration: 1.1, ease: "power3.out", delay: 0.2 }), 1500);
   }
   $("btn-take").onclick = () => show(1);
-  $("btn-how").onclick = () => drawer(`<h3>How this works</h3>
-    <p><b>1 · Mission.</b> Pick one mineral and the shortfall your factory can't survive.</p>
-    <p><b>2 · Fault lines.</b> Guess which suppliers would cause that loss. Then the model works backward from the loss to the most likely way it happens. It's often not the biggest supplier, but the ones that fail <i>together</i>.</p>
-    <p><b>3 · Defences.</b> Stockpile, sign offtakes with real producers and pull their ownership files (Sayari). Watch your distance from disaster move.</p>
-    <p><b>4 · History strikes.</b> The real 2023–26 export bans replay against your defences, pausing at four decisions.</p>
-    <p><b>5 · The cliff.</b> 1,000 simulated futures past 10 January 2027, when China's rare-earth pause expires.</p>
-    <p class="faint">Real data: Tavily news, Tradeverifyd trade flows, Sayari ownership and shipments. Every number has an evidence drawer.</p>`);
+  const howHTML = `<h3>How it works, in five steps</h3>
+    <p><b>1 · Pick what to protect.</b> Choose one mineral, such as the one inside electric-car motors, and decide how big a shortage would stop the factory.</p>
+    <p><b>2 · Find the weak spots.</b> You'll see where America gets that mineral. Guess which two suppliers would cause most of a shortage. The answer is often <i>not</i> the biggest supplier, but the suppliers that fail <i>at the same time</i> because they depend on the same source.</p>
+    <p><b>3 · Prepare.</b> Spend your $12B storing extra supply and signing deals with producers outside China. Check who really owns a producer before you sign: some "alternatives" are secretly tied to China.</p>
+    <p><b>4 · Live through 2023–26.</b> The real export bans and price shocks of those years hit your plan, three months at a time. You make four decisions along the way.</p>
+    <p><b>5 · Face the deadline.</b> China's pause ends on 10 January 2027. We play out 1,000 possible futures to see how often your factory keeps running.</p>
+    <p class="faint">Everything uses real data: news via Tavily, trade figures via Tradeverifyd, and company ownership and shipping records via Sayari. Look for the ⓘ buttons to see the evidence.</p>`;
+  $("btn-how").onclick = () => drawer(howHTML);
+  $("btn-gloss0").onclick = () => drawer(Plain.glossaryHTML());
+  $("btn-gloss").onclick = () => drawer(Plain.glossaryHTML());
 
   // ---------- Act 1: mission ----------
   let factoryRAF = null;
@@ -117,9 +121,9 @@
     $("missions").innerHTML = M.map((m, i) => {
       const model = Missions.buildModel(m.id);
       return `<button class="mission" role="listitem" data-m="${m.id}" aria-pressed="${G.mission && G.mission.id === m.id}" style="--tile:${m.color}">
-        ${tile(m)}<h3>${esc(m.mustNot)}</h3><div class="hook">${esc(m.hook)}</div>
-        <div class="pips">${[1, 2, 3].map((p) => `<i class="${p <= m.difficulty ? "on" : ""}"></i>`).join("")}<span style="margin-left:6px">${["", "Easy", "Medium", "Hard"][m.difficulty]}</span></div>
-        <span class="badge-teach">${model.synthetic ? (model.structured ? "Real structure · illustrative variance" : "Teaching network") : "Measured network"}</span></button>`;
+        ${tile(m)}<div class="faint" style="margin-top:-4px">${esc(m.name)}</div><h3>${esc(m.mustNot)}</h3><div class="hook">${esc(m.what || "")}</div><div class="hook" style="color:var(--ink)">${esc(m.hook)}</div>
+        <div class="pips">${[1, 2, 3].map((p) => `<i class="${p <= m.difficulty ? "on" : ""}"></i>`).join("")}<span style="margin-left:6px">${["", "Easier", "Medium", "Harder"][m.difficulty]}</span></div>
+        <span class="badge-teach">${model.synthetic ? "Real suppliers · some figures estimated" : "Measured from real shipping records"}</span></button>`;
     }).join("");
     $("missions").querySelectorAll(".mission").forEach((b, i, all) => {
       b.onclick = () => pick(b.dataset.m);
@@ -132,7 +136,7 @@
     document.documentElement.style.setProperty("--mission", G.mission.color);
     $("missions").querySelectorAll(".mission").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === id ? "true" : "false"));
     $("threshold").classList.remove("hidden");
-    $("btn-a1").disabled = false; $("btn-a1").textContent = `Map the ${G.mission.name.toLowerCase()} network →`;
+    $("btn-a1").disabled = false; $("btn-a1").textContent = `Next: see where ${G.mission.name.toLowerCase()} comes from →`;
     Stage.focus(id, G.mission.color);
     hud(); factory(); thrLive();
     if (!silent) Guide.tick("pick");
@@ -143,9 +147,10 @@
   function thrLive() {
     if (!G.mission) return;
     const model = Missions.buildModel(G.mission.id);
-    const d = RST.distance(model.stressS, G.L), band = RST.band(d);
-    $("thr-live").innerHTML = `<div>A ${Math.round(G.threshold * 100)}% cut for one quarter = <b>${Math.round(G.threshold * 91.25)} days</b> of missing ${esc(G.mission.name.toLowerCase())}.</div>
-      <div>Starting distance to disaster for this line: <b class="num">${d.toFixed(2)}σ</b> <span class="band band-${band}">${band}</span> <span class="faint">(no defences yet · lower threshold = closer to disaster)</span></div>`;
+    const d = RST.distance(model.stressS, G.L);
+    $("thr-live").innerHTML = `<div>In plain terms: about <b>${Math.round(G.threshold * 91.25)} days' worth</b> of ${esc(G.mission.name.toLowerCase())} missing over three months would stop the line.</div>
+      <div>Your starting <b>safety margin</b>, with nothing stored yet: <b class="num">${Plain.margin(d)}</b> ${Plain.zoneTag(d)}. ${Plain.marginSentence(d)} <button class="evidence-btn" id="what-margin">What's a safety margin?</button></div>`;
+    $("what-margin").onclick = () => drawer(Plain.glossaryHTML());
   }
   function factory() {
     const el = $("factory");
@@ -154,7 +159,7 @@
       <rect x="120" y="20" width="14" height="80" fill="rgba(30,41,59,.9)" stroke="#AEB6C4" stroke-width="1.5"/>
       <g id="gear" transform="translate(62 78)"><circle r="13" fill="none" stroke="#E08A52" stroke-width="4" stroke-dasharray="5 4"/><circle r="4" fill="#E08A52"/></g>
       <circle id="lamp" cx="96" cy="70" r="6" fill="#5fc08f"/>
-      <text id="sup" x="80" y="16" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#AEB6C4">supply −0%</text></svg>`;
+      <text id="sup" x="80" y="14" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#AEB6C4">supply −0%</text></svg>`;
     cancelAnimationFrame(factoryRAF);
     let ang = 0, t0 = performance.now();
     const loop = (t) => {
@@ -166,7 +171,7 @@
       if (!g) return;
       g.setAttribute("transform", `translate(62 78) rotate(${ang})`);
       lamp.setAttribute("fill", stopped ? "#FF5A4E" : "#5fc08f");
-      sup.textContent = `supply −${Math.round(s * 100)}%${stopped ? " · STOPPED" : ""}`;
+      sup.textContent = `supply −${Math.round(s * 100)}% · ${stopped ? "STOPPED" : "running"}`;
       sup.setAttribute("fill", stopped ? "#FF5A4E" : "#AEB6C4");
       factoryRAF = requestAnimationFrame(loop);
     };
@@ -184,23 +189,27 @@
     $("a2-badge").onclick = evidence;
     $("a2-badge").title = "Why illustrative? Open the evidence";
     $("a2-stats").classList.add("hidden"); $("a2-tools").innerHTML = ""; $("a2-fine").textContent = "";
-    $("a2-title").textContent = `This is where your ${G.mission.name.toLowerCase()} comes from.`;
-    $("a2-lede").innerHTML = `Node size is each supplier's share of US imports. ${G.model.synthetic ? "Shares are real; how much each one wobbles is illustrative." : `Measured from ${G.model.points} quarters of Sayari shipment records.`} <button class="evidence-btn" id="ev2">ⓘ evidence</button>`;
+    $("a2-title").textContent = `This is where America's ${G.mission.name.toLowerCase()} comes from.`;
+    $("a2-why").classList.add("hidden");
+    $("a2-legend").innerHTML = `<span><i style="border-color:var(--mission)"></i>a supplier · bigger = more supply</span><span><i style="border-color:#c7cbd4"></i>China-linked</span><span><i style="border-color:rgba(148,163,184,.6)"></i>top row: where suppliers get raw material</span><span><span class="net-legend dash" style="position:static;padding:0;background:none"></span>fail together</span>`;
+    $("a2-lede").innerHTML = `Each circle in the middle row is a country or company that sells ${esc(G.mission.name.toLowerCase())} to the US. <b>Bigger circle = more of the supply.</b> The top row is where <i>they</i> get their raw material. ${G.model.synthetic ? "Supplier shares are real; some figures are estimated (yellow badge)." : `Measured from ${G.model.points} quarters of real shipping records (Sayari).`} <button class="evidence-btn" id="ev2">ⓘ evidence</button>`;
     $("ev2").onclick = evidence;
-    net2 = new NetView($("net"), G.model, { plantLabel: `US ${G.mission.mustNot.split(" and ")[0].toLowerCase()} line` });
+    net2 = new NetView($("net"), G.model, { plantLabel: `Your US factory` });
     net2.onTap = (i) => {
       if (step2 !== "guess") { nodeEvidence(G.model.nodes[i]); return; }
       G.guess = net2.toggleSelect(i, 2);
       if (G.guess.length === 2) Guide.tick("guess");
       $("btn-a2").disabled = G.guess.length !== 2;
-      $("btn-a2").textContent = G.guess.length === 2 ? "Reveal the fault lines" : `Tap ${2 - G.guess.length} more`;
+      $("btn-a2").textContent = G.guess.length === 2 ? "Show me the answer" : `Tap ${2 - G.guess.length} more supplier${G.guess.length === 1 ? "" : "s"}`;
     };
     if (gsap && !reduced()) { const tw = gsap.from("#net .n-node, #net .n-t2", { opacity: 0, scale: 0.3, transformOrigin: "center", stagger: 0.12, duration: 0.6, ease: "back.out(1.8)" }); setTimeout(() => tw.progress(1), 2600); }
-    $("btn-a2").disabled = true; $("btn-a2").textContent = "Mapping…";
+    $("btn-a2").disabled = true; $("btn-a2").textContent = "Loading the map…";
     setTimeout(() => {
       if (G.act !== 2) return;
       step2 = "guess"; Guide.tick("look");
-      $("a2-title").textContent = `A ${Math.round(G.threshold * 100)}% shortfall hits. Tap the 2 suppliers you think will cause most of it.`;
+      $("a2-title").textContent = `Quiz: supply suddenly drops by ${Math.round(G.threshold * 100)}%. Which 2 suppliers would be most to blame?`;
+      $("a2-lede").innerHTML = `Tap two circles in the middle row. Most people pick the two biggest. Let's see if that's right. <button class="evidence-btn" id="ev2">ⓘ evidence</button>`;
+      $("ev2").onclick = evidence;
       $("btn-a2").textContent = "Tap 2 suppliers";
     }, reduced() ? 300 : 3200);
   }
@@ -225,25 +234,30 @@
     net2.showLinks(true);
     const names = G.faults.map((i) => shortName(G.model.nodes[i].label)).join(" and ");
     $("a2-title").innerHTML = sameAsBiggest
-      ? `Your two biggest suppliers carry <span class="num">${pct(supplyShare)}</span> of supply — and <span class="num" style="color:var(--danger)">${pct(riskShare)}</span> of the risk.`
-      : `${esc(names)} carry <span class="num">${pct(supplyShare)}</span> of your supply — but <span class="num" style="color:var(--danger)">${pct(riskShare)}</span> of the risk.`;
-    $("a2-lede").innerHTML = `${hits === 2 ? "You spotted both fault lines." : hits === 1 ? "You spotted 1 of 2 fault lines." : "You spotted 0 of 2 fault lines. Most people tap the biggest nodes."} Node size is now each supplier's share of the <b>inferred loss</b>. Red links are suppliers that fail together. <button class="evidence-btn" id="ev2">ⓘ evidence</button>`;
+      ? `Your two biggest suppliers provide <span class="num">${pct(supplyShare)}</span> of supply, but would cause <span class="num" style="color:var(--danger)">${pct(riskShare)}</span> of a shortage.`
+      : `${esc(names)} provide only <span class="num">${pct(supplyShare)}</span> of supply, but would cause <span class="num" style="color:var(--danger)">${pct(riskShare)}</span> of a shortage.`;
+    $("a2-lede").innerHTML = `${hits === 2 ? "✓ You found both weak spots." : hits === 1 ? "You found 1 of the 2 weak spots." : "You found 0 of the 2 weak spots. Most people pick the biggest circles."} The circles have now <b>resized to show how much of a shortage each supplier would cause</b>. Red outlines mark the weak spots. <button class="evidence-btn" id="ev2">ⓘ how is this worked out?</button>`;
+    // Plain-English "why": point at the links that make these suppliers fail together.
+    const linkWhy = G.model.links.filter((l) => G.faults.includes(l.i) || G.faults.includes(l.j)).slice(0, 2).map((l) => `<b>${esc(shortName(G.model.nodes[l.i].label))}</b> and <b>${esc(shortName(G.model.nodes[l.j].label))}</b>: ${esc(String(l.reason || "linked").split(";")[0].slice(0, 120))}`);
+    $("a2-why").classList.remove("hidden");
+    $("a2-why").innerHTML = `<span class="k">Why?</span>${sameAsBiggest ? "Big suppliers matter, but they're even riskier than their size suggests" : "Size isn't everything. These suppliers matter more than their size suggests"} because <b>they tend to fail at the same time</b>, usually because they depend on the same source. The red dashed lines on the map show these links.${linkWhy.length ? `<ul style="margin:6px 0 0;padding-left:18px">${linkWhy.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}`;
     $("ev2").onclick = evidence;
     $("a2-stats").classList.remove("hidden");
-    $("a2-stats").innerHTML = `<div class="stat-card"><div class="k">Share of supply</div><div class="v num" id="st-sup">0%</div></div><div class="stat-card risk"><div class="k">Share of the loss</div><div class="v num" id="st-risk">0%</div></div>`;
+    $("a2-stats").innerHTML = `<div class="stat-card"><div class="k">Their share of supply</div><div class="v num" id="st-sup">0%</div></div><div class="stat-card risk"><div class="k">Their share of a shortage</div><div class="v num" id="st-risk">0%</div></div>`;
     countUp($("st-sup"), supplyShare * 100, { format: (v) => `${Math.round(v)}%` });
     countUp($("st-risk"), riskShare * 100, { format: (v) => `${Math.round(v)}%`, duration: 1.6 });
-    $("a2-fine").textContent = `Conditional, not a forecast: if a ${Math.round(G.threshold * 100)}% loss happens, this is its most likely shape under a normal model${G.regime === "stress" ? " in an export-control regime (linked suppliers ρ = 0.8, China-linked volatility ×1.5; assumed)" : ""}.`;
-    $("a2-tools").innerHTML = `<button class="chip" id="t-up" aria-pressed="false">↑ Follow it upstream</button><button class="chip" id="t-alt" aria-pressed="false">◎ Show 1,000 alternatives</button><button class="chip" id="t-reg" aria-pressed="${G.regime === "calm"}">${G.regime === "stress" ? "Regime: export controls" : "Regime: calm years"}</button>`;
+    $("a2-fine").textContent = `This is an "if it happens" analysis, not a prediction: if a ${Math.round(G.threshold * 100)}% shortage happens, this is the most likely way it would happen${G.regime === "stress" ? ", assuming a crisis where linked suppliers fail together" : ", using calm-year patterns"}.`;
+    $("a2-tools").innerHTML = `<div class="hud-k" style="width:100%">Dig deeper (optional)</div><button class="chip" id="t-up" aria-pressed="false">↑ Where do they get their raw material?</button><button class="chip" id="t-alt" aria-pressed="false">◎ How certain is this?</button><button class="chip" id="t-reg" aria-pressed="${G.regime === "calm"}">${G.regime === "stress" ? "Showing: crisis mode (switch to normal times)" : "Showing: normal times (switch to crisis mode)"}</button>`;
     $("t-up").onclick = () => { Guide.tick("explore"); upstream($("t-up")); };
     $("t-alt").onclick = () => { Guide.tick("explore"); alternatives($("t-alt")); };
     $("t-reg").onclick = () => { Guide.tick("explore"); G.regime = G.regime === "stress" ? "calm" : "stress"; reveal(); };
     if (first) Guide.log(2, "Guessed the fault lines", [{ k: "Spotted", delta: hits, unit: " of 2", fmt: (v) => v }, { k: "Risk carried by the real fault lines", delta: riskShare * 100, unit: "%", fmt: (v) => Math.round(v) }], `${G.guess.map((i) => shortName(G.model.nodes[i].label)).join(" + ")} vs ${names}`);
     explorer();
-    $("btn-a2").disabled = false; $("btn-a2").textContent = "Build your defences →";
+    $("btn-a2").disabled = false; $("btn-a2").textContent = "Next: prepare your defences →";
     announce($("a2-title").textContent);
   }
-  const shortName = (s) => String(s).split(" (")[0].split(" - ")[0];
+  // Friendly supplier names for sentences: drop qualifiers like "(…)", " - …", " direct", "& warehouse lots".
+  const shortName = (s) => String(s).split(" (")[0].split(" - ")[0].replace(/\s+direct\b.*$/i, "").replace(/\s*&\s*warehouse.*$/i, "").replace(/\s+(lots|metal)$/i, "").trim();
   function upstream(btn) {
     const on = btn.getAttribute("aria-pressed") !== "true";
     btn.setAttribute("aria-pressed", on);
@@ -255,8 +269,8 @@
     const alt = G.model.nodes.map((n, i) => i).filter((i) => !["CHN", "HKG"].includes(G.model.nodes[i].country) && !/china/i.test(G.model.nodes[i].label));
     const fl = bp.flows.filter((f) => alt.some((i) => G.model.nodes[i].id === f.from));
     const tot = fl.reduce((s, f) => s + f.loss, 0), toSpof = fl.filter((f) => f.to === bp.spof.id).reduce((s, f) => s + f.loss, 0);
-    const line = tot > 0 ? `<b>${pct(toSpof / tot)}</b> of the loss from your "alternative" suppliers traces back to <b>${esc(spof.label)}</b>.` : `<b>${pct(bp.spof.share)}</b> of the inferred loss converges on <b>${esc(spof.label)}</b>.`;
-    toast(`<b style="color:var(--danger)">Hidden single point of failure.</b> ${line} <span class="faint">Upstream shares: ${esc(spof.evidence || "assumed")}; 1:1 contained element (assumed).</span>`);
+    const line = tot > 0 ? `Even your "non-Chinese" suppliers depend on it: <b>${pct(toSpof / tot)}</b> of the risk from them traces back to <b>${esc(spof.label)}</b>.` : `<b>${pct(bp.spof.share)}</b> of the shortage risk traces back to <b>${esc(spof.label)}</b>.`;
+    toast(`<b style="color:var(--danger)">Hidden weak point found.</b> ${line} You never buy from it directly, but almost everything flows through it. <span class="faint">(Some upstream shares are estimates.)</span>`);
   }
   function alternatives(btn) {
     const on = btn.getAttribute("aria-pressed") !== "true";
@@ -266,7 +280,7 @@
     const q = RST.alternatives(regimeS(), G.L, caps, { samples: 1000, seed: 42 }).map((x) => ({ p10: x.p10 / G.L, p50: x.p50 / G.L, p90: x.p90 / G.L }));
     G.alt = q;
     net2.halos(q);
-    toast(`Rings show the P10–P90 range of each supplier's share across 1,000 alternative ways the same loss could happen. The answer is a range, not one story.`, "good");
+    toast(`The faint rings around each circle show the range across 1,000 slightly different ways the same shortage could unfold. Big rings mean less certainty. The answer is a range, not one fixed story.`, "good");
   }
   $("btn-a2").onclick = () => { if (step2 === "guess" && G.guess.length === 2) reveal(); else if (step2 === "reveal") { Guide.tick("go2"); show(3); } };
   /** Live explorer: drag correlation / volatility and watch the inferred loss re-flow. Exploration only. */
@@ -274,11 +288,11 @@
     const el = $("a2-explore");
     el.classList.remove("hidden");
     G.xRho = G.xRho != null ? G.xRho : 0.8; G.xMult = G.xMult != null ? G.xMult : 1.5;
-    el.innerHTML = `<div class="hud-k">Try it: what drives the fault lines?</div>
-      <label>How tightly linked suppliers fail together (ρ) <div class="slider-row"><input type="range" id="x-rho" min="0" max="0.95" step="0.05" value="${G.xRho}"><b id="x-rho-v">${G.xRho.toFixed(2)}</b></div></label>
-      <label>How much more volatile China-linked supply gets in a crisis <div class="slider-row"><input type="range" id="x-mult" min="1" max="2.5" step="0.1" value="${G.xMult}"><b id="x-mult-v">×${G.xMult.toFixed(1)}</b></div></label>
+    el.innerHTML = `<div class="hud-k">Try it yourself: what makes a weak spot?</div>
+      <label>How often linked suppliers fail at the same time <div class="slider-row"><input type="range" id="x-rho" min="0" max="0.95" step="0.05" value="${G.xRho}"><b id="x-rho-v">${Math.round(G.xRho * 100)}%</b></div></label>
+      <label>How much China-linked supply swings in a crisis <div class="slider-row"><input type="range" id="x-mult" min="1" max="2.5" step="0.1" value="${G.xMult}"><b id="x-mult-v">×${G.xMult.toFixed(1)}</b></div></label>
       <div class="live" id="x-live"></div>
-      <div class="faint">Exploration only. Acts 3–5 use the default export-control assumptions (ρ 0.8, ×1.5). <button class="evidence-btn" id="x-reset">Reset</button></div>`;
+      <div class="faint">Drag a slider and watch the circles resize. This is just for exploring; the rest of the game uses the standard settings. <button class="evidence-btn" id="x-reset">Reset</button></div>`;
     const run = (morph) => {
       const S = RST.stress(G.model.calm, G.model.links.map((l) => ({ ...l, rho: G.xRho })), G.model.chinaIdx, { sigmaMult: G.xMult });
       const { a } = RST.solve(S, G.L);
@@ -287,10 +301,10 @@
       const order = share.map((v, i) => [v, i]).sort((x, y) => y[0] - x[0]);
       const top = [order[0][1], order[1][1]];
       const d = RST.distance(S, G.L);
-      $("x-live").innerHTML = `Biggest risks now: <b>${top.map((i) => esc(shortName(G.model.nodes[i].label))).join(" + ")}</b> carry <b class="num" style="color:var(--danger)">${pct(RST.lossShare(a, top))}</b> of the loss. Distance to disaster: <b class="num">${d.toFixed(2)}σ</b>.`;
+      $("x-live").innerHTML = `Biggest weak spots now: <b>${top.map((i) => esc(shortName(G.model.nodes[i].label))).join(" + ")}</b>, causing <b class="num" style="color:var(--danger)">${pct(RST.lossShare(a, top))}</b> of a shortage. Safety margin: <b class="num">${Plain.margin(d)}</b> ${Plain.zoneTag(d)}.`;
       const sr = $("st-risk"); if (sr) sr.textContent = pct(RST.lossShare(a, G.faults));
     };
-    $("x-rho").oninput = (e) => { G.xRho = +e.target.value; $("x-rho-v").textContent = G.xRho.toFixed(2); Guide.tick("explore"); run(true); };
+    $("x-rho").oninput = (e) => { G.xRho = +e.target.value; $("x-rho-v").textContent = `${Math.round(G.xRho * 100)}%`; Guide.tick("explore"); run(true); };
     $("x-mult").oninput = (e) => { G.xMult = +e.target.value; $("x-mult-v").textContent = `×${G.xMult.toFixed(1)}`; Guide.tick("explore"); run(true); };
     $("x-reset").onclick = () => { G.xRho = 0.8; G.xMult = 1.5; explorer(); run(true); };
     run(false);
@@ -300,7 +314,8 @@
     const M = G.model, S = regimeS(), n = M.nodes.length;
     const sigTable = `<table><tr><th></th>${M.nodes.map((x, j) => `<th>${j + 1}</th>`).join("")}</tr>${S.map((r, i) => `<tr><th>${i + 1}</th>${r.map((v) => `<td>${v.toFixed(1)}</td>`).join("")}</tr>`).join("")}</table>
       <p class="faint">${M.nodes.map((x, j) => `${j + 1} = ${esc(shortName(x.label))}`).join(" · ")}</p>`;
-    drawer(`<h3>The evidence</h3>
+    drawer(`<h3>How this is worked out (for experts)</h3>
+      <p>In plain terms: we look at how much each supplier's shipments usually swing, and how often they swing together. Then we ask "if supply fell by ${Math.round(G.threshold * 100)}%, what's the most likely mix of suppliers behind it?" Suppliers that swing together end up carrying more of the blame than their size suggests.</p>
       ${M.synthetic ? `<p><span class="pill game">illustrative</span> <b>Illustrative network — not measured.</b> ${esc(M.caveats[0] || "")}</p>` : `<p><span class="pill reported">measured</span> Σ estimated from ${M.points} ${esc(M.granularity)} periods of ${esc(M.measure || "")} (Sayari bills of lading), linearly detrended${M.lambda ? `, shrunk toward the diagonal (λ = ${M.lambda}, <span class="pill assumed">assumed</span>)` : ""}.</p>`}
       <h4>Formula</h4><pre>a = L · Σ1 / (1ᵀΣ1)      L = ${G.L.toFixed(1)} (= ${Math.round(G.threshold * 100)}% × 100)</pre>
       ${G.a ? `<p>Inferred loss a = [${G.a.map((v) => v.toFixed(2)).join(", ")}], sum ${G.a.reduce((x, y) => x + y, 0).toFixed(1)}.</p>` : ""}
@@ -366,7 +381,8 @@
   function act3() {
     $("a3-badge").classList.toggle("hidden", !G.model.synthetic);
     $("a3-badge").onclick = evidence;
-    net3 = new NetView($("net3"), G.model, { plantLabel: `US ${G.mission.mustNot.split(" and ")[0].toLowerCase()} line` });
+    $("a3-legend").innerHTML = `<span><i style="border-color:#FF5A4E"></i>weak spot</span><span><i style="border-color:var(--mission)"></i>circle size = share of a shortage</span><span><span class="net-legend dash" style="position:static;padding:0;background:none"></span>fail together</span>`;
+    net3 = new NetView($("net3"), G.model, { plantLabel: `Your US factory` });
     net3.setFaults(G.faults);
     for (const id of G.signed) addCpNode(COUNTERPARTIES.find((c) => c.id === id), false);
     paintRisk(false);
@@ -382,39 +398,41 @@
   }
   function addCpNode(cp, animate = true) {
     const linkTo = isLinked(cp) ? G.model.nodes.map((n, i) => (n.chinaLinked ? i : -1)).filter((i) => i >= 0).slice(0, 1) : [];
-    const k = net3.addNode({ id: cp.id, label: cp.name, country: cp.country, share: Missions.volumeFromDocPerQ(cp.docPerQ) / 100, chinaLinked: isLinked(cp), sub: `offtake · ${cp.country}`, linkReason: cp.ownerChina ? "China-based owner (Sayari)" : "Chinese feedstock (Sayari)" }, animate ? linkTo : []);
+    const k = net3.addNode({ id: cp.id, label: cp.name, country: cp.country, share: Missions.volumeFromDocPerQ(cp.docPerQ) / 100, chinaLinked: isLinked(cp), sub: `your deal · ${cp.country}`, linkReason: cp.ownerChina ? "China-based owner (Sayari)" : "Chinese feedstock (Sayari)" }, animate ? linkTo : []);
     if (!animate && linkTo.length) net3.extraLinks.push({ i: k, j: linkTo[0], on: true });
     return k;
   }
   function renderLevers() {
     const d = dist(effSigma(), G.stockDays);
     if (G.dNow == null) G.dNow = d;
-    const band = RST.band(d), scaleX = (x) => Math.min(100, (x / 5) * 100);
-    $("distance").innerHTML = `<div class="hud-k">Distance to disaster <button class="evidence-btn" id="ev3" style="font-size:11px">ⓘ what is σ?</button></div>
-      <div class="row"><span class="big num" id="dval">${G.dNow.toFixed(1)}σ</span><span class="band band-${band}">${band}</span><span class="faint">started at ${G.dStart.toFixed(1)}σ</span></div>
-      <div class="dscale"><b style="left:${scaleX(G.dStart)}%"></b><i id="dmark" style="left:${scaleX(G.dNow)}%"></i></div>
-      <div class="dlabels"><span>Fragile</span><span>1.5</span><span>Exposed</span><span>2.5</span><span>Resilient</span><span>3.5</span><span>Hardened</span></div>`;
-    countUp($("dval"), d, { from: G.dNow, format: (v) => `${v.toFixed(1)}σ`, duration: 0.8 });
+    const scaleX = (x) => Math.min(100, (x / 5) * 100);
+    $("distance").innerHTML = `<div class="hud-k">Your safety margin <button class="evidence-btn" id="ev3" style="font-size:11px">ⓘ what does this mean?</button></div>
+      <div class="row"><span class="big num" id="dval">${Plain.margin(G.dNow)}</span>${Plain.zoneTag(d)}<span class="faint">you started at ${Plain.margin(G.dStart)}</span></div>
+      <div class="sentence">${Plain.marginSentence(d)}</div>
+      <div class="dscale"><b style="left:${scaleX(G.dStart)}%" title="where you started"></b><i id="dmark" style="left:${scaleX(G.dNow)}%" title="where you are now"></i></div>
+      <div class="dlabels"><span>Danger</span><span>1.5×</span><span>At risk</span><span>2.5×</span><span>Safe</span><span>3.5×</span><span>Very safe</span></div>`;
+    countUp($("dval"), d, { from: G.dNow, format: (v) => `${v.toFixed(1)}×`, duration: 0.8 });
     requestAnimationFrame(() => { const mk = $("dmark"); if (mk) mk.style.left = `${scaleX(d)}%`; });
     G.dNow = d;
-    $("ev3").onclick = () => drawer(`<h3>Distance to disaster</h3><pre>d = (L + S) / √(1ᵀ Σ 1)</pre>
+    $("ev3").onclick = () => drawer(`<h3>Safety margin</h3><p><b>In plain terms:</b> supply always wobbles a bit from quarter to quarter. Your safety margin says how many "typical bad quarters" of wobble your factory could absorb before it stops. 1× means one ordinary bad quarter could stop you. 3× means it would take a shock three times worse than usual. Storing supply and signing good deals both push it up.</p><p><b>For experts</b>, it's the reverse-stress "distance to disaster":</p><pre>d = (L + S) / √(1ᵀ Σ 1)</pre>
       <p>L is the loss that stops your line (${Math.round(G.threshold * 100)}% of a quarter's supply). S is the shortfall your stockpile absorbs. √(1ᵀΣ1) is the typical size of a total supply shock under the current regime, including your offtakes.</p>
-      <p>Bands: Fragile &lt; 1.5σ · Exposed 1.5–2.5σ · Resilient 2.5–3.5σ · Hardened &gt; 3.5σ.</p>
+      <p>Zones: Danger &lt; 1.5× · At risk 1.5–2.5× · Safe 2.5–3.5× · Very safe &gt; 3.5×.</p>
       <p><b>Not a probability.</b> It's a distance under the model, and the atlas guardrail applies.</p>
       <p class="faint">Offtakes move volume out of the existing mix (σ ∝ volume, CV ${CV_NEW}, <span class="pill assumed">assumed</span>). A China-owned or China-fed supplier gets ρ = 0.8 with China-linked nodes (<span class="pill assumed">assumed</span>).</p>`);
     const sc = stockCost(G.stockDays);
-    $("lever-stock").innerHTML = `<h3>Stockpile <span class="num">${G.stockDays} days</span></h3>
-      <input type="range" id="stock" min="0" max="180" step="5" value="${G.stockDays}" aria-label="Days of runtime to stockpile" />
-      <div class="meta"><span>Factory keeps running <b class="num">${Math.round(G.stockDays / G.threshold)} days</b> at a ${Math.round(G.threshold * 100)}% shortfall</span><span class="num">≈ ${fmt$(sc.cost)}${sc.quarters > 1 ? ` over ${sc.quarters} quarters` : ""}</span></div>
-      <div class="faint">Thin market: your own buying pushes the price up (sim.js price model). Purchases are capped at 45 days a quarter.</div>
-      ${(() => { const nd = Math.min(180, G.stockDays + 10); if (nd === G.stockDays) return ""; const dc = stockCost(nd).cost - sc.cost, dd = dist(effSigma(), nd) - dist(effSigma(), G.stockDays); return `<div class="faint">Next 10 days: ≈<b class="num">${fmt$(dc)}</b> for <b class="num">+${dd.toFixed(2)}σ</b> · ≈${fmt$(dc / (dd / 0.1))} per +0.1σ</div>`; })()}`;
+    $("lever-stock").innerHTML = `<h3><span><span class="step-n">1</span>Store extra supply</span> <span class="num">${G.stockDays} days</span></h3>
+      <div class="plain-note">How many days of normal use to keep in storage. Drag the slider.</div>
+      <input type="range" id="stock" min="0" max="180" step="5" value="${G.stockDays}" aria-label="Days of supply to store" />
+      <div class="meta"><span>If your shortage hits, the factory keeps running for <b class="num">${Math.round(G.stockDays / G.threshold)} days</b></span><span class="num">Cost ≈ ${fmt$(sc.cost)}${sc.quarters > 1 ? ` (bought over ${sc.quarters} quarters)` : ""}</span></div>
+      <div class="faint">Buying a lot at once pushes the price up, so big purchases cost more per day. You can buy at most 45 days' worth per quarter.</div>
+      ${(() => { const nd = Math.min(180, G.stockDays + 10); if (nd === G.stockDays) return ""; const dc = stockCost(nd).cost - sc.cost, dd = dist(effSigma(), nd) - dist(effSigma(), G.stockDays); return `<div class="faint">10 more days would cost ≈<b class="num">${fmt$(dc)}</b> and add <b class="num">+${dd.toFixed(2)}×</b> to your safety margin.</div>`; })()}`;
     $("stock").oninput = (e) => { G.stockDays = +e.target.value; Guide.tick("stock"); renderLevers(); hud(); };
     $("stock").onchange = () => { logChange(`Stockpile set to ${G.stockDays} days`); $("stock").focus(); };
     dcurve();
     renderStress();
     const list = cps();
-    $("lever-offtake").innerHTML = `<h3>Sign an offtake <span class="faint" style="font-family:var(--sans);font-weight:500">${list.length} real producers</span></h3>
-      <div class="faint">Cheapest first. Pull the Sayari ownership file before you sign (${fmt$(INVESTIGATE_COST)}).</div>
+    $("lever-offtake").innerHTML = `<h3><span><span class="step-n">2</span>Sign a supply deal (optional)</span> <span class="faint" style="font-family:var(--sans);font-weight:500">${list.length} real producers</span></h3>
+      <div class="plain-note">A deal gets you a steady delivery every quarter from a producer outside China, after a delay of a year or more. <b>But check who owns them first</b> (${fmt$(INVESTIGATE_COST)}): a cheap "alternative" that's secretly tied to China fails when China cuts supply. Scroll sideways to see more producers.</div>
       <div class="carousel">${list.map((cp) => cpCard(cp)).join("") || `<div class="faint">No vetted producers for this mineral yet.</div>`}</div>`;
     $("lever-offtake").querySelectorAll("[data-inv]").forEach((b) => (b.onclick = () => investigate(b.dataset.inv)));
     $("lever-offtake").querySelectorAll("[data-sign]").forEach((b) => (b.onclick = () => sign(b.dataset.sign)));
@@ -425,7 +443,7 @@
   function snapshot() { return { d: dist(effSigma(), G.stockDays), budget: budgetLeft(), runtime: G.stockDays / G.threshold }; }
   function logChange(label, note) {
     const a = G._snap || snapshot(), b = snapshot();
-    Guide.log(3, label, [{ k: "Distance", from: a.d, to: b.d, unit: "σ", dp: 2, fmt: (v) => v.toFixed(2) }, { k: "Budget", delta: (b.budget - a.budget), unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Runtime", delta: b.runtime - a.runtime, unit: " d", fmt: (v) => Math.round(v) }], note);
+    Guide.log(3, label, [{ k: "Safety margin", from: a.d, to: b.d, unit: "×", dp: 2, fmt: (v) => v.toFixed(1) }, { k: "Money", delta: (b.budget - a.budget), unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Factory runs", delta: b.runtime - a.runtime, unit: " days", fmt: (v) => Math.round(v) }], note);
     G._snap = b;
   }
   /** Distance-to-disaster vs stockpile curve (with and without your offtakes). Click to set. */
@@ -443,9 +461,9 @@
       <polyline points="${line(ys0)}" fill="none" stroke="rgba(174,182,196,.55)" stroke-dasharray="4 4" stroke-width="1.5"/>
       <polyline points="${line(ys)}" fill="none" stroke="#E08A52" stroke-width="2.5"/>
       <circle cx="${X(G.stockDays)}" cy="${Y(dist(S, G.stockDays))}" r="6" fill="#E08A52" stroke="#0B0F17" stroke-width="2"/>
-      <text x="${L}" y="${H - 4}">0 d</text><text x="${W - R}" y="${H - 4}" text-anchor="end">180 days stockpiled</text>
+      <text x="${L}" y="${H - 4}">0 days</text><text x="${W - R}" y="${H - 4}" text-anchor="end">180 days stored</text>
       ${[1.5, 2.5, 3.5].filter((v) => v < maxY).map((v) => `<text x="${L - 4}" y="${Y(v) + 3}" text-anchor="end">${v}</text>`).join("")}
-    </svg><div class="faint">Orange: your plan · dashed: stockpile only, no offtakes. Click the chart to set a stockpile.</div>`;
+    </svg><div class="faint">How your safety margin grows as you store more (orange = your plan, dashed = without deals). Background colours are the zones. Click anywhere on the chart to choose an amount.</div>`;
     host.insertAdjacentHTML("beforeend", svg);
     host.querySelector(".dcurve").onclick = (e) => {
       const r = e.currentTarget.getBoundingClientRect();
@@ -460,19 +478,19 @@
     const clean = signed.filter((c) => !isLinked(c)).reduce((s, c) => s + c.docPerQ, 0), linked = signed.filter(isLinked).reduce((s, c) => s + c.docPerQ, 0);
     const cnShare = Math.min(1, G.model.nodes.filter((n) => n.chinaLinked).reduce((s, n) => s + n.share, 0));
     const tests = [
-      { k: `Your threshold: −${Math.round(G.threshold * 100)}%`, need: G.threshold * 91.25, have: clean + linked },
-      { k: "Severe: twice that", need: Math.min(1, 2 * G.threshold) * 91.25, have: clean + linked },
-      { k: `China-linked supply stops (${pct(cnShare)})`, need: cnShare * 91.25, have: clean },
+      { k: `Supply drops ${Math.round(G.threshold * 100)}%`, need: G.threshold * 91.25, have: clean + linked },
+      { k: `Supply drops ${Math.round(Math.min(1, 2 * G.threshold) * 100)}%`, need: Math.min(1, 2 * G.threshold) * 91.25, have: clean + linked },
+      { k: `All China-linked supply stops (${pct(cnShare)})`, need: cnShare * 91.25, have: clean },
     ];
-    el.innerHTML = `<h3>Stress tests <span class="faint" style="font-family:var(--sans);font-weight:500">how long your line runs</span></h3>
+    el.innerHTML = `<h3><span><span class="step-n">3</span>Test your plan</span> <span class="faint" style="font-family:var(--sans);font-weight:500">how long would the factory keep running?</span></h3>
       ${tests.map((t) => {
         const gap = Math.max(0, t.need - t.have) / 91.25; // fraction of demand missing per day
         const runs = gap <= 1e-9 ? Infinity : G.stockDays / gap;
         const ok = runs >= 365;
         return `<div class="stress-row"><span>${esc(t.k)}</span><div class="stress-bar" title="Bar = one year of this shock"><div class="need" style="width:100%"></div><div class="have" style="width:${Math.min(100, (Math.min(runs, 365) / 365) * 100)}%"></div></div>
-          <span class="stress-verdict ${ok ? "ok" : "bad"}">${runs === Infinity ? "holds ✓" : `${Math.round(runs)} d`}</span></div>`;
+          <span class="stress-verdict ${ok ? "ok" : "bad"}">${runs === Infinity ? "never stops ✓" : runs >= 365 ? "a year+ ✓" : `${Math.round(runs)} days`}</span></div>`;
       }).join("")}
-      <div class="faint">Days your stockpile keeps the line running if the shock lasts a year. Offtakes count once they're delivering; China-linked deals deliver nothing when China's supply stops. Simple runway arithmetic, not a forecast.</div>`;
+      <div class="faint">Each bar is one year of that shortage; orange is how long your plan keeps the factory going. Deals count once they're delivering, and deals tied to China deliver nothing if China stops. Simple arithmetic, not a prediction.</div>`;
   }
   function cpCard(cp) {
     const inv = G.investigated.has(cp.id), signed = G.signed.includes(cp.id);
@@ -482,18 +500,18 @@
     const gain = dAfter == null ? null : dAfter - dist(S0, G.stockDays);
     const flags = cp.flags || [];
     return `<div class="cp-card ${signed ? "signed" : ""} ${signed && isLinked(cp) ? "trap" : ""}">
-      <b>${esc(cp.name)}</b><div class="row"><span class="mini">${esc(cp.country)}</span><span class="mini">${fmt$(cp.upfront)}</span><span class="mini">${cp.docPerQ} d/qtr</span><span class="mini">lag ${cp.lag[0]}–${cp.lag[1]}q</span></div>
+      <b>${esc(cp.name)}</b><div class="row"><span class="mini">${esc(cp.country)}</span><span class="mini">${fmt$(cp.upfront)}</span><span class="mini" title="days of supply delivered each quarter">+${cp.docPerQ} days/quarter</span><span class="mini" title="delay before deliveries start">starts in ${cp.lag[0]}–${cp.lag[1]} quarters</span></div>
       ${inv || signed ? `<div class="row">${cp.ownerChina ? `<span class="mini danger">China-based owner</span>` : ""}${flags.filter((f) => f.kind !== "owner").slice(0, 3).map((f) => `<span class="mini ${["labour", "sanctions"].includes(f.kind) ? "danger" : "warn"}" title="${esc(f.why || "")}">${esc(String(f.label).slice(0, 38))}</span>`).join("")}${!cp.ownerChina && !flags.length ? `<span class="mini ok">no flags returned</span>` : ""}</div>
-        <div class="faint">Owner: ${esc(cp.owner || "—")} · TV score ${cp.score != null ? esc(cp.score) : "—"}</div>` : `<div class="faint">Ownership unknown. Investigate to see what Sayari holds.</div>`}
-      ${gain != null ? `<div class="faint">Projected: <b class="num" style="color:${gain > 0.05 ? "var(--ok)" : "var(--ink-2)"}">${gain >= 0 ? "+" : ""}${gain.toFixed(2)}σ</b>${inv ? "" : " (assumes independent)"}${gain > 0.005 ? ` · <b class="num">${fmt$(cp.upfront / (gain / 0.1))}</b> per +0.1σ` : ""}</div>` : `<div class="faint">Signed${isLinked(cp) ? " · fails with China" : ""}</div>`}
-      <div class="btns"><button data-inv="${cp.id}" ${inv || signed ? "disabled" : ""}>${inv ? "Investigated" : `Investigate ${fmt$(INVESTIGATE_COST)}`}</button><button class="sign" data-sign="${cp.id}" ${signed || budgetLeft() < cp.upfront ? "disabled" : ""}>${signed ? "Signed" : "Sign"}</button></div></div>`;
+        <div class="faint">Owner: ${esc(cp.owner || "—")}</div>` : `<div class="faint">Owner unknown. Check before you sign.</div>`}
+      ${gain != null ? `<div class="faint">Safety margin: <b class="num" style="color:${gain > 0.05 ? "var(--ok)" : "var(--ink-2)"}">${gain >= 0 ? "+" : ""}${gain.toFixed(2)}×</b>${inv ? "" : " if it's truly independent"}</div>` : `<div class="faint">${isLinked(cp) ? "✗ Signed, but it fails when China cuts supply" : "✓ Signed"}</div>`}
+      <div class="btns"><button data-inv="${cp.id}" ${inv || signed ? "disabled" : ""}>${inv ? "Checked ✓" : `Check owner · ${fmt$(INVESTIGATE_COST)}`}</button><button class="sign" data-sign="${cp.id}" ${signed || budgetLeft() < cp.upfront ? "disabled" : ""}>${signed ? "Signed" : "Sign deal"}</button></div></div>`;
   }
   function investigate(id) {
     const cp = COUNTERPARTIES.find((c) => c.id === id);
     G.investigated.add(id); G.investCost += INVESTIGATE_COST; Guide.tick("invest");
     const before = dist(effSigma([...G.signed, id], { [id]: true }), G.stockDays), after = dist(effSigma([...G.signed, id]), G.stockDays);
-    if (isLinked(cp)) toast(`<b style="color:var(--danger)">Ownership file: ${esc(cp.name)}.</b> ${cp.ownerChina ? "Sayari shows a China-based owner." : "Sayari shows Chinese feedstock."} The projected gain drops from <b class="num">${(before - dist(effSigma(), G.stockDays)).toFixed(2)}σ</b> to <b class="num">${(after - dist(effSigma(), G.stockDays)).toFixed(2)}σ</b>. Diversification can get worse as you learn more.`);
-    else toast(`Ownership file: ${esc(cp.name)}. ${cp.flags && cp.flags.length ? `Flags: ${esc(cp.flags.map((f) => f.label).join("; ").slice(0, 160))}.` : "No flags returned."} <span class="faint">Sayari findings, not allegations.</span>`, "good");
+    if (isLinked(cp)) toast(`<b style="color:var(--danger)">Careful: ${esc(cp.name)} is tied to China.</b> ${cp.ownerChina ? "Records show its owner is based in China." : "Records show it relies on Chinese raw material."} So it would fail at the same time as China. Its benefit drops from <b class="num">+${(before - dist(effSigma(), G.stockDays)).toFixed(2)}×</b> to <b class="num">+${(after - dist(effSigma(), G.stockDays)).toFixed(2)}×</b>.`);
+    else toast(`${esc(cp.name)}: no ties to China found. ${cp.flags && cp.flags.length ? `Other records: ${esc(cp.flags.map((f) => f.label).join("; ").slice(0, 140))}.` : ""} <span class="faint">(Sayari records, not accusations.)</span>`, "good");
     renderLevers();
     logChange(`Investigated ${cp.name}`, isLinked(cp) ? (cp.ownerChina ? "Sayari: China-based owner" : "Sayari: Chinese feedstock") : "No China link found");
   }
@@ -504,22 +522,23 @@
     addCpNode(cp, true);
     setTimeout(() => paintRisk(true), 650);
     renderLevers();
-    if (isLinked(cp)) setTimeout(() => toast(`<b style="color:var(--danger)">Trap.</b> ${esc(cp.name)} ${cp.ownerChina ? "has a China-based owner in Sayari" : "runs on Chinese feedstock (Sayari)"}. Its edge snaps to the China cluster: when China's controls bite, it fails too. Distance ${before.toFixed(1)}σ → ${G.dNow.toFixed(1)}σ.`), 500);
-    else toast(`Signed ${esc(cp.name)}. Deliveries start in ${cp.lag[0]}–${cp.lag[1]} quarters. Distance ${before.toFixed(1)}σ → ${G.dNow.toFixed(1)}σ.`, "good");
+    if (isLinked(cp)) setTimeout(() => toast(`<b style="color:var(--danger)">That was a trap.</b> ${esc(cp.name)} ${cp.ownerChina ? "is owned from China" : "depends on Chinese raw material"}, so a red line now ties it to China on the map: when China cuts supply, this deal fails too. Safety margin ${Plain.margin(before)} → ${Plain.margin(G.dNow)}.`), 500);
+    else toast(`Deal signed with ${esc(cp.name)}. Deliveries start in ${cp.lag[0]}–${cp.lag[1]} quarters. Safety margin ${Plain.margin(before)} → ${Plain.margin(G.dNow)}.`, "good");
     logChange(`Signed ${cp.name}`, isLinked(cp) ? "Trap: China-linked, so it fails with China" : `Deliveries in ${cp.lag[0]}–${cp.lag[1]} quarters`);
   }
-  $("btn-a3").onclick = () => { Guide.tick("go3"); Guide.log(3, "Started the clock", [{ k: "Distance", delta: G.dNow, unit: "σ", fmt: (v) => v.toFixed(2) }, { k: "Stockpile target", delta: G.stockDays, unit: " d", fmt: (v) => Math.round(v) }], `${G.signed.length} offtake(s) signed`); show(4); };
+  $("btn-a3").onclick = () => { Guide.tick("go3"); Guide.log(3, "Started the clock", [{ k: "Safety margin", delta: G.dNow, unit: "×", fmt: (v) => v.toFixed(1) }, { k: "Stored", delta: G.stockDays, unit: " days", fmt: (v) => Math.round(v) }], `${G.signed.length} deal(s) signed`); show(4); };
 
   // ---------- About ----------
   $("btn-about").onclick = () => drawer(`<h3>About Stockpile Strategist</h3>
-    <p>You run America's critical-minerals reserve with $12B, the size of the real Project Vault. The game teaches one idea: <b>your biggest supplier is not your biggest risk; the suppliers that fail together are.</b></p>
+    <p>You run America's emergency mineral stockpile with $12B, the size of the real "Project Vault" launched in 2026. The game teaches one idea: <b>your biggest supplier isn't always your biggest risk. Suppliers that fail at the same time are.</b></p>
+    ${howHTML}
     <h4>Data</h4><ul>
       <li><b>Tavily:</b> dated pre-quarter news, no foresight, plus the forward-mode news signal.</li>
       <li><b>Tradeverifyd:</b> UN Comtrade US import flows (globe arcs, teaching networks), copper price, disruption checks, entity scores.</li>
       <li><b>Sayari:</b> shipment records (antimony network), beneficial owners, watchlist and risk flags for real producers. Flags are findings, not allegations.</li></ul>
     <h4>Honesty rules</h4><ul><li>Reported vs assumed is labelled everywhere. Illustrative networks carry a badge.</li><li>Reverse-stress results are conditional, not forecasts. σ-distances aren't probabilities. Act 5 counts are counts of <i>simulated</i> futures.</li></ul>
     <p class="faint">Reverse-stress logic adapted from the <a href="https://ethical-tech-colab.github.io/reverse-stress/" target="_blank" rel="noopener">Ethical Tech CoLab Resilience Atlas</a> (teaching material, not a validated product).</p>
-    <p><a href="../classic/">Open Analyst mode</a> for the full six-mineral dashboard (v3).</p>`);
+    <p><a href="../classic/">Open Analyst mode</a> to manage all six minerals at once, quarter by quarter.</p>`);
 
   // ---------- keyboard ----------
   document.addEventListener("keydown", (e) => {
@@ -534,11 +553,19 @@
   const ENTER = { 0: act0, 1: act1, 2: act2, 3: act3, 4: () => Replay.start(G), 5: () => Futures.start(G) };
   window.ACTS = { ENTER, hud, budgetLeft, stockCost, effSigma, dist, isLinked, show };
 
+  // Keep the coach bar just under the HUD, whatever height the HUD wraps to.
+  const syncHud = () => {
+    const r = document.documentElement.style;
+    r.setProperty("--hud-h", `${$("hud").offsetHeight || 64}px`);
+    r.setProperty("--coach-h", `${$("coach").classList.contains("hidden") ? 0 : $("coach").offsetHeight}px`);
+  };
+  window.__syncHud = syncHud;
+  addEventListener("resize", syncHud); setInterval(syncHud, 500);
   // ---------- boot ----------
   Stage.init($("stage")).then(({ arcs }) => {
     const tot = arcs.reduce((s, a) => s + a.value, 0);
     const yr = arcs[0] && arcs[0].year;
-    $("globe-caption").textContent = arcs.length ? `Arcs: ${arcs.length} real US import flows for six critical minerals, $${(tot / 1e6).toFixed(0)}M in ${yr} (Tradeverifyd · UN Comtrade · covered corridors only).` : "";
+    $("globe-caption").textContent = arcs.length ? `The glowing lines on the globe are real shipments of these minerals into the US in ${yr}: ${arcs.length} trade routes worth $${(tot / 1e6).toFixed(0)}M (UN trade data via Tradeverifyd).` : "";
   });
   const start = (location.hash.match(/act=(\d)/) || [])[1];
   const m = (location.hash.match(/m=([a-z]+)/) || [])[1];

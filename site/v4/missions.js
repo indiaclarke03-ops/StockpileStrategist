@@ -5,16 +5,20 @@
   // Mission colour is only ever shown one-at-a-time (single series), never side by side.
   const MISSIONS = [
     { id: "dysprosium", sym: "Dy", num: 66, mass: "162.50", name: "Dysprosium", color: "#9085e9",
-      mustNot: "EV motors and fighter-jet magnets", hook: "In May 2025, Ford's Chicago plant stopped for a week.",
+      mustNot: "EV motors and fighter-jet magnets",
+      what: "A rare-earth metal that keeps the powerful magnets in electric-car motors, wind turbines and missiles working when they get hot.", hook: "In May 2025, Ford's Chicago plant stopped for a week.",
       hookSrc: "https://amp.claimsjournal.com/news/national/2025/06/13/331185.htm", difficulty: 3 },
     { id: "antimony", sym: "Sb", num: 51, mass: "121.76", name: "Antimony", color: "#199e70",
-      mustNot: "Artillery shells", hook: "Antimony jumped 40% the day after China's ban.",
+      mustNot: "Artillery shells",
+      what: "A metal used to harden ammunition and in flame retardants. China mines about half of the world's supply.", hook: "Antimony jumped 40% the day after China's ban.",
       hookSrc: "https://www.kitco.com/news/off-the-wire/2024-12-03/china-bans-export-critical-minerals-us-trade-tensions-escalate", difficulty: 2 },
     { id: "gallium", sym: "Ga", num: 31, mass: "69.723", name: "Gallium", color: "#3987e5",
-      mustNot: "Radar and chips", hook: "China ended direct gallium exports to the US in 2024.",
+      mustNot: "Radar and chips",
+      what: "A metal used in high-speed chips, radar and LEDs. China produces about 98% of the world's new supply.", hook: "China ended direct gallium exports to the US in 2024.",
       hookSrc: "https://2024.minexeurasia.com/?p=2060", difficulty: 2 },
     { id: "cobalt", sym: "Co", num: 27, mass: "58.933", name: "Cobalt", color: "#d55181",
-      mustNot: "Batteries and jet engines", hook: "The DRC banned cobalt exports in February 2025.",
+      mustNot: "Batteries and jet engines",
+      what: "A metal in rechargeable batteries and jet-engine parts. Most is mined in the Democratic Republic of Congo (DRC) and refined in China.", hook: "The DRC banned cobalt exports in February 2025.",
       hookSrc: "https://www.mining.com/web/column-can-the-congo-tame-the-wild-cobalt-market", difficulty: 1 },
   ];
 

@@ -21,6 +21,14 @@ To play locally, open `site/v4/index.html` in a browser. There's no build step, 
 | **4 · History strikes** | The real 2023–26 events replay against your defences, with a do-nothing ghost and four decision pauses. A validation card reports Match / Partial / Miss honestly | Unchanged `sim.js` engine · cited events · Tavily intel |
 | **5 · The cliff** | 1,000 simulated futures draw in, split by cliff branch. Then a report card, benchmarks and a shareable PNG | Unchanged `montecarlo.js` · Tavily news signal |
 
+### Written for newcomers
+
+- **Plain language throughout.**
+  - The front page explains the situation in three cards: the problem, the 10 January 2027 deadline, and your job.
+  - Every step opens with a plain "what you'll do here".
+  - Jargon is replaced: "distance to disaster (σ)" becomes a **safety margin** ("your factory could survive a shortage 2.6× worse than a typical bad quarter"), shown in zones from Danger to Very safe. "Days of cover" becomes days of supply stored, "offtake" becomes supply deal, "political capital" becomes public trust.
+- **Key terms** opens a plain-English glossary (`site/v4/plain.js`, shared by both modes). The maths sits in "for experts" drawers.
+
 ### How you know what to do, and what your decisions did
 
 - **Coach bar (both modes).** It tells you the current step and why it matters, and ticks steps off as you complete them.

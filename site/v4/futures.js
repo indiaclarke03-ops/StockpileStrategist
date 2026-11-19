@@ -1,7 +1,7 @@
 /* Stockpile Strategist v4 — Act 5: the cliff (montecarlo.js, unchanged maths) + report card. */
 (function (root) {
   const D = root.GAME_DATA, EXT = D.EXT || {}, { QUARTERS, FORWARD } = D;
-  const BR = { extend: { c: "#3987e5", l: "Pause extended again" }, lapse: { c: "#d55181", l: "Pause lapses: expanded controls return" }, deal: { c: "#c98500", l: "New deal" } };
+  const BR = { extend: { c: "#3987e5", l: "China extends the pause" }, lapse: { c: "#d55181", l: "The pause ends and restrictions return" }, deal: { c: "#c98500", l: "A new US–China deal" } };
   const FAIL = "#FF5A4E";
 
   function missionRun(fn, k) {
@@ -23,16 +23,16 @@
     const res = MonteCarlo.run(s, { paths: 1000, signal, track: k, failAt: G.threshold, seed: 2027 });
     const survived = res.paths.filter((p) => p.failQ < 0).length;
     G.futures = { res, survived };
-    U.$("a5-title").textContent = "1,000 futures";
+    U.$("a5-title").textContent = "Playing out 1,000 possible futures…";
     U.$("report").classList.add("hidden");
     U.$("a5-dock").innerHTML = "";
     const counts = { extend: 0, lapse: 0, deal: 0 };
     res.paths.forEach((p) => counts[p.branch]++);
-    U.$("fan-labels").innerHTML = Object.entries(BR).map(([b, v]) => `<span>${v.l} · <b class="num">${counts[b]}</b> <i style="background:${v.c}"></i></span>`).join("") + `<span>Line stops <i style="background:${FAIL}"></i></span>`;
+    U.$("fan-labels").innerHTML = Object.entries(BR).map(([b, v]) => `<span>${v.l} · <b class="num">${counts[b]}</b> <i style="background:${v.c}"></i></span>`).join("") + `<span>Red = factory stopped <i style="background:${FAIL}"></i></span>`;
     U.$("whatif").classList.add("hidden");
     draw(res, () => {
       Guide.tick("fan");
-      U.$("a5-title").innerHTML = `In <span class="num" id="surv">0</span> of 1,000 simulated futures, your factory keeps running.`;
+      U.$("a5-title").innerHTML = `In <span class="num" id="surv">0</span> out of 1,000 possible futures, your factory keeps running through 2027.`;
       U.countUp(U.$("surv"), survived, { duration: 1.4, format: (v) => Math.round(v).toLocaleString() });
       report(G, res, survived, signal);
       Guide.tick("card");
@@ -45,17 +45,18 @@
     const U = root.UI, k = G.mission.id, el = U.$("whatif");
     const w = (G.whatif = { extra: 0, signal: baseSignal, thr: G.threshold, show: { extend: true, lapse: true, deal: true } });
     el.classList.remove("hidden");
-    el.innerHTML = `<label>What if you'd held more going into 2027? <div class="slider-row"><input type="range" id="w-extra" min="0" max="120" step="5" value="0"><b id="w-extra-v">+0 days</b></div></label>
-      <label>News signal (Tavily lexicon: −1 calm · +1 escalation) <div class="slider-row"><input type="range" id="w-sig" min="-1" max="1" step="0.05" value="${baseSignal}"><b id="w-sig-v">${baseSignal >= 0 ? "+" : ""}${baseSignal.toFixed(2)}</b></div></label>
-      <label>Line stops at a shortfall of <div class="slider-row"><input type="range" id="w-thr" min="10" max="40" step="1" value="${Math.round(G.threshold * 100)}"><b id="w-thr-v">${Math.round(G.threshold * 100)}%</b></div></label>
-      <div><div class="hud-k">Show branches</div><div class="branch-chips">${Object.entries(BR).map(([b, v]) => `<button data-br="${b}" aria-pressed="true"><i style="display:inline-block;width:10px;height:3px;background:${v.c};vertical-align:middle;margin-right:5px"></i>${v.l.split(":")[0]}</button>`).join("")}</div></div>
-      <div><div class="hud-k">Survive in the what-if</div><div class="delta" id="w-out" aria-live="polite">${baseSurvived} / 1,000</div><div class="faint" id="w-cliff"></div></div>`;
+    el.innerHTML = `<div style="grid-column:1/-1" class="plain-note"><b>What if…?</b> Drag any slider and all 1,000 futures re-run instantly.</div>
+      <label>…you had stored more before 2027? <div class="slider-row"><input type="range" id="w-extra" min="0" max="120" step="5" value="0"><b id="w-extra-v">+0 days</b></div></label>
+      <label>…the news were calmer or more tense? <span class="faint">(today's real headlines score ${baseSignal >= 0 ? "+" : ""}${baseSignal.toFixed(2)})</span><div class="slider-row"><input type="range" id="w-sig" min="-1" max="1" step="0.05" value="${baseSignal}"><b id="w-sig-v">${baseSignal >= 0 ? "+" : ""}${baseSignal.toFixed(2)}</b></div><span class="faint">−1 calm · +1 escalating</span></label>
+      <label>…your factory could take a bigger or smaller shortage? <div class="slider-row"><input type="range" id="w-thr" min="10" max="40" step="1" value="${Math.round(G.threshold * 100)}"><b id="w-thr-v">${Math.round(G.threshold * 100)}%</b></div></label>
+      <div><div class="hud-k">Show which futures</div><div class="branch-chips">${Object.entries(BR).map(([b, v]) => `<button data-br="${b}" aria-pressed="true"><i style="display:inline-block;width:10px;height:3px;background:${v.c};vertical-align:middle;margin-right:5px"></i>${v.l.split(":")[0]}</button>`).join("")}</div></div>
+      <div><div class="hud-k">Futures where the factory keeps running</div><div class="delta" id="w-out" aria-live="polite">${baseSurvived} / 1,000</div><div class="faint" id="w-cliff"></div></div>`;
     const rerun = () => {
       const s = G.history.state;
       const res = MonteCarlo.run(s, { paths: 1000, signal: w.signal, track: k, failAt: w.thr, seed: 2027, overrideStart: w.extra ? { [k]: s.minerals[k].reserveDoC + w.extra } : null });
       const surv = res.paths.filter((p) => p.failQ < 0).length, d = surv - baseSurvived;
       U.$("w-out").innerHTML = `${surv} / 1,000 ${Guide.chips([{ k: "vs your plan", delta: d, unit: "", fmt: (v) => Math.round(v) }])}`;
-      U.$("w-cliff").textContent = `Cliff branches: extend ${Math.round(res.cliffWeights.extend * 100)}% · lapse ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}%`;
+      U.$("w-cliff").textContent = `Chance of each outcome in the simulation: pause extended ${Math.round(res.cliffWeights.extend * 100)}% · restrictions return ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}%`;
       draw(res, null, { instant: true, show: w.show });
       Guide.tick("whatif");
     };
@@ -82,7 +83,7 @@
       ["Q4 26", ...FORWARD.quarters.map((q) => `Q${q.slice(5)} 27`)].forEach((lab, i) => { c.fillText(lab, x(i) - 16, H - 10); });
       const stepT = max > 150 ? 60 : 30; const ticks = []; for (let v = 0; v <= max; v += stepT) ticks.push(v);
       ticks.forEach((v) => { c.beginPath(); c.moveTo(L, y(v)); c.lineTo(W - R, y(v)); c.stroke(); c.fillText(String(v), 8, y(v) + 4); });
-      c.fillText("days of cover in reserve", L, 12);
+      c.fillText("days of supply in your stockpile", L, 12);
       c.fillStyle = "rgba(255,90,78,.10)"; c.fillRect(L, y(0) - 6, W - L - R, 6);
     };
     axes();
@@ -113,8 +114,8 @@
       c.closePath(); c.fill();
       c.strokeStyle = "#EEF1F6"; c.lineWidth = 2.2; c.beginPath(); p50.forEach((v, t) => (t ? c.lineTo(x(t), y(v)) : c.moveTo(x(t), y(v)))); c.stroke();
       c.fillStyle = "#EEF1F6"; c.font = "600 11px Inter, sans-serif";
-      c.fillText("median", x(n) + 6, y(p50[n]) + 4);
-      c.fillStyle = "#AEB6C4"; c.fillText("P10–P90", x(n) + 6, y(p90[n]) + 4);
+      c.fillText("middle future", x(n) + 6, y(p50[n]) + 4);
+      c.fillStyle = "#AEB6C4"; c.fillText("most futures", x(n) + 6, y(p90[n]) + 4);
     };
     if (opts.instant) step(); else setTimeout(step, 30);
   }
@@ -137,21 +138,22 @@
     el.classList.remove("hidden");
     el.innerHTML = `<div><div class="grade">${grade}</div><div class="faint" style="text-align:center">${Math.round(score)} / 100</div></div>
       <div><div class="report-rows">
-        <div class="rr"><div class="k">Fault lines spotted</div><div class="v">${G.guessHits || 0} of 2</div></div>
-        <div class="rr"><div class="k">Distance to disaster</div><div class="v">${G.dStart.toFixed(1)}σ → ${dFinal.toFixed(1)}σ</div><div class="faint">${RST.band(dFinal)} · not a probability</div></div>
-        <div class="rr"><div class="k">History, 2023–26</div><div class="v">${Math.round(h.yours)} d lost</div><div class="faint">doing nothing: ${Math.round(h.ghost)} d · test: ${h.verdict}</div></div>
-        <div class="rr"><div class="k">Simulated futures survived</div><div class="v">${survived} / 1,000</div><div class="faint">news signal ${signal >= 0 ? "+" : ""}${signal.toFixed(2)} <button class="evidence-btn" id="why-sig">why?</button></div></div>
+        <div class="rr"><div class="k">Step 2 · weak spots found</div><div class="v">${G.guessHits || 0} of 2</div></div>
+        <div class="rr"><div class="k">Step 3 · safety margin</div><div class="v">${Plain.margin(G.dStart)} → ${Plain.margin(dFinal)}</div><div class="faint">${Plain.zone(dFinal).label}</div></div>
+        <div class="rr"><div class="k">Step 4 · days factory stopped</div><div class="v">${Math.round(h.yours)} days</div><div class="faint">without a plan: ${Math.round(h.ghost)} days</div></div>
+        <div class="rr"><div class="k">Step 5 · futures survived</div><div class="v">${survived} / 1,000</div><div class="faint">based on today's news <button class="evidence-btn" id="why-sig">how?</button></div></div>
       </div>
-      <table class="bench"><thead><tr><th>Strategy (${U.esc(G.mission.name)} only)</th><th>Days lost 2023–26</th><th>Spent</th><th>Futures survived</th></tr></thead><tbody>
+      <h4 style="margin:16px 0 4px;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ore)">How you compare with other strategies (${U.esc(G.mission.name)})</h4>
+      <table class="bench"><thead><tr><th>Strategy</th><th>Days factory stopped</th><th>Money spent</th><th>Futures survived</th></tr></thead><tbody>
         <tr class="you"><td>You</td><td>${Math.round(h.yours)}</td><td>${U.fmt$(h.state.spent)}</td><td>${(survived / 10).toFixed(0)}%</td></tr>
         ${benches.map((b) => `<tr><td>${U.esc(b.label)}</td><td>${Math.round(b.down)}</td><td>${U.fmt$(b.spent)}</td><td>${(b.surv * 100).toFixed(0)}%</td></tr>`).join("")}
       </tbody></table>
-      <p class="faint">Counts are of simulated futures under the forward model (base rates from 2023–26, cliff branches weighted by the Tavily signal). They are not probabilities of reality.</p></div>`;
+      <p class="faint">"Futures survived" counts simulated futures, based on how often China and the DRC acted in 2023–26 and on today's news. It's a test of your plan, not a prediction.</p></div>`;
     U.fx(() => root.gsap.from(el, { opacity: 0, y: 20, duration: 0.6 }), 800);
-    U.$("why-sig").onclick = () => U.drawer(`<h3>Why the news signal is ${signal >= 0 ? "+" : ""}${signal.toFixed(2)}</h3>
-      <p>The past week's headlines are scored with a published keyword lexicon: escalation terms +1, de-escalation −1. The signal shifts the cliff branches: extend ${Math.round(res.cliffWeights.extend * 100)}% · lapse ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}% (base 45/35/20, <span class="pill assumed">assumed</span>).</p>
+    U.$("why-sig").onclick = () => U.drawer(`<h3>How today's news shapes the futures</h3>
+      <p>We read this week's real headlines about minerals and China. Words like "ban", "restrict" or "retaliate" push the score up; "extend", "truce" or "ease" push it down. Today's score is <b>${signal >= 0 ? "+" : ""}${signal.toFixed(2)}</b>, which makes the outcomes: pause extended ${Math.round(res.cliffWeights.extend * 100)}% · restrictions return ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}% (starting from 45/35/20, an estimate).</p>
       <ul>${((EXT.signal || {}).items || []).map((i) => `<li><a href="${U.esc(i.url)}" target="_blank" rel="noopener">${U.esc(i.title)}</a> <span class="faint">${U.esc(i.source || "")} · ${U.esc(i.date || "")} · ${i.score > 0 ? "+1" : i.score < 0 ? "−1" : "0"} ${U.esc((i.matched || []).join(", "))}</span></li>`).join("")}</ul>`);
-    U.$("a5-dock").innerHTML = `<button class="ghost" id="btn-again">Play another mineral</button><button class="primary big" id="btn-share" data-primary>Share result</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Open Analyst mode</a>`;
+    U.$("a5-dock").innerHTML = `<button class="ghost" id="btn-again">Try another mineral</button><button class="primary big" id="btn-share" data-primary>Save my result</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit" title="Manage all six minerals at once">Analyst mode (all minerals)</a>`;
     U.$("btn-again").onclick = () => { Guide.tick("share"); Object.assign(G, { guess: [], faults: [], stockDays: 0, signed: [], investigated: new Set(), investCost: 0, dStart: null, dNow: null, regime: "stress" }); Router.show(1); };
     U.$("btn-share").onclick = () => { Guide.tick("share"); Share.card(G); };
   }

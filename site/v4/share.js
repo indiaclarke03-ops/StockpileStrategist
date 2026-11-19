@@ -14,14 +14,14 @@
     x.fillStyle = "#EEF1F6"; x.font = "700 86px Space Grotesk, Inter, sans-serif"; x.textAlign = "center"; x.fillText(m.sym, 155, 186); x.textAlign = "left";
     x.fillStyle = "#7D8698"; x.font = "500 16px JetBrains Mono, monospace"; x.fillText(m.mass, 126, 226);
     x.fillStyle = "#E08A52"; x.font = "600 18px JetBrains Mono, monospace"; x.fillText("STOCKPILE STRATEGIST · FIND THE FAULT LINES", 280, 96);
-    x.fillStyle = "#EEF1F6"; x.font = "700 44px Space Grotesk, Inter, sans-serif"; x.fillText(`Mission: ${m.mustNot}`, 280, 150);
-    x.fillStyle = "#AEB6C4"; x.font = "500 22px Inter, sans-serif"; x.fillText(`Line stops at a ${Math.round(G.threshold * 100)}% shortfall · 10 Jan 2027 cliff`, 280, 190);
+    x.fillStyle = "#EEF1F6"; x.font = "700 44px Space Grotesk, Inter, sans-serif"; x.fillText(`Protecting: ${m.mustNot}`, 280, 150);
+    x.fillStyle = "#AEB6C4"; x.font = "500 22px Inter, sans-serif"; x.fillText(`${m.name} · factory stops at a ${Math.round(G.threshold * 100)}% shortage · 10 Jan 2027 deadline`, 280, 190);
     x.fillStyle = "#E08A52"; x.font = "800 190px Space Grotesk, Inter, sans-serif"; x.fillText(r.grade, 920, 250);
     const rows = [
-      ["Fault lines spotted", `${r.guessHits} of 2`],
-      ["Distance to disaster", `${G.dStart.toFixed(1)}σ → ${r.dFinal.toFixed(1)}σ`],
-      ["History 2023–26", `${Math.round(r.yours)} days lost (doing nothing: ${Math.round(r.ghost)})`],
-      ["Simulated futures survived", `${r.survived} of 1,000`],
+      ["Weak spots found", `${r.guessHits} of 2`],
+      ["Safety margin", `${G.dStart.toFixed(1)}× → ${r.dFinal.toFixed(1)}× (${Plain.zone(r.dFinal).label})`],
+      ["2023–26: factory stopped", `${Math.round(r.yours)} days (no plan: ${Math.round(r.ghost)})`],
+      ["2027: futures survived", `${r.survived} of 1,000`],
     ];
     rows.forEach(([k, v], i) => {
       const yy = 330 + i * 62;

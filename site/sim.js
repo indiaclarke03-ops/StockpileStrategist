@@ -240,9 +240,9 @@
 
   const STRATEGIES = {
     doNothing: { label: "Do nothing", fn: () => ({}) },
-    jogmec: { label: "JOGMEC 60-day", fn: (s) => topUp(s, 60) },
+    jogmec: { label: "Japan's rule: always hold 60 days", fn: (s) => topUp(s, 60) },
     panic: {
-      label: "Panic buyer",
+      label: "Panic buyer: only buy after bad news",
       fn: (s, last) => {
         if (!last) return {};
         // Buys only after it sees an announcement hit a mineral: +40 DoC on each one hit.
@@ -257,7 +257,7 @@
       },
     },
     hindsight: {
-      label: "Perfect hindsight (heuristic)",
+      label: "Cheater: knows the future",
       fn: (s) => {
         // Knows the future: builds 90 DoC on minerals cut within the next two quarters,
         // and keeps topping up while a cut is still biting. Buys nothing else.

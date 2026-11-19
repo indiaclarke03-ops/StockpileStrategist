@@ -53,11 +53,11 @@
     const c = EXT.copper;
     $("stats").innerHTML = `
       <div class="stat"><div class="k">Quarter</div><div class="v">${state.done ? "Done" : qLabel(state.quarter)}</div><div class="s">turn ${Math.min(state.qi + 1, 14)} of 14</div></div>
-      <div class="stat"><div class="k">Budget</div><div class="v">${fmt$(state.budget)}</div><div class="s">of $12.00B</div></div>
-      <div class="stat"><div class="k">Political capital</div><div class="v">${Math.round(state.politicalCapital)}</div><div class="pcbar"><i style="width:${state.politicalCapital}%;background:${state.politicalCapital < 40 ? "var(--danger)" : state.politicalCapital < 70 ? "var(--warn)" : "var(--ok)"}"></i></div></div>
-      <div class="stat"><div class="k">Industry downtime</div><div class="v">${Math.round(state.downtimeDays)} d</div><div class="s">${Math.round(idle)} d if you'd done nothing</div></div>
+      <div class="stat"><div class="k">Money left</div><div class="v">${fmt$(state.budget)}</div><div class="s">of $12.00B</div></div>
+      <div class="stat" title="How much the public and Congress trust your handling of the reserve. Falls when factories stop or after questionable deals."><div class="k">Public trust</div><div class="v">${Math.round(state.politicalCapital)}</div><div class="pcbar"><i style="width:${state.politicalCapital}%;background:${state.politicalCapital < 40 ? "var(--danger)" : state.politicalCapital < 70 ? "var(--warn)" : "var(--ok)"}"></i></div></div>
+      <div class="stat" title="Total days US factories were stopped by shortages, across all six minerals"><div class="k">Factory days lost</div><div class="v">${Math.round(state.downtimeDays)} days</div><div class="s">${Math.round(idle)} if you'd done nothing</div></div>
       ${c && c.value != null ? `<div class="stat" title="Tradeverifyd tia_commodity_price"><div class="k">Copper</div><div class="v" style="font-size:13px">${esc(Number(c.value).toFixed(2))} ${esc(c.unit || "")}</div><div class="s">Tradeverifyd · ${esc(c.date || "")}</div></div>` : ""}
-      <div class="stat"><div class="k">Cliff</div><div class="v" style="font-size:13px">10 Jan 2027</div><div class="s">${days} days away</div></div>`;
+      <div class="stat" title="China's pause on its toughest new restrictions ends on 10 January 2027"><div class="k">China's pause ends</div><div class="v" style="font-size:13px">10 Jan 2027</div><div class="s">${days} days from today</div></div>`;
     $("ledger-n").textContent = ledger.length;
   }
 
@@ -66,13 +66,13 @@
     const any = KEYS.some((k) => orders.buy[k] || orders.release[k]) || orders.offtakes.length;
     if (any) coachDone.add("orders");
     const steps = [
-      { id: "read", label: "Read the intel", hint: "Skim what was knowable before this quarter: Tavily news, what governments were doing, and the timeline so far." },
-      { id: "pick", label: "Inspect a mineral", hint: "Click a mineral row. The detail panel shows real prices against the model, its supply risk, and your order controls." },
-      { id: "orders", label: "Set orders", hint: "Drag Buy or Release. The preview shows the cost, the price your buying causes, and the change in distance to disaster before you commit." },
-      { id: "commit", label: "Commit the quarter", hint: "Press Commit (or Enter). The real event for this quarter fires, and you'll see what it did to each mineral and what the real world did." },
+      { id: "read", label: "Read the news", hint: "Read the briefing on the left: real news from just before this quarter. You don't know what happens next." },
+      { id: "pick", label: "Pick a mineral", hint: "Click a row in the table. Underneath, you'll see its price, its stockpile and how safe it is." },
+      { id: "orders", label: "Decide what to buy", hint: "Drag 'Buy more supply'. The box below it shows the cost and how much safer you get, before anything is final." },
+      { id: "commit", label: "Lock it in", hint: "Press 'Lock in my plan' (or Enter). The real event for this quarter happens, and you'll see what it did." },
     ];
     const cur = steps.find((s) => !coachDone.has(s.id)) || steps[3];
-    $("coach").innerHTML = `<div><div class="k">${qLabel(state.quarter)} · decide, then reality strikes</div><div class="hint"><b>Step ${steps.indexOf(cur) + 1}/4:</b> ${esc(cur.hint)}</div></div>
+    $("coach").innerHTML = `<div><div class="k">${qLabel(state.quarter)} · each turn: read, decide, then see what really happened</div><div class="hint"><b>What to do now:</b> ${esc(cur.hint)}</div></div>
       <ol>${steps.map((s) => `<li class="${coachDone.has(s.id) ? "done" : s === cur ? "cur" : ""}">${coachDone.has(s.id) ? "✓ " : ""}${esc(s.label)}</li>`).join("")}</ol>`;
   }
   const tick = (id) => { if (!coachDone.has(id)) { coachDone.add(id); renderCoach(); } };
@@ -95,16 +95,16 @@
     const prior = EVENTS.filter((e) => new Date(e.date) < start).slice(-6).reverse();
     const body = {
       news: brief && brief.items && brief.items.length ? brief.items.map((i) => `<div class="intel-item news"><div class="d">${esc(i.date)} · <a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.source || domain(i.url))}</a></div><b>${esc(i.title)}</b>${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ""}</div>`).join("") : `<div class="faint">No cached Tavily briefing for this quarter.</div>`,
-      world: world.length ? world.map((r) => `<div class="intel-item world"><div class="d">${esc(r.date)} · ${esc(r.actor)}</div>${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("") : `<div class="faint">Nothing yet. Early on, Western responses were rules and grants rather than purchases.</div>`,
+      world: world.length ? world.map((r) => `<div class="intel-item world"><div class="d">${esc(r.date)} · ${esc(r.actor)}</div>${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("") : `<div class="faint">Nothing yet. Early on, governments mostly made rules and gave grants rather than buying minerals.</div>`,
       timeline: (prior.length ? prior : []).map((e) => `<div class="intel-item timeline"><div class="d">${e.date} · ${esc(e.actor)}</div>${esc(e.headline)}</div>`).join("") + (prior.length < 2 ? BACKGROUND.map((b) => `<div class="intel-item"><div class="d">${b.date} · background</div>${esc(b.text)}</div>`).join("") : ""),
     };
-    $("intel").innerHTML = `<h2>Intel briefing</h2><p class="qtitle">${qLabel(q)}</p>
-      <div class="faint">Only what was knowable before ${start.toISOString().slice(0, 10)}.</div>
-      <div class="tabs" role="tablist">${[["news", `News (${brief && brief.items ? brief.items.length : 0})`], ["world", `Real world (${world.length})`], ["timeline", "Timeline"]].map(([id, l]) => `<button role="tab" aria-pressed="${intelTab === id}" data-tab="${id}">${l}</button>`).join("")}</div>
-      ${intelTab === "news" ? `<div class="faint">Tavily, ${esc(brief && brief.window ? brief.window.join(" → ") : "")}</div>` : intelTab === "world" ? `<div class="faint">What governments and industry had already done (Tavily-sourced). Compare your moves.</div>` : ""}
+    $("intel").innerHTML = `<h2>Briefing</h2><p class="qtitle">${qLabel(q)}</p>
+      <div class="faint">What you could have known on ${start.toISOString().slice(0, 10)}. Nothing from the future.</div>
+      <div class="tabs" role="tablist">${[["news", `News (${brief && brief.items ? brief.items.length : 0})`], ["world", `What governments did (${world.length})`], ["timeline", "Events so far"]].map(([id, l]) => `<button role="tab" aria-pressed="${intelTab === id}" data-tab="${id}">${l}</button>`).join("")}</div>
+      ${intelTab === "news" ? `<div class="faint">Real headlines from the previous three months (found with Tavily).</div>` : intelTab === "world" ? `<div class="faint">What the US, Japan, the EU and companies had already done. Compare your moves with theirs.</div>` : `<div class="faint">The restrictions and shocks that have happened so far.</div>`}
       ${body[intelTab]}
-      <button class="ghost" style="width:100%;margin-top:8px" id="btn-read">✓ Got it, on to orders</button>
-      ${lastReport ? `<button class="ghost" style="width:100%;margin-top:6px" id="btn-lastq">Review ${qLabel(lastReport.quarter)}</button>` : ""}`;
+      <button class="ghost" style="width:100%;margin-top:8px" id="btn-read">✓ Done reading, now decide</button>
+      ${lastReport ? `<button class="ghost" style="width:100%;margin-top:6px" id="btn-lastq">What happened in ${qLabel(lastReport.quarter)}?</button>` : ""}`;
     $("intel").querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { intelTab = b.dataset.tab; tick("read"); renderIntel(); }));
     $("btn-read").onclick = () => { tick("read"); document.querySelector(".mtable tr.row") && document.querySelector(".mtable tr.row").focus(); };
     if ($("btn-lastq")) $("btn-lastq").onclick = () => showReveal(lastReport);
@@ -113,20 +113,21 @@
   function renderTable() {
     if (state.done) { $("table").innerHTML = ""; return; }
     const hit = new Set(lastReport ? lastReport.events.flatMap((e) => Object.keys(e.effects)) : []);
-    $("table").innerHTML = `<h2>Your reserve · click a mineral</h2>
-      <table class="mtable"><thead><tr><th>Mineral</th><th>Days of cover</th><th>Price</th><th>Imports</th><th>China share</th><th title="Distance to disaster for a 25% shortfall, using your stockpile as the buffer (not a probability)">Distance</th><th>Orders</th></tr></thead><tbody>
+    $("table").innerHTML = `<h2>Your six minerals · click one to manage it</h2>
+      <div class="help">Stored = days of normal use in your stockpile (60 is Japan's target). Price is relative to mid-2023 (= 100). Safety margin = how big a shock that mineral could absorb (aim for Safe). <button class="ghost" style="padding:1px 8px;min-height:0;font-size:11px" id="btn-gloss2">What do these mean?</button></div>
+      <table class="mtable"><thead><tr><th>Mineral</th><th>Stored (days)</th><th>Price</th><th>Imports arriving</th><th>Share from China</th><th title="How big a shock this mineral's supply could absorb before factories stop (25% shortage). Not a probability.">Safety margin</th><th>Your plan</th></tr></thead><tbody>
       ${KEYS.map((k) => {
         const m = state.minerals[k], p = MINERALS[k], proj = projected(k), d = distOf(k, proj), d0 = distOf(k, m.reserveDoC);
         const prev = m.hist.price[m.hist.price.length - 2], dp = prev ? m.priceIdx / prev - 1 : 0;
         const ys = knownYears(k), cs = ys.length ? ys[ys.length - 1] : null;
-        const o = [orders.buy[k] ? `<span class="chip warn">+${orders.buy[k]} d</span>` : "", orders.release[k] ? `<span class="chip info">−${orders.release[k]} d</span>` : "", ...orders.offtakes.filter((id) => COUNTERPARTIES.find((c) => c.id === id).mineral === k).map(() => `<span class="chip good">deal</span>`)].join(" ");
+        const o = [orders.buy[k] ? `<span class="chip warn">buy ${orders.buy[k]} days</span>` : "", orders.release[k] ? `<span class="chip info">release ${orders.release[k]} days</span>` : "", ...orders.offtakes.filter((id) => COUNTERPARTIES.find((c) => c.id === id).mineral === k).map(() => `<span class="chip good">deal</span>`)].join(" ");
         return `<tr class="row ${k === sel ? "sel" : ""} ${hit.has(k) ? "hit" : ""}" data-k="${k}" tabindex="0" aria-label="${p.name}">
           <td><div class="mname">${tile(k)}<div><b>${p.name}</b><span>${esc(p.uses.split(",")[0])}</span></div></div></td>
           <td><div class="cell-big">${proj.toFixed(0)}${proj !== m.reserveDoC ? ` <span class="faint">(now ${m.reserveDoC.toFixed(0)})</span>` : ""}</div><div class="docbar"><i class="${proj !== m.reserveDoC ? "proj" : ""}" style="width:${Math.min(100, (proj / 120) * 100)}%"></i><b style="left:50%" title="60 days"></b></div></td>
           <td><span class="cell-big">${m.priceIdx.toFixed(0)}</span> <span class="${dp > 0.005 ? "up" : dp < -0.005 ? "down" : "faint"}">${dp ? (dp > 0 ? "▲" : "▼") + Math.abs(dp * 100).toFixed(0) + "%" : ""}</span></td>
-          <td class="${m.importAvail < 0.85 ? "up" : ""}"><span class="cell-big">${pct(m.importAvail)}</span>${m.cutNet > 0.02 ? `<div class="faint">controls ${pct(m.cutNet)}</div>` : ""}</td>
-          <td>${cs ? `<span class="cell-big">${pct(cs.share)}</span><div class="faint">${cs.year} Comtrade</div>` : `<span class="faint">—</span>`}</td>
-          <td><span class="cell-big">${d.toFixed(1)}σ</span> <span class="band band-${RST.band(d)}">${RST.band(d)}</span>${Math.abs(d - d0) > 0.01 ? `<div class="faint">${d > d0 ? "+" : ""}${(d - d0).toFixed(2)}σ from orders</div>` : ""}</td>
+          <td class="${m.importAvail < 0.85 ? "up" : ""}"><span class="cell-big">${pct(m.importAvail)}</span>${m.cutNet > 0.02 ? `<div class="faint">${m.importAvail < 0.98 ? "restricted" : "restricted, but rerouted"}</div>` : ""}</td>
+          <td>${cs ? `<span class="cell-big">${pct(cs.share)}</span><div class="faint">in ${cs.year}</div>` : `<span class="faint">—</span>`}</td>
+          <td><span class="cell-big">${Plain.margin(d)}</span> ${Plain.zoneTag(d)}${Math.abs(d - d0) > 0.01 ? `<div class="faint">${d > d0 ? "+" : ""}${(d - d0).toFixed(1)}× from your plan</div>` : ""}</td>
           <td>${o || '<span class="faint">—</span>'}</td></tr>`;
       }).join("")}</tbody></table>`;
     $("table").querySelectorAll("tr.row").forEach((tr) => {
@@ -150,7 +151,7 @@
       ${segs}${h.map((v, i) => (i ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3" fill="${src[i] === "reported" ? "#AEB6C4" : "#0B0F17"}" stroke="#AEB6C4" stroke-width="1.3"><title>${QUARTERS[i - 1]} model ${v.toFixed(0)} (${src[i]})</title></circle>` : "")).join("")}
       ${realKnown.map((p) => `<circle cx="${xr(p.quarter)}" cy="${Y(p.value)}" r="5" fill="#E08A52" stroke="#0B0F17" stroke-width="1.5"><title>${p.quarter} real price index ${Math.round(p.value)}</title></circle>`).join("")}
       <text x="${L}" y="${H - 6}">23Q2</text><text x="${W - R}" y="${H - 6}" text-anchor="end">26Q4</text></svg>
-      <div class="chart-cap">Grey line: the price you pay. It follows the real cited price path (solid = a reported quarter, dashed = interpolated between reports) plus the push from your own buying. Orange dots: real cited prices${EXT.prices && EXT.prices[k] ? ` <span title="${esc(EXT.prices[k].series || "")}">(${esc(String(EXT.prices[k].series || "").split(" (")[0].slice(0, 70))}${String(EXT.prices[k].series || "").length > 70 ? "…" : ""}, ${esc(EXT.prices[k].unit || "")})</span>` : ""}, indexed to the first point, shown only once they'd been reported.</div>`;
+      <div class="chart-cap"><b>Price, mid-2023 = 100.</b> Grey line: the price you pay, which follows real market prices (dashed where we filled gaps between reports) plus the push from your own buying. Orange dots: real reported prices${EXT.prices && EXT.prices[k] ? ` <span title="${esc(EXT.prices[k].series || "")}">(${esc(String(EXT.prices[k].series || "").split(" (")[0].slice(0, 70))}${String(EXT.prices[k].series || "").length > 70 ? "…" : ""}, ${esc(EXT.prices[k].unit || "")})</span>` : ""}, indexed to the first point, shown only once they'd been reported.</div>`;
   }
   function reserveChart(k) {
     const m = state.minerals[k], W = 560, H = 120, L = 36, R = 10, T = 10, B = 20, n = QUARTERS.length;
@@ -162,7 +163,7 @@
       <polyline points="${av.map((v, i) => `${X(i)},${YA(v)}`).join(" ")}" fill="none" stroke="#3987e5" stroke-width="1.6"/>
       <polyline points="${doc.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="#E08A52" stroke-width="2.4"/>
       ${proj !== m.reserveDoC ? `<line x1="${X(doc.length - 1)}" y1="${Y(m.reserveDoC)}" x2="${X(doc.length)}" y2="${Y(proj)}" stroke="#E08A52" stroke-width="2.4" stroke-dasharray="5 4"/><circle cx="${X(doc.length)}" cy="${Y(proj)}" r="4" fill="#E08A52"/>` : ""}
-    </svg><div class="chart-cap"><span style="color:#E08A52">■</span> your reserve (days of cover; dashed = after this quarter's orders) · <span style="color:#3987e5">■</span> import availability (0–100%)</div>`;
+    </svg><div class="chart-cap"><span style="color:#E08A52">■</span> days of supply in your stockpile (dashed = after this quarter's plan) · <span style="color:#3987e5">■</span> share of normal imports arriving (top = 100%)</div>`;
   }
   function renderDetail() {
     if (state.done) { $("detail").innerHTML = ""; return; }
@@ -178,28 +179,29 @@
     const latest = spread.filter((x) => x.ratio).pop();
     const model = models[k];
     $("detail").innerHTML = `<div class="detail-head"><div class="mname">${tile(k)}<div><h3>${p.name}</h3><span>${esc(p.uses)}</span></div></div>
-        <div class="chips">${m.cutNet > 0.02 ? `<span class="chip bad">export controls ${pct(m.cutNet)}</span>` : `<span class="chip good">no controls</span>`}<span class="chip">imports ${pct(m.importAvail)}</span>${ys.length ? `<span class="chip">China share ${ys.map((y) => `${y.year} ${pct(y.share)}`).join(" → ")}</span>` : ""}<span class="chip ${model.synthetic ? "warn" : "info"}" title="${esc(model.caveats[0] || "")}">${model.synthetic ? "risk network: illustrative" : "risk network: measured (Sayari)"}</span></div></div>
+        <div class="chips">${m.cutNet > 0.02 ? `<span class="chip bad">China restrictions in force</span>` : `<span class="chip good">no restrictions right now</span>`}<span class="chip">${pct(m.importAvail)} of normal imports arriving</span>${ys.length ? `<span class="chip">share from China: ${ys.map((y) => `${y.year} ${pct(y.share)}`).join(" → ")}</span>` : ""}<span class="chip ${model.synthetic ? "warn" : "info"}" title="${esc(model.caveats[0] || "")}">${model.synthetic ? "supplier data partly estimated" : "supplier data measured from shipping records"}</span></div></div>
       <div class="detail-grid">
         <div>${priceChart(k)}${reserveChart(k)}
           ${k === "dysprosium" && spread.length ? `<div class="spread"><b>Ex-China vs China price ${latest ? `<span class="up">${latest.ratio}×</span>` : ""}</b>${latest ? `<div class="r"><span>You pay</span><i style="width:100%"></i><b class="num">${m.priceIdx.toFixed(0)}</b></div><div class="r"><span>China pays</span><i style="width:${Math.max(2, 100 / latest.ratio)}%"></i><b class="num">≈${(m.priceIdx / latest.ratio).toFixed(0)}</b></div>` : ""}${spread.map((x) => `<div class="faint">${esc(x.label)} · <a href="${esc(x.source)}" target="_blank" rel="noopener">${esc(x.outlet)}</a></div>`).join("")}</div>` : ""}
         </div>
         <div>
-          <div class="ctrl"><label for="buy">Buy this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
+          <h3 style="font-size:15px;margin-bottom:6px">Your decision for ${esc(p.name)}</h3>
+          <div class="ctrl"><label for="buy">Buy more supply this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
             <div class="presets"><button data-to="60">→ 60 days</button><button data-to="90">→ 90 days</button><button data-to="max">Max (${max})</button><button data-to="0">Clear</button></div>
-            <div class="faint">Cap this quarter: ${max} days (45 × import availability). Thin market: depth ${p.marketDepth}.</div></div>
-          <div class="ctrl"><label for="rel">Release to industry <b>${rel} days</b></label><input type="range" id="rel" min="0" max="${Math.floor(m.reserveDoC)}" step="1" value="${rel}" ${m.reserveDoC >= 1 ? "" : "disabled"}></div>
-          <div class="preview" aria-live="polite"><div class="hud-k faint">Live preview: before you commit</div>
+            <div class="faint">You can buy up to ${max} days this quarter (less when imports are restricted). Buying a lot pushes the price up.</div></div>
+          <div class="ctrl"><label for="rel">Release stock to factories <b>${rel} days</b></label><input type="range" id="rel" min="0" max="${Math.floor(m.reserveDoC)}" step="1" value="${rel}" ${m.reserveDoC >= 1 ? "" : "disabled"}></div>
+          <div class="preview" aria-live="polite"><div class="hud-k faint">What this will do (nothing is final until you lock it in)</div>
             <div class="row"><span>Cost</span><b>${fmt$(cost)}</b></div>
-            <div class="row"><span>Your buying moves next quarter's price</span><b class="${priceImpact > 0.5 ? "up" : priceImpact < -0.5 ? "down" : ""}">${priceImpact >= 0 ? "+" : ""}${priceImpact.toFixed(1)}%</b></div>
-            <div class="row"><span>Days of cover</span><b>${m.reserveDoC.toFixed(0)} → ${proj.toFixed(0)}</b></div>
-            <div class="row"><span>Line keeps running at a 25% shortfall</span><b>${Math.round(proj / THR)} days</b></div>
-            <div class="row"><span>Distance to disaster</span><b>${d0.toFixed(2)}σ → ${d1.toFixed(2)}σ <span class="band band-${RST.band(d1)}">${RST.band(d1)}</span></b></div>
-            <div class="row"><span>Budget after all orders</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
-            <div class="row"><span>Storage per quarter</span><b>≈${fmt$(CONFIG.storageRate * proj * p.baseCost * m.priceIdx / 100)}</b></div>
-            ${buy ? `<div class="row"><span>Marginal: next 5 days</span><b>${fmt$(Sim.quoteBuy(state, k, Math.min(max, buy + 5)) - cost)}</b></div>` : ""}
+            <div class="row"><span>Your buying pushes the price up by</span><b class="${priceImpact > 0.5 ? "up" : priceImpact < -0.5 ? "down" : ""}">${priceImpact >= 0 ? "+" : ""}${priceImpact.toFixed(1)}%</b></div>
+            <div class="row"><span>Days of supply stored</span><b>${m.reserveDoC.toFixed(0)} → ${proj.toFixed(0)}</b></div>
+            <div class="row"><span>If a 25% shortage hits, factories keep running for</span><b>${Math.round(proj / THR)} days</b></div>
+            <div class="row"><span>Safety margin</span><b>${Plain.margin(d0)} → ${Plain.margin(d1)} ${Plain.zoneTag(d1)}</b></div>
+            <div class="row"><span>Money left after your whole plan</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
+            <div class="row"><span>Storage cost each quarter</span><b>≈${fmt$(CONFIG.storageRate * proj * p.baseCost * m.priceIdx / 100)}</b></div>
+            ${buy ? `<div class="row"><span>5 more days would cost</span><b>${fmt$(Sim.quoteBuy(state, k, Math.min(max, buy + 5)) - cost)}</b></div>` : ""}
           </div>
-          <div style="margin-top:10px"><div class="faint">Offtakes for ${esc(p.name)}: ${deals.length ? deals.map((o) => `${esc(COUNTERPARTIES.find((c) => c.id === o.id).name)} (${o.status})`).join(", ") : "none signed"}${pending.length ? ` · ${pending.length} pending this quarter` : ""}</div>
-            <button class="ghost" style="margin-top:6px;width:100%" id="btn-off-k">Sign an offtake for ${esc(p.name)}…</button></div>
+          <div style="margin-top:10px"><div class="faint">Supply deals for ${esc(p.name)}: ${deals.length ? deals.map((o) => `${esc(COUNTERPARTIES.find((c) => c.id === o.id).name)} (${{ pending: "not delivering yet", delivering: "delivering", blocked: "blocked" }[o.status] || o.status})`).join(", ") : "none yet"}${pending.length ? ` · ${pending.length} added this quarter` : ""}</div>
+            <button class="ghost" style="margin-top:6px;width:100%" id="btn-off-k">Sign a supply deal for ${esc(p.name)}…</button></div>
         </div>
       </div>`;
     const setBuy = (v) => { orders.buy[k] = Math.max(0, Math.min(max, v)); tick("orders"); refreshLive(); };
@@ -229,17 +231,18 @@
     for (const id of orders.offtakes) { const cp = COUNTERPARTIES.find((c) => c.id === id); lines.push([`Offtake: ${cp.name}`, fmt$(cp.upfront)]); }
     const dSum = KEYS.map((k) => distOf(k, projected(k)) - distOf(k, state.minerals[k].reserveDoC));
     const weakest = KEYS.map((k) => [distOf(k, projected(k)), k]).sort((a, b) => a[0] - b[0])[0];
-    $("orders").innerHTML = `<h2>Orders · ${qLabel(state.quarter)}</h2>
-      ${lines.length ? lines.map(([a, b]) => `<div class="order-line"><span>${esc(a)}</span><span class="num">${b}</span></div>`).join("") : `<div class="muted">No orders yet. You'll hold and save budget.</div>`}
+    $("orders").innerHTML = `<h2>Your plan for ${qLabel(state.quarter)}</h2>
+      ${lines.length ? lines.map(([a, b]) => `<div class="order-line"><span>${esc(a)}</span><span class="num">${b}</span></div>`).join("") : `<div class="muted">Nothing planned yet. If you lock in now, you buy nothing and keep your money.</div>`}
       <div class="order-line order-total"><span>Total</span><span class="num">${fmt$(cost)}</span></div>
       <div class="order-line"><span class="muted">Budget after</span><span class="num ${over ? "up" : ""}">${fmt$(state.budget - cost)}</span></div>
-      <div style="margin:8px 0">${chips([{ k: "Total σ gained", delta: dSum.reduce((a, b) => a + b, 0), unit: "σ", fmt: (v) => v.toFixed(2) }, { k: "Weakest", delta: weakest[0], unit: `σ ${MINERALS[weakest[1]].symbol}`, fmt: (v) => v.toFixed(2) }])}</div>
-      <label class="toggle"><input type="checkbox" id="auto" ${state.autoRelease ? "checked" : ""}/> Auto-release reserve to cover shortfalls</label>
-      <div class="row2"><button class="ghost" id="btn-off">Sign an offtake…</button></div>
-      <button class="primary" id="btn-commit" ${over ? "disabled" : ""}>Commit &amp; end quarter →</button>
-      ${over ? `<div class="err">Orders exceed budget.</div>` : ""}
+      <div style="margin:8px 0">${chips([{ k: "Safety added", delta: dSum.reduce((a, b) => a + b, 0), unit: "×", fmt: (v) => v.toFixed(1) }, { k: `Weakest: ${MINERALS[weakest[1]].name}`, delta: weakest[0], unit: "×", fmt: (v) => v.toFixed(1) }])}</div>
+      <label class="toggle"><input type="checkbox" id="auto" ${state.autoRelease ? "checked" : ""}/> Automatically send stored supply to factories when imports fall short</label>
+      <div class="row2"><button class="ghost" id="btn-off">Sign a supply deal…</button></div>
+      <button class="primary" id="btn-commit" ${over ? "disabled" : ""}>Lock in my plan →</button>
+      <div class="faint" style="margin-top:4px">Then this quarter's real events happen.</div>
+      ${over ? `<div class="err">This plan costs more than the money you have left.</div>` : ""}
       <div class="row2" style="margin-top:12px"><select id="ff" aria-label="Fast-forward to">${QUARTERS.slice(state.qi + 1).map((q) => `<option value="${q}">${qLabel(q)}</option>`).join("")}<option value="END">End of campaign</option></select><button class="ghost" id="btn-ff">Fast-forward</button></div>
-      <div class="faint">Fast-forward plays quarters with no new orders.</div>
+      <div class="faint">Skip ahead without buying anything.</div>
       ${readinessPanel()}`;
     $("auto").onchange = (e) => { state.autoRelease = e.target.checked; };
     $("btn-off").onclick = () => showOfftakes(null);
@@ -253,7 +256,7 @@
     const key = state.qi + "|" + state.offtakes.map((o) => o.id + o.status).join(",");
     if (readyCache.key !== key) { const probe = Sim.clone(state); probe.qi = QUARTERS.length; const rec = {}; for (const k of KEYS) rec[k] = MonteCarlo.recommend(probe, k, { signal: 0, paths: 200 }); readyCache = { key, rec }; }
     const rec = readyCache.rec;
-    return `<div class="ready"><h2>Prepare for 2027</h2><div class="faint">${QUARTERS.length - state.qi} turn(s) left. Target: ≥ 60 days in 90% of simulated 2027 futures (neutral news).</div>
+    return `<div class="ready"><h2>Get ready for 2027</h2><div class="faint">${QUARTERS.length - state.qi} turn(s) left before China's pause ends. "Need" = how many days to store so you keep at least 60 days in 9 out of 10 simulated 2027 futures.</div>
       <table><thead><tr><th>Mineral</th><th>Have</th><th>Need</th><th></th></tr></thead><tbody>
       ${KEYS.map((k) => { const have = projected(k), need = rec[k]; return `<tr><td>${MINERALS[k].name}</td><td class="num">${have.toFixed(0)}</td><td class="num">${need == null ? ">2000" : need}</td><td>${need != null && have >= need ? '<span class="chip good">ready</span>' : need != null ? `<button data-ready="${k}" data-need="${need}">+${Math.ceil(need - have)}</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
@@ -283,7 +286,7 @@
     if (!res.ok) { alert(res.errs.join("\n")); return; }
     lastReport = Sim.resolveQuarter(state); reports.push(lastReport);
     const after = snapshot(), idle = shadowReps[QUARTERS.indexOf(q)];
-    ledger.push({ q, label: summary, changes: [{ k: "Downtime", delta: lastReport.downtime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Doing nothing", delta: idle.downtime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Budget", delta: after.budget - before.budget, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Political capital", delta: after.pc - before.pc, unit: "", fmt: (v) => Math.round(v) }] });
+    ledger.push({ q, label: summary, changes: [{ k: "Factory days lost", delta: lastReport.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "If you'd done nothing", delta: idle.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Money", delta: after.budget - before.budget, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Public trust", delta: after.pc - before.pc, unit: "", fmt: (v) => Math.round(v) }] });
     orders = { buy: {}, release: {}, offtakes: [] };
     coachDone = new Set();
     render();
@@ -307,41 +310,41 @@
   function showReveal(rep) {
     const qi = QUARTERS.indexOf(rep.quarter), idle = shadowReps[qi];
     const world = (EXT.responses || []).filter((r) => r.quarter === rep.quarter).slice(0, 4);
-    const verdict = idle.downtime < 0.5 && rep.downtime < 0.5 ? ["info", "No downtime this quarter, and none if you'd done nothing either."]
-      : rep.downtime < idle.downtime - 0.5 ? ["good", `Your reserve spared industry <b>${Math.round(idle.downtime - rep.downtime)} days</b> of downtime (doing nothing: ${Math.round(idle.downtime)}; you: ${Math.round(rep.downtime)}).`]
-      : ["bad", `Industry lost <b>${Math.round(rep.downtime)} days</b> this quarter (doing nothing: ${Math.round(idle.downtime)}).`];
+    const verdict = idle.downtime < 0.5 && rep.downtime < 0.5 ? ["info", "No factories stopped this quarter, and none would have even without your stockpile."]
+      : rep.downtime < idle.downtime - 0.5 ? ["good", `Your stockpile saved <b>${Math.round(idle.downtime - rep.downtime)} days</b> of factory stoppages. Without it: ${Math.round(idle.downtime)} days; with it: ${Math.round(rep.downtime)}.`]
+      : ["bad", `Factories stopped for <b>${Math.round(rep.downtime)} days</b> this quarter (without any stockpile: ${Math.round(idle.downtime)}).`];
     const Q = 91.25;
-    modal(`<div class="modal-head"><div><div class="kicker">Reality strikes · what actually happened</div><h3>${qLabel(rep.quarter)}</h3></div><button class="ghost" id="btn-x">Close</button></div>
+    modal(`<div class="modal-head"><div><div class="kicker">What really happened</div><h3>${qLabel(rep.quarter)}</h3></div><button class="ghost" id="btn-x">Close</button></div>
       ${rep.events.length ? rep.events.map((e) => `<div class="event-card"><div class="meta">${e.date} · ${esc(e.actor)}</div><div class="headline">${esc(e.headline)}</div>
-        <div class="chips">${Object.entries(e.effects).map(([k, f]) => `<span class="chip">${MINERALS[k].name}</span>${f.cut != null ? `<span class="chip bad">cut ${pct(f.cut)}${(f.targetFactor ?? 1) < 1 ? " · licensing" : " · targets US"}</span>` : ""}${f.setCut != null ? `<span class="chip warn">regime → ${pct(f.setCut)}</span>` : ""}${f.relief != null ? `<span class="chip good">relief ${pct(f.relief)}</span>` : ""}${D.REAL_PRICE && D.REAL_PRICE[k] ? `<span class="chip info" title="Prices follow cited real prices; this event's assumed multiplier is not used">price: real ${esc((EXT.prices[k] || {}).series ? "Fastmarkets" : "")} path</span>` : f.priceMult != null ? `<span class="chip ${f.priceSrc === "reported" ? "info" : ""}">price ×${f.priceMult.toFixed(2)} · ${f.priceSrc === "reported" ? "reported" : "assumed"}</span>` : ""}`).join("")}</div>
+        <div class="chips">${Object.entries(e.effects).map(([k, f]) => `<span class="chip">${MINERALS[k].name}</span>${f.cut != null ? `<span class="chip bad">${(f.targetFactor ?? 1) < 1 ? "licences now required (slows supply)" : "exports to the US banned"}</span>` : ""}${f.setCut != null ? `<span class="chip warn">replaced by an export quota</span>` : ""}${f.relief != null ? `<span class="chip good">restrictions eased</span>` : ""}${D.REAL_PRICE && D.REAL_PRICE[k] ? `<span class="chip info" title="Prices follow cited real prices; this event's assumed multiplier is not used">price: real ${esc((EXT.prices[k] || {}).series ? "Fastmarkets" : "")} path</span>` : f.priceMult != null ? `<span class="chip ${f.priceSrc === "reported" ? "info" : ""}">price ×${f.priceMult.toFixed(2)} · ${f.priceSrc === "reported" ? "reported" : "assumed"}</span>` : ""}`).join("")}</div>
         <div class="lesson">${esc(e.lesson)}</div><div class="faint">Sources: ${e.sources.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener">${esc(domain(s))}</a>`).join(" · ")}</div></div>`).join("") : `<div class="event-card" style="border-left-color:var(--line-2);background:transparent"><div class="headline">No new controls this quarter.</div><div class="lesson">Existing controls still bite while rerouting fills part of the gap.</div></div>`}
-      ${world.length ? `<div class="world-card"><h4>What the real world did this quarter</h4>${world.map((r) => `<div><b>${esc(r.actor)}</b> · ${esc(r.date)}: ${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("")}</div>` : ""}
+      ${world.length ? `<div class="world-card"><h4>Meanwhile, what real governments did</h4>${world.map((r) => `<div><b>${esc(r.actor)}</b> · ${esc(r.date)}: ${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("")}</div>` : ""}
       <div class="verdict ${verdict[0]}">${verdict[1]}</div>
-      <h2 style="margin-top:14px">Where each mineral's supply came from this quarter</h2>
-      <table class="data"><thead><tr><th>Mineral</th><th>Supply mix</th><th>Price</th><th>Imports</th><th>Drawn</th><th>Unmet</th><th>Downtime</th><th>Reserve</th></tr></thead><tbody>
+      <h2 style="margin-top:14px">What it did to each mineral</h2>
+      <table class="data"><thead><tr><th>Mineral</th><th>Where supply came from</th><th>Price change</th><th>Imports</th><th>Used from stock</th><th>Missing</th><th>Factory days lost</th><th>Stored now</th></tr></thead><tbody>
       ${KEYS.map((k) => { const r = rep.minerals[k], d = r.priceTo / r.priceFrom - 1, imp = Math.min(Q, r.avail * Q), off = Math.min(Q - imp, r.offtake || 0), dr = Math.min(Q - imp - off, r.drawn || 0), gap = Math.max(0, Q - imp - off - dr);
         const seg = (v, c) => (v > 0.3 ? `<span style="width:${(v / Q) * 100}%;background:${c}"></span>` : "");
         return `<tr><td>${MINERALS[k].name}</td><td><div class="wf" title="blue imports · green offtakes · orange reserve · red unmet">${seg(imp, "#3987e5")}${seg(off, "#5fc08f")}${seg(dr, "#E08A52")}${seg(gap, "#FF5A4E")}</div></td>
           <td>${r.priceFrom.toFixed(0)}→${r.priceTo.toFixed(0)} <span class="${d > 0.005 ? "up" : d < -0.005 ? "down" : "faint"}">${d >= 0 ? "+" : ""}${(d * 100).toFixed(0)}%</span></td><td>${pct(r.avail)}</td><td>${r.drawn ? r.drawn.toFixed(0) : "—"}</td>
           <td class="${r.shortfallDays > 0.5 ? "up" : ""}">${r.shortfallDays > 0.5 ? r.shortfallDays.toFixed(0) : "—"}</td><td class="${r.downtime > 0.5 ? "up" : ""}">${r.downtime > 0.5 ? r.downtime.toFixed(0) : "—"}</td><td>${r.reserve.toFixed(0)}</td></tr>`; }).join("")}
       </tbody></table>
-      <div class="faint" style="margin-top:6px">Supply mix bar: <span style="color:#3987e5">imports</span> · <span style="color:#5fc08f">offtakes</span> · <span style="color:#E08A52">drawn from your reserve</span> · <span style="color:#FF5A4E">unmet (idles factories)</span>. Storage ${fmt$(rep.storage)} · political capital ${rep.pcDelta >= 0 ? "+" : ""}${rep.pcDelta.toFixed(0)}.</div>
+      <div class="faint" style="margin-top:6px">Each bar is everything factories needed this quarter: <span style="color:#3987e5">arrived from abroad</span> · <span style="color:#5fc08f">from your deals</span> · <span style="color:#E08A52">taken from your stockpile</span> · <span style="color:#FF5A4E">missing, so factories stopped</span>. Numbers are in days of supply. Storage cost ${fmt$(rep.storage)} · public trust ${rep.pcDelta >= 0 ? "+" : ""}${rep.pcDelta.toFixed(0)}.</div>
       ${rep.offtakeNotes.length ? `<div class="section">${rep.offtakeNotes.map((n) => `<div class="order-line">⇄ ${esc(n)}</div>`).join("")}</div>` : ""}
-      <div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="btn-continue">${state.done && rep === reports[reports.length - 1] ? "See final results →" : rep === lastReport ? `Continue to ${qLabel(state.quarter)} →` : "Close"}</button></div>`);
+      <div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="btn-continue">${state.done && rep === reports[reports.length - 1] ? "See my final results →" : rep === lastReport ? `On to ${qLabel(state.quarter)} →` : "Close"}</button></div>`);
     $("btn-continue").onclick = closeModal; $("btn-x").onclick = closeModal;
   }
 
   function showOfftakes(only) {
     const signed = new Set([...state.offtakes.map((o) => o.id), ...orders.offtakes]);
     const list = COUNTERPARTIES.filter((c) => !only || c.mineral === only).sort((a, b) => a.upfront / a.docPerQ - b.upfront / b.docPerQ);
-    modal(`<div class="modal-head"><div><div class="kicker">Offtake deals${only ? ` · ${MINERALS[only].name}` : ""}</div><h3>Sign with a real producer</h3></div><button class="ghost" id="btn-x">Close</button></div>
+    modal(`<div class="modal-head"><div><div class="kicker">Supply deals${only ? ` · ${MINERALS[only].name}` : ""}</div><h3>Sign a deal with a real producer</h3></div><button class="ghost" id="btn-x">Close</button></div>
       <div class="banner">${EXT.vetted ? `Vetted with <b>Sayari</b> (owners, watchlist, risk factors) and <b>Tradeverifyd</b> (entity score), cached ${esc(EXT.vettedFetched || "")}. Flags are findings, not allegations. Deal terms are game calibrations.` : "Illustrative counterparties."}</div>
-      <div class="faint" style="margin-bottom:10px">Cheapest per day of supply first. China-owned "alternatives" stay exposed to Chinese controls. Deliveries start after the lag and slip 20% per quarter.</div>
+      <div class="faint" style="margin-bottom:10px">A deal gives you a fixed delivery every quarter, starting after a delay (projects often run late). Cheapest first. Watch for red flags: a producer owned from China still fails when China cuts supply.</div>
       ${list.map((cp) => { const flagged = (cp.flags || []).length || cp.ownerChina, v = cp.vetting, taken = signed.has(cp.id);
         const gainDays = cp.docPerQ, dNow = distOf(cp.mineral, projected(cp.mineral));
         return `<div class="cp ${flagged ? "flagged" : ""}"><div>
           <div class="chips" style="align-items:center"><b style="font-size:14px">${esc(cp.name)}</b><span class="chip">${MINERALS[cp.mineral].name}</span><span class="chip">${esc(cp.country)}</span></div>
-          <div class="facts"><span>Owner: ${esc(cp.owner)}</span><span>Upfront ${fmt$(cp.upfront)}</span><span>${gainDays} d/quarter</span><span>Lag ${cp.lag[0]}–${cp.lag[1]}q</span><span>${fmt$(cp.upfront / cp.docPerQ)} per d/q</span></div>
+          <div class="facts"><span>Owner: ${esc(cp.owner)}</span><span>Upfront ${fmt$(cp.upfront)}</span><span>+${gainDays} days of supply each quarter</span><span>starts in ${cp.lag[0]}–${cp.lag[1]} quarters</span></div>
           <div class="chips" style="margin-top:6px">${(cp.flags || []).map((f) => `<span class="chip ${["owner", "labour", "sanctions"].includes(f.kind) ? "bad" : "warn"}" title="${esc(f.why || "")}">${esc(f.label)}</span>`).join("") || `<span class="chip good">no flags returned</span>`}</div>
           ${v ? `<div class="vet">Sayari ${v.sayariId ? `<code>${esc(v.sayariId)}</code>` : "—"} · Tradeverifyd score ${cp.score != null ? esc(cp.score) : "—"}${v.statusNote ? ` · ${esc(v.statusNote)}` : ""}${v.linkCaveat ? ` · Caveat: ${esc(v.linkCaveat)}` : ""}</div>` : ""}
           <div class="faint" style="margin-top:4px">${cp.ownerChina || cp.upstreamChina ? "Under a China-led shock this deal delivers little or nothing." : `Once delivering, adds ${gainDays} days of supply each quarter (≈ ${Math.round((gainDays / 91.25) * 100)}% of demand). ${MINERALS[cp.mineral].name} is at ${dNow.toFixed(1)}σ today.`}</div></div>
@@ -358,22 +361,27 @@
   }
 
   function showLedger() {
-    modal(`<div class="modal-head"><div><div class="kicker">Decision ledger</div><h3>What each decision did</h3></div><button class="ghost" id="btn-x">Close</button></div>
-      <p class="faint">Each committed quarter: what you ordered, and the measured effect against the same quarter with no defences.</p>
+    modal(`<div class="modal-head"><div><div class="kicker">Your decisions</div><h3>What each quarter's choices changed</h3></div><button class="ghost" id="btn-x">Close</button></div>
+      <p class="faint">Each quarter: what you did, and the result compared with doing nothing. Green = better, red = worse.</p>
       ${ledger.length ? `<ul class="ledger">${ledger.map((e) => `<li><b>${qLabel(e.q)} · ${esc(e.label)}</b> ${chips(e.changes)}</li>`).join("")}</ul>` : "<p>No decisions yet.</p>"}
       <h2 class="section">Consequences log</h2><div style="max-height:260px;overflow:auto">${[...state.log].reverse().map((r) => `<div class="order-line"><span class="faint num">${r.q}</span><span style="flex:1;margin-left:8px">${esc(r.text)}</span></div>`).join("") || '<div class="faint">Nothing yet.</div>'}</div>`);
     $("btn-x").onclick = closeModal;
   }
 
   function showIntro() {
-    modal(`<div class="kicker">Analyst mode · 1 July 2023</div><h3 style="font-size:26px;margin:6px 0 10px">Run all six minerals, quarter by quarter.</h3>
-      <p class="muted">$12B (the size of Project Vault), 14 quarters of real history, then 1,000 simulated futures past the 10 Jan 2027 cliff.</p>
-      <ol class="muted" style="line-height:1.8"><li><b>Read the intel</b>: real Tavily news from before each quarter, plus what governments had already done.</li>
-        <li><b>Click a mineral</b>: real prices vs the model, China's share, and your distance to disaster.</li>
-        <li><b>Drag Buy / Release</b>: the live preview shows the cost, the price you move, and the σ gained, before you commit.</li>
-        <li><b>Commit</b>: the real event fires. See where every mineral's supply came from, and what the real world did.</li></ol>
-      <div class="banner">The strip under the coach bar is your history. Click any past quarter to review it. Your decisions and their effects build up in <b>Decisions</b>.</div>
-      <div style="display:flex;justify-content:flex-end;gap:8px"><a class="ghost" href="../v4/" style="text-decoration:none">Story mode instead</a><button class="primary" id="btn-start">Start →</button></div>`);
+    modal(`<div class="kicker">Analyst mode · it's 1 July 2023</div><h3 style="font-size:26px;margin:6px 0 10px">You run America's $12 billion emergency mineral stockpile.</h3>
+      <div class="explain-cards">
+        <div class="xcard"><div class="xk">The problem</div>Six minerals inside cars, chips, batteries and weapons come mostly from <b>China</b> (cobalt from the <b>DRC</b>). From 2023 on, those countries start restricting exports.</div>
+        <div class="xcard"><div class="xk">Your job</div>Buy and store supply <b>before</b> shortages hit, so US factories keep running. But money is limited, and buying pushes prices up.</div>
+        <div class="xcard"><div class="xk">How it plays</div><b>14 turns</b>, each one 3 months of real history (mid-2023 to 2026). Then we test your stockpile against <b>1,000 possible futures</b> after China's pause ends on 10 Jan 2027.</div>
+      </div>
+      <h3 style="font-size:16px;margin:10px 0 4px">Each turn</h3>
+      <ol class="muted" style="line-height:1.8;margin-top:0"><li><b>Read the briefing</b> (left): real news from just before that quarter.</li>
+        <li><b>Click a mineral</b> in the table to see its price, stock and safety margin.</li>
+        <li><b>Drag "Buy more supply"</b>. The box underneath shows the cost and how much safer you get.</li>
+        <li><b>Lock in your plan</b>. The real event for that quarter happens, and you see what it did.</li></ol>
+      <div class="banner">New to this? Click <b>Key terms</b> (top right) for plain-English explanations, or try <a href="../v4/">story mode</a>, a guided 5-minute version with one mineral.</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px"><a class="ghost" href="../v4/" style="text-decoration:none">Try story mode instead</a><button class="primary" id="btn-start">Start turn 1 →</button></div>`);
     $("btn-start").onclick = closeModal;
   }
 
@@ -389,7 +397,7 @@
         ${li(!!EXT.vetted, `<b>Sayari + Tradeverifyd</b>: ${COUNTERPARTIES.length} real producers vetted for ownership and risk flags.`)}
         ${li(!!(window.CACHE && window.CACHE.network), `<b>Sayari</b> supply networks: ${Object.keys((window.CACHE || {}).network || {}).join(", ")}. These drive each mineral's distance to disaster; non-antimony networks are illustrative.`)}
       </ul>
-      <p class="faint">Distance to disaster = (25% shortfall + your stockpile buffer) / √(1ᵀΣ1) under the export-control regime, as in story mode. It's not a probability. Engine assumptions are tunable in <code>site/data.js</code>. Event sizes are tagged reported or assumed.</p>`);
+      <p class="faint">Safety margin = how big a shock a mineral's supply could absorb, compared with a typical bad quarter (for experts: the reverse-stress distance (L + S)/√(1ᵀΣ1)). It's not a probability. Engine assumptions are in <code>site/data.js</code>.</p>${Plain.glossaryHTML()}`);
     $("btn-x").onclick = closeModal;
   }
 
@@ -402,26 +410,26 @@
     const sig0 = EXT.signal ? EXT.signal.value : 0;
     el.innerHTML = `<div class="panel"><div class="kicker">Campaign complete · Q3 2023 → Q4 2026</div>
       <div class="hero" style="margin-top:8px"><div><div class="bigscore">${you.total.toFixed(0)}</div><div class="muted">out of 100</div></div>
-        <div class="parts"><div class="part"><div class="k">Cover (40)</div><div class="v">${you.parts.cover.toFixed(1)}</div><div class="faint">avg weakest-mineral ${you.avgMinDoc.toFixed(0)}/60 d</div></div>
-          <div class="part"><div class="k">Downtime avoided (30)</div><div class="v">${you.parts.downtime.toFixed(1)}</div><div class="faint">${Math.round(state.downtimeDays)} d vs ${Math.round(bench.worst)} d idle</div></div>
-          <div class="part"><div class="k">Efficiency (15)</div><div class="v">${you.parts.efficiency.toFixed(1)}</div><div class="faint">${fmt$(state.spent)} spent</div></div>
-          <div class="part"><div class="k">Political capital (15)</div><div class="v">${you.parts.political.toFixed(1)}</div><div class="faint">${Math.round(state.politicalCapital)}/100</div></div></div></div>
-      <h2 class="section">Against benchmark strategies (same engine, same history)</h2>
-      <table class="data"><thead><tr><th>Strategy</th><th>Score</th><th>Cover</th><th>Downtime</th><th>Efficiency</th><th>Pol. cap.</th><th>Days lost</th><th>Spent</th></tr></thead><tbody>
+        <div class="parts"><div class="part"><div class="k">Stock kept up (40 pts)</div><div class="v">${you.parts.cover.toFixed(1)}</div><div class="faint">your weakest mineral averaged ${you.avgMinDoc.toFixed(0)} of 60 days</div></div>
+          <div class="part"><div class="k">Stoppages avoided (30 pts)</div><div class="v">${you.parts.downtime.toFixed(1)}</div><div class="faint">${Math.round(state.downtimeDays)} factory days lost vs ${Math.round(bench.worst)} with no stockpile</div></div>
+          <div class="part"><div class="k">Value for money (15 pts)</div><div class="v">${you.parts.efficiency.toFixed(1)}</div><div class="faint">${fmt$(state.spent)} spent</div></div>
+          <div class="part"><div class="k">Public trust (15 pts)</div><div class="v">${you.parts.political.toFixed(1)}</div><div class="faint">${Math.round(state.politicalCapital)} / 100</div></div></div></div>
+      <h2 class="section">How you compare (same history, different strategies)</h2>
+      <table class="data"><thead><tr><th>Strategy</th><th>Score</th><th>Stock</th><th>Stoppages</th><th>Value</th><th>Trust</th><th>Factory days lost</th><th>Spent</th></tr></thead><tbody>
       ${rows.map(([l, st, sc, cls]) => `<tr class="${cls || ""}"><td>${l}</td><td>${sc.total.toFixed(1)}</td><td>${sc.parts.cover.toFixed(1)}</td><td>${sc.parts.downtime.toFixed(1)}</td><td>${sc.parts.efficiency.toFixed(1)}</td><td>${sc.parts.political.toFixed(1)}</td><td>${Math.round(st.downtimeDays)}</td><td>${fmt$(st.spent)}</td></tr>`).join("")}</tbody></table>
       <div class="section"><button class="ghost" id="btn-led2">Review your decisions</button></div></div>
-      <div class="panel section"><div class="kicker">Forward mode · 2027</div><h3 style="font-size:22px;margin:4px 0">The 10 January 2027 cliff, live</h3>
-        <p class="muted" style="margin-top:0">Every slider re-runs 1,000 futures from your final reserve.</p>
+      <div class="panel section"><div class="kicker">The 2027 deadline</div><h3 style="font-size:22px;margin:4px 0">What happens after China's pause ends on 10 January 2027?</h3>
+        <p class="muted" style="margin-top:0">China could extend the pause, let its restrictions return, or strike a new deal. We play 2027 out 1,000 times from your final stockpile. Move any slider and it re-runs instantly.</p>
         <div class="fwd-controls">
-          <label>News signal (Tavily lexicon) <b id="f-sig-v">${sig0.toFixed(2)}</b><input type="range" id="f-sig" min="-1" max="1" step="0.05" value="${sig0}"></label>
-          <label>What if you'd held more of every mineral? <b id="f-extra-v">+0 d</b><input type="range" id="f-extra" min="0" max="120" step="5" value="0"></label>
-          <div><div class="faint">Disruptions (Tradeverifyd: none active at fetch time; toggle to test)</div><div class="chips">${FORWARD.disruptionRegions.map((d) => `<label class="chip"><input type="checkbox" data-dis="${d.id}"> ${esc(d.label)}</label>`).join("")}</div></div>
+          <label>How tense is the news? (today's real headlines score ${sig0.toFixed(2)}; −1 calm, +1 escalating) <b id="f-sig-v">${sig0.toFixed(2)}</b><input type="range" id="f-sig" min="-1" max="1" step="0.05" value="${sig0}"></label>
+          <label>What if you had stored more of every mineral? <b id="f-extra-v">+0 days</b><input type="range" id="f-extra" min="0" max="120" step="5" value="0"></label>
+          <div><div class="faint">Add a natural disaster near a mine (none were active when we checked):</div><div class="chips">${FORWARD.disruptionRegions.map((d) => `<label class="chip"><input type="checkbox" data-dis="${d.id}"> ${esc(d.label)}</label>`).join("")}</div></div>
         </div><div id="fwd-out"></div></div>
       <div style="display:flex;gap:8px;justify-content:center;margin:20px 0"><button class="ghost" id="btn-again">Play again</button><a class="ghost" href="../v4/" style="text-decoration:none">Story mode</a></div>`;
     $("btn-again").onclick = () => reset(false); $("btn-led2").onclick = showLedger;
     let t = null; const go = () => { clearTimeout(t); t = setTimeout(runForward, 120); };
     $("f-sig").oninput = (e) => { $("f-sig-v").textContent = (+e.target.value).toFixed(2); go(); };
-    $("f-extra").oninput = (e) => { $("f-extra-v").textContent = `+${e.target.value} d`; go(); };
+    $("f-extra").oninput = (e) => { $("f-extra-v").textContent = `+${e.target.value} days`; go(); };
     el.querySelectorAll("[data-dis]").forEach((c) => (c.onchange = go));
     runForward(); renderStats(); $("coach").innerHTML = ""; renderStrip(); window.scrollTo(0, 0);
   }
@@ -434,13 +442,13 @@
     if (!baseFwd) baseFwd = res;
     const rec = {}; for (const k of KEYS) rec[k] = MonteCarlo.recommend(state, k, { signal, disruptions, paths: 200 });
     const cw = res.cliffWeights;
-    $("fwd-out").innerHTML = `<div class="chips"><span class="chip">Cliff: extend ${pct(cw.extend)} · lapse ${pct(cw.lapse)} · new deal ${pct(cw.deal)}</span><span class="chip">P(China tightens)/q ${pct(res.pTighten)}</span>
-        ${chips([{ k: "Expected downtime", delta: res.expectedDowntime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "vs your plan", delta: res.expectedDowntime - baseFwd.expectedDowntime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }])}</div>
+    $("fwd-out").innerHTML = `<div class="chips"><span class="chip">Outcomes: pause extended ${pct(cw.extend)} · restrictions return ${pct(cw.lapse)} · new deal ${pct(cw.deal)}</span>
+        ${chips([{ k: "Average factory days lost in 2027", delta: res.expectedDowntime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "vs your actual stockpile", delta: res.expectedDowntime - baseFwd.expectedDowntime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }])}</div>
       <div class="fans">${KEYS.map((k) => { const m = res.minerals[k], start = (over ? over[k] : state.minerals[k].reserveDoC), r = rec[k];
-        return `<div class="fan"><div class="mname">${tile(k, true)}<b>${MINERALS[k].name}</b><span class="faint" style="margin-left:auto">start ${start.toFixed(0)} d</span></div>${fanSVG(m.fan)}
-          <div class="faint">P(falls below 60) <b class="${m.pBelow60 > 0.2 ? "up" : ""}">${pct(m.pBelow60)}</b> · below 30 <b>${pct(m.pBelow30)}</b></div>
-          <div class="faint">To stay ≥ 60 d in 90% of futures: hold <b>${r == null ? ">2000" : r} d</b>${r != null && r > start ? ` (+${Math.ceil(r - start)})` : r != null ? " ✓" : ""}</div></div>`; }).join("")}</div>
-      <div class="faint section">Band = P10–P90 of 1,000 simulated futures, line = median, red dashed = 60 days. Counts are of simulated paths, not probabilities.</div>`;
+        return `<div class="fan"><div class="mname">${tile(k, true)}<b>${MINERALS[k].name}</b><span class="faint" style="margin-left:auto">starts with ${start.toFixed(0)} days</span></div>${fanSVG(m.fan)}
+          <div class="faint">Drops below 60 days in <b class="${m.pBelow60 > 0.2 ? "up" : ""}">${pct(m.pBelow60)}</b> of futures · below 30 days in <b>${pct(m.pBelow30)}</b></div>
+          <div class="faint">To stay above 60 days in 9 of 10 futures, store <b>${r == null ? "over 2,000" : r} days</b>${r != null && r > start ? ` (${Math.ceil(r - start)} more)` : r != null ? " ✓ you do" : ""}</div></div>`; }).join("")}</div>
+      <div class="faint section">Shaded band = where most futures land, line = the middle one, red dashed line = 60 days. These are simulated futures, not predictions.</div>`;
   }
   function fanSVG(fan) {
     const W = 300, H = 140, L = 30, R = 10, T = 8, B = 18, max = Math.max(90, ...fan.map((f) => f.p90)) * 1.1;
@@ -468,9 +476,14 @@
     }
   });
   $("btn-about").onclick = showAbout;
+  const showGloss = () => { modal(`<div class="modal-head"><div class="kicker">Plain English</div><button class="ghost" id="btn-x">Close</button></div>${Plain.glossaryHTML()}`); $("btn-x").onclick = closeModal; };
+  $("btn-gloss").onclick = showGloss;
+  document.addEventListener("click", (e) => { if (e.target && e.target.id === "btn-gloss2") showGloss(); });
   $("btn-ledger").onclick = showLedger;
   $("btn-reset").onclick = () => { if (confirm("Restart the campaign from Q3 2023?")) { baseFwd = null; reset(false); } };
 
+  const syncTop = () => document.documentElement.style.setProperty("--top-h", `${document.querySelector(".topbar").offsetHeight}px`);
+  addEventListener("resize", syncTop); syncTop();
   reset(!/ff=/.test(location.hash));
   const ff = (location.hash.match(/ff=([0-9Q]+|END)/) || [])[1];
   if (ff) fastForward(ff);

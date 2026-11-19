@@ -12,16 +12,18 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="../v4/" title="Back to story mode"><span class="logo" aria-hidden="true">◆</span><span><b>Stockpile Strategist</b><span class="sub">Analyst mode · all six minerals</span></span></a>
+    <a class="brand" href="../v4/" title="Back to story mode"><span class="logo" aria-hidden="true">◆</span><span><b>Stockpile Strategist</b><span class="sub">Analyst mode · manage all six minerals</span></span></a>
     <div class="stats" id="stats"></div>
     <div class="top-actions">
-      <button class="ghost" id="btn-ledger">Decisions <b id="ledger-n">0</b></button>
+      <button class="ghost" id="btn-gloss">Key terms</button>
+      <button class="ghost" id="btn-ledger" title="Every quarter's choices and what they changed">Your decisions <b id="ledger-n">0</b></button>
       <button class="ghost" id="btn-about">About the data</button>
       <button class="ghost" id="btn-reset">Restart</button>
     </div>
   </header>
 
   <nav class="coach" id="coach" aria-label="This quarter"></nav>
+  <div class="strip-label">Your timeline: each box is 3 months, July 2023 to December 2026. <b style="color:#ff8f86">Red</b> = factories stopped that quarter, <b style="color:#5fc08f">green</b> = they kept running. Click a past box to review it.</div>
   <nav class="timeline-strip" id="tstrip" aria-label="Quarters"></nav>
 
   <main id="game" class="layout">
@@ -46,6 +48,7 @@
   <script src="../montecarlo.js"></script>
   <script src="../v4/rst.js"></script>
   <script src="../v4/missions.js"></script>
+  <script src="../v4/plain.js"></script>
   <script src="map.js"></script>
   <script src="app.js"></script>
 </body>
