@@ -15,142 +15,72 @@
   <div class="vignette" aria-hidden="true"></div>
 
   <header id="hud" class="hud hidden" aria-label="Status">
+    <a class="brand" href="./" title="Start over"><span class="logo">◆</span></a>
     <div class="hud-mission" id="hud-mission"></div>
-    <div class="hud-item"><span class="hud-k">Money left</span><span class="hud-v num" id="hud-budget">$12.00B</span></div>
-    <div class="hud-item hud-gauge" title="How long your stored supply keeps the factory running if your chosen shortage hits"><span class="hud-k">If a shortage hits, factory runs for</span>
-      <span class="hud-v num" id="hud-runtime">0 days</span><span class="gauge"><i id="hud-runtime-bar"></i></span></div>
-    <div class="hud-item" title="China's pause on its toughest rare-earth restrictions ends on 10 January 2027"><span class="hud-k">China's pause ends in</span><span class="hud-v num" id="hud-countdown">—</span></div>
+    <div class="hud-progress" id="hud-progress" aria-live="polite"></div>
+    <div class="hud-stats">
+      <div class="hud-item"><span class="hud-k">Money left</span><span class="hud-v num" id="hud-money">$12.00B</span></div>
+      <div class="hud-item"><span class="hud-k">Pause ends in</span><span class="hud-v num" id="hud-countdown">—</span></div>
+    </div>
     <div class="hud-actions">
+      <button class="ghost small" id="btn-ledger" title="Every choice you've made and what it changed">Decisions <b id="ledger-n">0</b></button>
       <button class="ghost small" id="btn-gloss">Key terms</button>
-      <button class="icon-btn" id="btn-about" aria-label="About the data and method">ⓘ</button>
+      <button class="icon-btn" id="btn-about" aria-label="About the data">ⓘ</button>
     </div>
   </header>
 
-  <nav id="coach" class="coach hidden" aria-label="Your progress"></nav>
-
-  <main id="acts">
-    <!-- Act 0: the situation, in plain words -->
-    <section class="act" data-act="0" aria-labelledby="a0-title">
-      <div class="cold">
-        <div class="eyebrow">Stockpile Strategist · a game about the minerals inside everyday technology</div>
-        <h1 id="a0-title" class="display">In <span class="num" id="a0-days">52</span> days, China could cut off minerals US factories can't work without.</h1>
-        <p class="cold-sub">You run America's <b>$12 billion emergency stockpile</b>. Your job is to keep the factories running.</p>
-        <div class="explain-cards">
-          <div class="xcard"><div class="xk">1 · The problem</div><p>A few minerals, like <b>dysprosium</b> for electric-car motors and <b>antimony</b> for artillery shells, come mostly from China. Since 2023, China has repeatedly restricted selling them to the US.</p></div>
-          <div class="xcard"><div class="xk">2 · The deadline</div><p>In November 2025, China agreed to <b>pause</b> its toughest new restrictions for a year. That pause has been extended only to <b>10 January 2027</b>. Nobody knows what happens next.</p></div>
-          <div class="xcard"><div class="xk">3 · Your job</div><p>Pick one mineral and find where its supply could break. Then store reserves and sign deals, and see how your plan holds up against <b>what really happened in 2023–26</b> and against <b>1,000 possible futures</b>.</p></div>
-        </div>
-        <div class="cold-actions">
-          <button class="primary big" id="btn-take" data-primary>Start · about 5 minutes</button>
-          <button class="textlink" id="btn-how">How it works</button>
-          <button class="textlink" id="btn-gloss0">Key terms explained</button>
-        </div>
-        <div class="globe-caption" id="globe-caption"></div>
+  <!-- Front page -->
+  <section class="front" id="front" aria-labelledby="f-title">
+    <div class="front-inner">
+      <div class="eyebrow">Stockpile Strategist</div>
+      <h1 id="f-title" class="display">In <span class="num" id="f-days">52</span> days, China could cut off minerals US factories need.</h1>
+      <p class="front-sub">You run America's <b>$12 billion emergency stockpile</b>. Keep the factories running.</p>
+      <div class="explain-cards">
+        <div class="xcard"><div class="xk">The problem</div><p>Key minerals for cars, chips and weapons come mostly from China, which keeps restricting them.</p></div>
+        <div class="xcard"><div class="xk">The deadline</div><p>China's pause on its toughest restrictions ends on <b>10 January 2027</b>.</p></div>
+        <div class="xcard"><div class="xk">Your job</div><p>Store the right supply, avoid traps, then test your plan on real events.</p></div>
       </div>
-      <div class="ticker" id="ticker" aria-live="polite"></div>
-    </section>
-
-    <!-- Act 1 -->
-    <section class="act" data-act="1" aria-labelledby="a1-title">
-      <div class="act-inner">
-        <div class="eyebrow">Step 1 of 5 · Pick what to protect</div>
-        <h2 id="a1-title" class="display-2">Which factory line will you protect?</h2>
-        <p class="act-intro">Each card is a real mineral and the products that depend on it. You'll follow just one mineral for the whole game.</p>
-        <div class="missions" id="missions" role="list"></div>
-        <div class="threshold hidden" id="threshold">
-          <div class="threshold-row">
-            <div>
-              <h3 class="sub-h">How big a shortage would stop this factory?</h3>
-              <p class="lede">If supply drops by more than <b class="num" id="thr-v">25%</b> for three months, the line stops.</p>
-              <input type="range" id="thr" min="10" max="40" step="1" value="25" aria-label="Shortage that stops the factory" />
-              <div class="faint">Lower means a more fragile factory, so it's harder to protect. 25% is a sensible default.</div>
-              <div class="thr-live" id="thr-live"></div>
-            </div>
-            <div class="factory" id="factory" aria-label="Factory status"></div>
-          </div>
-        </div>
+      <div class="front-actions">
+        <button class="primary big" id="btn-start">Start · 5 minutes</button>
+        <button class="textlink" id="btn-gloss0">Key terms</button>
+        <a class="textlink" href="../classic/">Analyst mode (all six minerals)</a>
       </div>
-      <div class="dock"><button class="primary big" id="btn-a1" data-primary disabled>Pick a mineral first</button></div>
-    </section>
+      <div class="globe-caption" id="globe-caption"></div>
+    </div>
+    <div class="ticker" id="ticker" aria-live="polite"></div>
+  </section>
 
-    <!-- Act 2 -->
-    <section class="act" data-act="2" aria-labelledby="a2-title">
-      <div class="act-split">
-        <div class="act-copy">
-          <div class="eyebrow">Step 2 of 5 · Find the weak spots</div>
-          <h2 id="a2-title" class="display-2" aria-live="polite"></h2>
-          <p class="lede" id="a2-lede"></p>
-          <div class="reveal-stats hidden" id="a2-stats"></div>
-          <div class="why-box hidden" id="a2-why"></div>
-          <div class="chips" id="a2-tools"></div>
-          <div class="explore hidden" id="a2-explore"></div>
-          <p class="fineprint" id="a2-fine"></p>
-        </div>
-        <div class="net-wrap">
-          <div class="net-legend" id="a2-legend"></div>
-          <div class="badge-illus hidden" id="a2-badge">Illustrative data · tap for details</div>
-          <div id="net" class="net"></div>
-        </div>
-      </div>
-      <div class="dock"><button class="primary big" id="btn-a2" data-primary disabled>Tap 2 suppliers</button></div>
-    </section>
-
-    <!-- Act 3 -->
-    <section class="act" data-act="3" aria-labelledby="a3-title">
-      <div class="act-split">
-        <div class="act-copy">
-          <div class="eyebrow">Step 3 of 5 · Prepare · it's July 2023</div>
-          <h2 id="a3-title" class="display-2">Get ready before trouble starts.</h2>
-          <p class="act-intro">You have two tools: <b>store extra supply</b>, and <b>sign deals</b> with producers outside China. Your <b>safety margin</b> shows how well protected you are. Aim for <b>Safe</b>.</p>
-          <div class="distance" id="distance"></div>
-          <div class="levers">
-            <div class="lever" id="lever-stock"></div>
-            <div class="lever" id="lever-offtake"></div>
-            <div class="lever" id="lever-stress"></div>
-          </div>
-        </div>
-        <div class="net-wrap">
-          <div class="net-legend" id="a3-legend"></div>
-          <div class="badge-illus hidden" id="a3-badge">Illustrative data · tap for details</div>
-          <div id="net3" class="net"></div>
-        </div>
-      </div>
-      <div class="dock"><button class="primary big" id="btn-a3" data-primary>Start the clock: July 2023 →</button></div>
-    </section>
-
-    <!-- Act 4 -->
-    <section class="act" data-act="4" aria-labelledby="a4-title">
-      <div class="replay">
-        <div class="replay-top">
-          <div>
-            <div class="eyebrow">Step 4 of 5 · Live through 2023–2026</div>
-            <h2 id="a4-title" class="display-2 small" aria-live="polite">July 2023</h2>
-            <p class="act-intro" style="margin:0">Real events play out against your plan, three months at a time. It pauses at 4 key moments for you to decide.</p>
-          </div>
-          <div class="replay-controls"><button class="ghost" id="btn-speed">Faster</button><button class="ghost" id="btn-skip">Skip to the end</button></div>
-        </div>
-        <div class="replay-grid">
-          <div class="replay-side"><div class="why-q" id="why-q"></div><div class="realworld" id="realworld"></div><div class="news" id="news" aria-live="polite"></div></div>
-          <div class="timeline-wrap"><div id="net4" class="net net4"></div><svg id="timeline" class="timeline" role="img" aria-label="Your stockpile and factory stoppages over time"></svg><div class="validation hidden" id="validation"></div></div>
-        </div>
-        <div class="pause hidden" id="pause" role="dialog" aria-modal="false"></div>
-      </div>
-      <div class="dock"><button class="primary big hidden" id="btn-a4" data-primary>Now face the 2027 deadline →</button></div>
-    </section>
-
-    <!-- Act 5 -->
-    <section class="act" data-act="5" aria-labelledby="a5-title">
-      <div class="cliff">
-        <div class="eyebrow">Step 5 of 5 · The deadline: 10 January 2027</div>
-        <h2 id="a5-title" class="display-2" aria-live="polite">1,000 possible futures</h2>
-        <p class="act-intro">After the pause ends, China might extend it, let its restrictions return, or strike a new deal. We play 2027 out 1,000 times from where your stockpile stands now. Each line below is one possible future.</p>
-        <div class="whatif hidden" id="whatif"></div>
-        <div class="fan-wrap"><canvas id="fan" aria-label="1,000 possible futures of your stockpile"></canvas><div class="fan-labels" id="fan-labels"></div></div>
-        <div class="report hidden" id="report"></div>
-      </div>
-      <div class="dock" id="a5-dock"></div>
-    </section>
+  <!-- Steps -->
+  <main id="app" class="app hidden">
+    <div class="step-col" id="stepCol">
+      <section class="step" data-step="pick"><div class="card" id="s-pick"></div></section>
+      <section class="step" data-step="limit"><div class="card" id="s-limit"></div></section>
+      <section class="step" data-step="map"><div class="card" id="s-map"></div></section>
+      <section class="step" data-step="quiz"><div class="card" id="s-quiz"></div></section>
+      <section class="step" data-step="answer"><div class="card" id="s-answer"></div></section>
+      <section class="step" data-step="hidden"><div class="card" id="s-hidden"></div></section>
+      <section class="step" data-step="store"><div class="card" id="s-store"></div></section>
+      <section class="step" data-step="deals"><div class="card" id="s-deals"></div></section>
+      <section class="step" data-step="check"><div class="card" id="s-check"></div></section>
+      <section class="step" data-step="history"><div class="card" id="s-history"></div></section>
+      <section class="step" data-step="results"><div class="card wide" id="s-results"></div></section>
+      <section class="step" data-step="futures"><div class="card wide" id="s-futures"></div></section>
+      <section class="step" data-step="report"><div class="card wide" id="s-report"></div></section>
+    </div>
+    <aside class="live hidden" id="live" aria-label="Live supply chain">
+      <div class="live-head"><div class="live-title" id="liveTitle">Live supply chain</div><button class="badge-illus hidden" id="liveBadge">Some figures estimated</button></div>
+      <div class="live-status" id="liveStatus"></div>
+      <div class="live-graph" id="liveGraph"></div>
+      <div class="live-legend" id="liveLegend"></div>
+      <div class="live-extra" id="liveExtra"></div>
+    </aside>
   </main>
+
+  <nav class="dock hidden" id="dock" aria-label="Navigation">
+    <button class="ghost" id="btn-back">← Back</button>
+    <div class="dock-hint" id="dock-hint"></div>
+    <button class="primary big" id="btn-next" data-primary>Next →</button>
+  </nav>
 
   <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Details">
     <button class="icon-btn drawer-close" id="drawer-close" aria-label="Close">✕</button>

@@ -21,6 +21,26 @@ To play locally, open `site/v4/index.html` in a browser. There's no build step, 
 | **4 · History strikes** | The real 2023–26 events replay against your defences, with a do-nothing ghost and four decision pauses. A validation card reports Match / Partial / Miss honestly | Unchanged `sim.js` engine · cited events · Tavily intel |
 | **5 · The cliff** | 1,000 simulated futures draw in, split by cliff branch. Then a report card, benchmarks and a shareable PNG | Unchanged `montecarlo.js` · Tavily news signal |
 
+### Story mode in 13 short steps
+
+Each screen has one idea and one action, with Back/Next in the same place every time:
+
+1. Choose a mineral
+2. Your factory's limit
+3. The supply chain
+4. Quiz
+5. The weak spots
+6. The hidden weak point
+7. Build a stockpile
+8. Supply deals
+9. Check your plan
+10. Live through 2023–26
+11. Your results
+12. The 2027 deadline
+13. Your report
+
+The **live supply chain panel** stays beside the step and reacts to what you do. Your stockpile tank fills as you buy. In the 2023–26 replay, supply lines thin with "−x%" when restrictions hit, the tank drains as stored supply keeps the factory running, the factory lamp turns red when the line stops, and deals light up once they deliver. Analyst mode shows the same graph for any mineral in its "Supply chain" tab.
+
 ### Written for newcomers
 
 - **Plain language throughout.**
@@ -54,7 +74,7 @@ To play locally, open `site/v4/index.html` in a browser. There's no build step, 
 
 Shortcuts: [`#ff=2024Q4`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=2024Q4) · [`#ff=END`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=END).
 
-**v4 shortcuts:** [`#act=2&m=antimony`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#act=2&m=antimony) jumps to the antimony fault-line reveal. [`#act=3&m=dysprosium`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#act=3&m=dysprosium) jumps to the dysprosium defences. Press Enter for the primary action, ←/→ to move between choices, and Esc to close drawers.
+**v4 shortcuts:** [`#step=answer&m=cobalt`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#step=answer&m=cobalt) jumps to the cobalt weak-spot reveal. [`#step=store&m=dysprosium`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#step=store&m=dysprosium) jumps to building a dysprosium stockpile. Press Enter for the primary action, ←/→ to move between choices, and Esc to close drawers.
 
 ## The networks: what's measured, what's illustrative
 

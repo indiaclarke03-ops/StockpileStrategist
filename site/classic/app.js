@@ -15,7 +15,7 @@
   const TILE = { gallium: "#3987e5", germanium: "#0ca30c", antimony: "#199e70", graphite: "#c98500", dysprosium: "#9085e9", cobalt: "#d55181" };
   const THR = 0.25; // analyst mode: line stops at a 25% shortfall (distance-to-disaster readout)
 
-  let state, orders, lastReport, reports, shadowReps, sel, mapMineral, models, ledger, intelTab, coachDone;
+  let state, orders, lastReport, reports, shadowReps, sel, mapMineral, models, ledger, intelTab, coachDone, intelMore = false;
 
   // ---------- setup ----------
   function reset(intro = true) {
@@ -94,18 +94,19 @@
     const world = (EXT.responses || []).filter((r) => QUARTERS.indexOf(r.quarter) >= 0 && QUARTERS.indexOf(r.quarter) < state.qi).slice(-8).reverse();
     const prior = EVENTS.filter((e) => new Date(e.date) < start).slice(-6).reverse();
     const body = {
-      news: brief && brief.items && brief.items.length ? brief.items.map((i) => `<div class="intel-item news"><div class="d">${esc(i.date)} · <a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.source || domain(i.url))}</a></div><b>${esc(i.title)}</b>${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ""}</div>`).join("") : `<div class="faint">No cached Tavily briefing for this quarter.</div>`,
-      world: world.length ? world.map((r) => `<div class="intel-item world"><div class="d">${esc(r.date)} · ${esc(r.actor)}</div>${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("") : `<div class="faint">Nothing yet. Early on, governments mostly made rules and gave grants rather than buying minerals.</div>`,
+      news: brief && brief.items && brief.items.length ? brief.items.slice(0, intelMore ? 9 : 3).map((i) => `<div class="intel-item news"><div class="d">${esc(i.date)} · <a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.source || domain(i.url))}</a></div>${esc(i.title)}</div>`).join("") + (brief.items.length > 3 ? `<button class="linkbtn" id="intel-more">${intelMore ? "Show fewer" : `Show ${brief.items.length - 3} more`}</button>` : "") : `<div class="faint">No news cached for this quarter.</div>`,
+      world: world.length ? world.slice(0, intelMore ? 8 : 3).map((r) => `<div class="intel-item world"><div class="d">${esc(r.date)} · ${esc(r.actor)}</div>${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("") : `<div class="faint">Nothing yet. Early on, governments mostly made rules and gave grants rather than buying minerals.</div>`,
       timeline: (prior.length ? prior : []).map((e) => `<div class="intel-item timeline"><div class="d">${e.date} · ${esc(e.actor)}</div>${esc(e.headline)}</div>`).join("") + (prior.length < 2 ? BACKGROUND.map((b) => `<div class="intel-item"><div class="d">${b.date} · background</div>${esc(b.text)}</div>`).join("") : ""),
     };
     $("intel").innerHTML = `<h2>Briefing</h2><p class="qtitle">${qLabel(q)}</p>
       <div class="faint">What you could have known on ${start.toISOString().slice(0, 10)}. Nothing from the future.</div>
       <div class="tabs" role="tablist">${[["news", `News (${brief && brief.items ? brief.items.length : 0})`], ["world", `What governments did (${world.length})`], ["timeline", "Events so far"]].map(([id, l]) => `<button role="tab" aria-pressed="${intelTab === id}" data-tab="${id}">${l}</button>`).join("")}</div>
-      ${intelTab === "news" ? `<div class="faint">Real headlines from the previous three months (found with Tavily).</div>` : intelTab === "world" ? `<div class="faint">What the US, Japan, the EU and companies had already done. Compare your moves with theirs.</div>` : `<div class="faint">The restrictions and shocks that have happened so far.</div>`}
+
       ${body[intelTab]}
       <button class="ghost" style="width:100%;margin-top:8px" id="btn-read">✓ Done reading, now decide</button>
       ${lastReport ? `<button class="ghost" style="width:100%;margin-top:6px" id="btn-lastq">What happened in ${qLabel(lastReport.quarter)}?</button>` : ""}`;
     $("intel").querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { intelTab = b.dataset.tab; tick("read"); renderIntel(); }));
+    if ($("intel-more")) $("intel-more").onclick = () => { intelMore = !intelMore; renderIntel(); };
     $("btn-read").onclick = () => { tick("read"); document.querySelector(".mtable tr.row") && document.querySelector(".mtable tr.row").focus(); };
     if ($("btn-lastq")) $("btn-lastq").onclick = () => showReveal(lastReport);
   }
@@ -114,7 +115,7 @@
     if (state.done) { $("table").innerHTML = ""; return; }
     const hit = new Set(lastReport ? lastReport.events.flatMap((e) => Object.keys(e.effects)) : []);
     $("table").innerHTML = `<h2>Your six minerals · click one to manage it</h2>
-      <div class="help">Stored = days of normal use in your stockpile (60 is Japan's target). Price is relative to mid-2023 (= 100). Safety margin = how big a shock that mineral could absorb (aim for Safe). <button class="ghost" style="padding:1px 8px;min-height:0;font-size:11px" id="btn-gloss2">What do these mean?</button></div>
+      <div class="help">Aim for a <b>Safe</b> safety margin on every mineral. <button class="linkbtn" id="btn-gloss2">What do the columns mean?</button></div>
       <table class="mtable"><thead><tr><th>Mineral</th><th>Stored (days)</th><th>Price</th><th>Imports arriving</th><th>Share from China</th><th title="How big a shock this mineral's supply could absorb before factories stop (25% shortage). Not a probability.">Safety margin</th><th>Your plan</th></tr></thead><tbody>
       ${KEYS.map((k) => {
         const m = state.minerals[k], p = MINERALS[k], proj = projected(k), d = distOf(k, proj), d0 = distOf(k, m.reserveDoC);
@@ -165,54 +166,71 @@
       ${proj !== m.reserveDoC ? `<line x1="${X(doc.length - 1)}" y1="${Y(m.reserveDoC)}" x2="${X(doc.length)}" y2="${Y(proj)}" stroke="#E08A52" stroke-width="2.4" stroke-dasharray="5 4"/><circle cx="${X(doc.length)}" cy="${Y(proj)}" r="4" fill="#E08A52"/>` : ""}
     </svg><div class="chart-cap"><span style="color:#E08A52">■</span> days of supply in your stockpile (dashed = after this quarter's plan) · <span style="color:#3987e5">■</span> share of normal imports arriving (top = 100%)</div>`;
   }
+  let detailTab = "decide";
   function renderDetail() {
     if (state.done) { $("detail").innerHTML = ""; return; }
     const k = sel, m = state.minerals[k], p = MINERALS[k];
+    const ys = knownYears(k), model = models[k];
+    const tabs = [["decide", "Decide"], ["chain", "Supply chain"], ["price", "Price"], ["map", "Map"]];
+    $("detail").innerHTML = `<div class="detail-head"><div class="mname">${tile(k)}<div><h3>${p.name}</h3><span>${esc(p.uses)}</span></div></div>
+        <div class="chips">${m.cutNet > 0.02 ? `<span class="chip bad">restricted · ${pct(m.importAvail)} of imports arriving</span>` : `<span class="chip good">no restrictions</span>`}${ys.length ? `<span class="chip">from China: ${pct(ys[ys.length - 1].share)} (${ys[ys.length - 1].year})</span>` : ""}</div></div>
+      <div class="tabs" role="tablist" style="margin-top:12px">${tabs.map(([id, l]) => `<button role="tab" aria-pressed="${detailTab === id}" data-dt="${id}">${l}</button>`).join("")}</div>
+      <div id="dt-body"></div>`;
+    $("detail").querySelectorAll("[data-dt]").forEach((b) => (b.onclick = () => { detailTab = b.dataset.dt; renderDetail(); }));
+    const body = $("dt-body");
+    if (detailTab === "decide") decideTab(body, k);
+    if (detailTab === "chain") chainTab(body, k);
+    if (detailTab === "price") {
+      const spread = (D.DY_SPREAD || []).filter((x) => QUARTERS.indexOf(x.knownFrom) <= state.qi), latest = spread.filter((x) => x.ratio).pop();
+      body.innerHTML = priceChart(k) + reserveChart(k) + (k === "dysprosium" && latest ? `<div class="spread"><b>You pay about ${latest.ratio}× what Chinese factories pay</b><div class="faint">${esc(latest.label)} · <a href="${esc(latest.source)}" target="_blank" rel="noopener">${esc(latest.outlet)}</a></div></div>` : "");
+    }
+    if (detailTab === "map") { body.innerHTML = `<div id="mapwrap"></div>`; renderMap(); }
+  }
+  function decideTab(body, k) {
+    const m = state.minerals[k], p = MINERALS[k];
     const buy = orders.buy[k] || 0, rel = orders.release[k] || 0, max = Sim.maxBuy(state, k);
     const cost = Sim.quoteBuy(state, k, buy), proj = projected(k);
     const d0 = distOf(k, m.reserveDoC), d1 = distOf(k, proj);
-    const priceImpact = ((p.eta * buy) / p.marketDepth) * 100 - ((p.eta * rel) / p.marketDepth / 2) * 100;
-    const ys = knownYears(k);
+    const priceImpact = ((p.eta * buy) / p.marketDepth) * 100;
     const deals = state.offtakes.filter((o) => o.mineral === k);
-    const pending = orders.offtakes.filter((id) => COUNTERPARTIES.find((c) => c.id === id).mineral === k);
-    const spread = (D.DY_SPREAD || []).filter((x) => QUARTERS.indexOf(x.knownFrom) <= state.qi);
-    const latest = spread.filter((x) => x.ratio).pop();
-    const model = models[k];
-    $("detail").innerHTML = `<div class="detail-head"><div class="mname">${tile(k)}<div><h3>${p.name}</h3><span>${esc(p.uses)}</span></div></div>
-        <div class="chips">${m.cutNet > 0.02 ? `<span class="chip bad">China restrictions in force</span>` : `<span class="chip good">no restrictions right now</span>`}<span class="chip">${pct(m.importAvail)} of normal imports arriving</span>${ys.length ? `<span class="chip">share from China: ${ys.map((y) => `${y.year} ${pct(y.share)}`).join(" → ")}</span>` : ""}<span class="chip ${model.synthetic ? "warn" : "info"}" title="${esc(model.caveats[0] || "")}">${model.synthetic ? "supplier data partly estimated" : "supplier data measured from shipping records"}</span></div></div>
-      <div class="detail-grid">
-        <div>${priceChart(k)}${reserveChart(k)}
-          ${k === "dysprosium" && spread.length ? `<div class="spread"><b>Ex-China vs China price ${latest ? `<span class="up">${latest.ratio}×</span>` : ""}</b>${latest ? `<div class="r"><span>You pay</span><i style="width:100%"></i><b class="num">${m.priceIdx.toFixed(0)}</b></div><div class="r"><span>China pays</span><i style="width:${Math.max(2, 100 / latest.ratio)}%"></i><b class="num">≈${(m.priceIdx / latest.ratio).toFixed(0)}</b></div>` : ""}${spread.map((x) => `<div class="faint">${esc(x.label)} · <a href="${esc(x.source)}" target="_blank" rel="noopener">${esc(x.outlet)}</a></div>`).join("")}</div>` : ""}
-        </div>
-        <div>
-          <h3 style="font-size:15px;margin-bottom:6px">Your decision for ${esc(p.name)}</h3>
-          <div class="ctrl"><label for="buy">Buy more supply this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
-            <div class="presets"><button data-to="60">→ 60 days</button><button data-to="90">→ 90 days</button><button data-to="max">Max (${max})</button><button data-to="0">Clear</button></div>
-            <div class="faint">You can buy up to ${max} days this quarter (less when imports are restricted). Buying a lot pushes the price up.</div></div>
-          <div class="ctrl"><label for="rel">Release stock to factories <b>${rel} days</b></label><input type="range" id="rel" min="0" max="${Math.floor(m.reserveDoC)}" step="1" value="${rel}" ${m.reserveDoC >= 1 ? "" : "disabled"}></div>
-          <div class="preview" aria-live="polite"><div class="hud-k faint">What this will do (nothing is final until you lock it in)</div>
-            <div class="row"><span>Cost</span><b>${fmt$(cost)}</b></div>
-            <div class="row"><span>Your buying pushes the price up by</span><b class="${priceImpact > 0.5 ? "up" : priceImpact < -0.5 ? "down" : ""}">${priceImpact >= 0 ? "+" : ""}${priceImpact.toFixed(1)}%</b></div>
-            <div class="row"><span>Days of supply stored</span><b>${m.reserveDoC.toFixed(0)} → ${proj.toFixed(0)}</b></div>
-            <div class="row"><span>If a 25% shortage hits, factories keep running for</span><b>${Math.round(proj / THR)} days</b></div>
-            <div class="row"><span>Safety margin</span><b>${Plain.margin(d0)} → ${Plain.margin(d1)} ${Plain.zoneTag(d1)}</b></div>
-            <div class="row"><span>Money left after your whole plan</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
-            <div class="row"><span>Storage cost each quarter</span><b>≈${fmt$(CONFIG.storageRate * proj * p.baseCost * m.priceIdx / 100)}</b></div>
-            ${buy ? `<div class="row"><span>5 more days would cost</span><b>${fmt$(Sim.quoteBuy(state, k, Math.min(max, buy + 5)) - cost)}</b></div>` : ""}
-          </div>
-          <div style="margin-top:10px"><div class="faint">Supply deals for ${esc(p.name)}: ${deals.length ? deals.map((o) => `${esc(COUNTERPARTIES.find((c) => c.id === o.id).name)} (${{ pending: "not delivering yet", delivering: "delivering", blocked: "blocked" }[o.status] || o.status})`).join(", ") : "none yet"}${pending.length ? ` · ${pending.length} added this quarter` : ""}</div>
-            <button class="ghost" style="margin-top:6px;width:100%" id="btn-off-k">Sign a supply deal for ${esc(p.name)}…</button></div>
-        </div>
-      </div>`;
+    body.innerHTML = `<div class="detail-grid">
+      <div>
+        <div class="ctrl"><label for="buy">Buy this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
+          <div class="presets"><button data-to="60">Up to 60 days</button><button data-to="90">Up to 90 days</button><button data-to="max">Max (${max})</button><button data-to="0">Clear</button></div></div>
+        <div class="ctrl"><label for="rel">Release to factories <b>${rel} days</b></label><input type="range" id="rel" min="0" max="${Math.floor(m.reserveDoC)}" step="1" value="${rel}" ${m.reserveDoC >= 1 ? "" : "disabled"}></div>
+        <div class="faint">Deals: ${deals.length ? deals.map((o) => `${esc(COUNTERPARTIES.find((c) => c.id === o.id).name)} (${{ pending: "not started", delivering: "delivering", blocked: "blocked" }[o.status] || o.status})`).join(", ") : "none"} · <button class="linkbtn" id="btn-off-k">Sign a deal</button></div>
+      </div>
+      <div class="preview" aria-live="polite"><div class="hud-k faint">If you lock this in</div>
+        <div class="row"><span>Cost</span><b>${fmt$(cost)}</b></div>
+        <div class="row"><span>Price impact</span><b class="${priceImpact > 0.5 ? "up" : ""}">+${priceImpact.toFixed(1)}%</b></div>
+        <div class="row"><span>Stored</span><b>${m.reserveDoC.toFixed(0)} → ${proj.toFixed(0)} days</b></div>
+        <div class="row"><span>Safety margin</span><b>${Plain.margin(d0)} → ${Plain.margin(d1)} ${Plain.zoneTag(d1)}</b></div>
+        <div class="row"><span>Money left</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
+      </div></div>`;
     const setBuy = (v) => { orders.buy[k] = Math.max(0, Math.min(max, v)); tick("orders"); refreshLive(); };
     $("buy").oninput = (e) => setBuy(+e.target.value);
     $("rel").oninput = (e) => { orders.release[k] = +e.target.value; tick("orders"); refreshLive(); };
-    $("detail").querySelectorAll("[data-to]").forEach((b) => (b.onclick = () => {
+    body.querySelectorAll("[data-to]").forEach((b) => (b.onclick = () => {
       const t = b.dataset.to;
       if (t === "max") setBuy(max); else if (t === "0") setBuy(0);
       else { let d = Math.max(0, Math.ceil(+t - m.reserveDoC + (orders.release[k] || 0))); d = Math.min(d, max); while (d > 0 && Sim.quoteBuy(state, k, d) > state.budget - orderCost() + Sim.quoteBuy(state, k, orders.buy[k] || 0)) d--; setBuy(d); }
     }));
     $("btn-off-k").onclick = () => showOfftakes(k);
+  }
+  /** Same live supply-chain view as story mode: current import cuts, your stockpile tank, factory state. */
+  function chainTab(body, k) {
+    const m = state.minerals[k], model = models[k], last = reports.length ? reports[reports.length - 1].minerals[k] : null;
+    body.innerHTML = `<div class="chain-status">${[["Imports arriving", pct(m.importAvail), m.importAvail < 0.85 ? "bad" : "good"], ["Stockpile", `${Math.round(projected(k))} days`, "ore"], ["Factory last quarter", last && last.downtime > 0.5 ? `Stopped ${Math.round(last.downtime)}d` : "Running", last && last.downtime > 0.5 ? "bad" : "good"]].map(([a, b, c]) => `<div class="ls ${c}"><div class="k">${a}</div><div class="v">${b}</div></div>`).join("")}</div>
+      <div id="chainGraph"></div><div class="faint">Circle size = share of supply · −x% = supply cut by restrictions · tank = your stockpile ${model.synthetic ? "· some figures estimated" : "· measured from shipping records"}</div>`;
+    const net = new NetView($("chainGraph"), model, { plantLabel: "US factories" });
+    const drc = k === "cobalt";
+    let ex = model.nodes.map((n, i) => i).filter((i) => (drc ? model.tier2.some((t) => t.country === "COD" && (t.share || {})[model.nodes[i].id] >= 0.3) : model.nodes[i].chinaLinked));
+    if (!ex.length) ex = model.nodes.map((n, i) => i);
+    const exShare = ex.reduce((s, i) => s + model.nodes[i].share, 0) || 1, f = Math.max(0, Math.min(1, 1 - (1 - m.importAvail) / exShare));
+    net.setFlows(model.nodes.map((n, i) => (ex.includes(i) ? f : 1)));
+    net.setTank(projected(k));
+    net.setFactory(last && last.downtime > 0.5 ? "stopped" : last && last.drawn > 0.5 ? "strained" : "running", last && last.downtime > 0.5 ? "stopped" : last && last.drawn > 0.5 ? "running on stockpile" : "running");
+    net.onTap = () => {};
   }
   /** Re-render the parts that depend on orders without rebuilding the active slider (keeps drag smooth). */
   function refreshLive() {
@@ -264,7 +282,7 @@
   // ---------- map ----------
   function renderMap() {
     const el = $("mapwrap");
-    if (state.done) { el.innerHTML = ""; return; }
+    if (!el || state.done) return;
     const t0 = EXT.trade && EXT.trade[mapMineral];
     let shares = [], year = null;
     if (t0) { const ys = knownYears(mapMineral).map((r) => r.year); year = ys.length ? ys[ys.length - 1] : Object.keys(t0.sharesByYear || {}).sort()[0]; shares = (t0.sharesByYear && t0.sharesByYear[year]) || t0.shares; }
@@ -274,6 +292,7 @@
       <div class="map-legend"><span><i style="background:var(--ore)"></i>share of US imports (${esc(year || "—")}${year && knownYears(mapMineral).length ? "" : ", baseline"})</span><span><i style="border:2px solid var(--danger)"></i>China</span><span><i style="background:var(--info)"></i>offtake candidate</span><span><i style="background:var(--warn)"></i>flagged candidate</span></div>
       <div class="faint">${t0 ? esc(t0.sourceLabel) : "No cached trade data."}</div>`;
     el.querySelectorAll("[data-map]").forEach((b) => (b.onclick = () => { mapMineral = b.dataset.map; renderMap(); }));
+    el.querySelector(".map-head h2").textContent = "Where US imports come from";
     SupplyMap.render($("mapsvg"), { shares, pins, disruptions: EXT.disruptions || [] });
   }
 

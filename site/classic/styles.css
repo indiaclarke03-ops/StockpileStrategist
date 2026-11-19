@@ -195,3 +195,44 @@ details summary { cursor: pointer; color: var(--ink-2); }
 
 .coach { top: var(--top-h, 61px); }
 .intel, .orders { top: calc(var(--top-h, 61px) + 110px); }
+
+/* Shared live supply-chain graph (from story mode) */
+:root { --mission: #9085e9; --ink-3: #7D8698; }
+/* Network */
+.n-edge { fill: none; stroke: rgba(148,163,184,.25); transition: stroke-width .5s, opacity .5s; }
+.n-edge.flow { stroke-dasharray: 2 9; animation: flow 1.6s linear infinite; stroke: rgba(110,168,240,.7); }
+.n-edge.up { stroke: rgba(255,90,78,0); } .n-edge.up.on { stroke: rgba(255,90,78,.75); stroke-dasharray: 2 8; animation: flowup 1.2s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -22; } } @keyframes flowup { to { stroke-dashoffset: 20; } }
+.n-node circle.body { fill: rgba(30,41,59,.95); stroke: var(--mission); stroke-width: 2.2; cursor: pointer; transition: opacity .4s; }
+.n-node.cn circle.body { stroke: #c7cbd4; }
+.n-node.sel circle.body { stroke: var(--ore); stroke-width: 4; fill: rgba(224,138,82,.2); }
+.n-node.fault circle.body { stroke: var(--danger); stroke-width: 3; fill: rgba(255,90,78,.18); }
+.n-node.cut circle.body { opacity: .55; } .n-node .cutb { fill: #ff8f86; font: 700 13px var(--mono); text-anchor: middle; }
+.n-node.dimmed { opacity: .4; } .n-node.new circle.body { stroke-dasharray: 5 4; }
+.n-node .ring { fill: none; opacity: 0; } .n-node .halo { fill: none; stroke: rgba(238,241,246,.16); }
+.n-node text { fill: var(--ink); font: 600 14px var(--sans); text-anchor: middle; pointer-events: none; }
+.n-node text.val { font: 700 16px var(--mono); } .n-node text.sub { fill: var(--ink-3); font: 500 12px var(--sans); }
+.n-link { fill: none; stroke: var(--danger); stroke-width: 2.2; opacity: 0; } .n-link.on { opacity: .8; stroke-dasharray: 6 5; animation: flow 1.4s linear infinite; }
+.n-t2 circle { fill: rgba(30,41,59,.9); stroke: rgba(148,163,184,.5); stroke-width: 1.5; }
+.n-t2.spof circle { stroke: var(--danger); stroke-width: 3; } .n-t2.spof .pulse { fill: none; stroke: var(--danger); animation: pulse 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pulse { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.9); } }
+.n-t2 text { fill: var(--ink-2); font: 500 13px var(--sans); text-anchor: middle; } .n-t2 .spof-label { fill: var(--danger); font: 700 12px var(--mono); }
+.n-plant rect { fill: rgba(224,138,82,.14); stroke: var(--ore); stroke-width: 2; transition: fill .4s, stroke .4s; }
+.n-plant text { fill: var(--ink); font: 700 14px var(--sans); text-anchor: middle; } .n-plant .plant-status { font: 600 12px var(--mono); fill: var(--ok); text-transform: uppercase; }
+.n-plant .lamp { fill: var(--ok); } .n-plant.stopped rect { fill: rgba(255,90,78,.2); stroke: var(--danger); } .n-plant.stopped .lamp, .n-plant.stopped .plant-status { fill: var(--danger); }
+.n-plant.strained .lamp, .n-plant.strained .plant-status { fill: var(--warn); }
+.n-shock { fill: var(--danger); }
+.tank-shell { fill: rgba(11,15,23,.9); stroke: var(--ore); stroke-width: 2; } .tank-fill { fill: rgba(224,138,82,.55); transition: y .6s ease, height .6s ease; }
+.tank text { text-anchor: middle; } .tank .tank-k { fill: var(--ink-3); font: 700 11px var(--mono); letter-spacing: .1em; } .tank .tank-v { fill: var(--ink); font: 700 20px var(--display); } .tank .tank-u { fill: var(--ink-2); font: 500 11px var(--sans); }
+.tank.empty .tank-shell { stroke: var(--ink-3); stroke-dasharray: 4 4; }
+.tank-flow { fill: none; stroke: rgba(224,138,82,0); stroke-width: 6; } .tank-flow.on { stroke: rgba(224,138,82,.85); stroke-dasharray: 4 8; animation: flowtank .8s linear infinite; }
+@keyframes flowtank { to { stroke-dashoffset: 24; } }
+
+
+.chain-status { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 6px; }
+.ls { border-radius: 10px; padding: 7px 10px; background: rgba(148,163,184,.06); border: 1px solid var(--line); }
+.ls .k { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); } .ls .v { font: 700 16px var(--display); }
+.ls.bad .v { color: var(--danger); } .ls.good .v { color: var(--ok); } .ls.ore .v { color: var(--ore); }
+#chainGraph svg { width: 100%; height: auto; max-height: 420px; display: block; }
+.linkbtn { background: none; border: 0; color: var(--info); padding: 0; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.intel-item.news { font-size: 13px; }
