@@ -126,6 +126,19 @@
       ${brief.note ? `<div class="faint">${esc(brief.note)}</div>` : ""}`;
   }
 
+  function spreadBox(m) {
+    const known = (window.GAME_DATA.DY_SPREAD || []).filter((x) => QUARTERS.indexOf(x.knownFrom) <= state.qi);
+    if (!known.length) return "";
+    const latest = known.filter((x) => x.ratio).pop();
+    return `<div class="spread">
+      <div class="spread-head"><b>Ex-China vs China price</b>${latest ? `<span class="num">${latest.ratio}×</span>` : `<span class="chip warn">widening</span>`}</div>
+      ${latest ? `<div class="spread-bars" title="Your ex-China index vs implied China-price index">
+        <div><span>You pay</span><i style="width:100%"></i><b class="num">${m.priceIdx.toFixed(0)}</b></div>
+        <div><span>China pays</span><i style="width:${Math.max(2, 100 / latest.ratio)}%"></i><b class="num">≈${(m.priceIdx / latest.ratio).toFixed(0)}</b></div></div>` : ""}
+      ${known.map((x) => `<div class="faint">${esc(x.label)} · <a href="${esc(x.source)}" target="_blank" rel="noopener">${esc(x.outlet)}</a></div>`).join("")}
+    </div>`;
+  }
+
   function sparkline(k) {
     const m = state.minerals[k], h = m.hist.price, src = m.hist.priceSrc;
     const W = 260, H = 46, pad = 4;
@@ -176,6 +189,7 @@
         ${(() => { const t = EXT.trade && EXT.trade[k]; if (!t) return ""; const ys = knownYears(t);
           if (!ys.length) return `<div class="faint" title="${esc(p.exposureSource || "")}">China share of US imports: 2023 Comtrade data not yet published.</div>`;
           return `<div class="faint" title="${esc(p.exposureSource || "")}${t.limitations ? " · " + esc(t.limitations.slice(0, 300)) : ""}">China share of US imports (Comtrade, HS ${esc((t.hs || []).join("/"))}): ${ys.map((y) => `${y.year} <b class="num">${pct(y.share)}</b>`).join(" → ")}</div>`; })()}
+        ${k === "dysprosium" ? spreadBox(m) : ""}
         <div>${sparkline(k)}<div class="spark-legend"><span>2023Q2 = 100</span><span>● reported · ○ modelled/assumed</span></div></div>
         <div class="ctrl"><span class="muted">Buy</span>
           <div class="stepper"><button data-a="buy" data-k="${k}" data-d="-1" ${buy ? "" : "disabled"}>−</button><span class="val">${buy}</span>
@@ -213,7 +227,9 @@
         <select id="ff">${remaining.map((q) => `<option value="${q}">${qLabel(q)}</option>`).join("")}<option value="END">End of campaign</option></select>
         <button id="btn-ff" title="Resolve quarters with no new orders">Fast-forward</button>
       </div>
-      <div class="faint" style="margin-top:4px">Fast-forward plays empty quarters (useful for jumping to the Dec 2024 ban).</div>`;
+      <div class="faint" style="margin-top:4px">Fast-forward plays empty quarters (useful for jumping to the Dec 2024 ban).</div>
+      ${readinessPanel()}`;
+    $("orders").querySelectorAll("button[data-ready]").forEach((b) => (b.onclick = () => setBuyTo(b.dataset.ready, +b.dataset.to)));
     $("auto").onchange = (e) => { state.autoRelease = e.target.checked; };
     $("btn-offtake").onclick = showOfftakes;
     $("btn-commit").onclick = commit;
@@ -240,6 +256,49 @@
       <div class="faint" style="margin-top:4px">${t ? esc(t.sourceLabel) : "No cached trade data for this mineral."}${t && t.hhi != null ? ` · supplier-country HHI ${Math.round(t.hhi)}` : ""}${t && t.riskFlags && t.riskFlags.length ? ` · Sayari supplier risk flags: ${t.riskFlags.slice(0, 4).map((f) => `${esc(humanFlag(f.label))} (${f.count})`).join(", ")}` : ""}</div>`;
     el.querySelectorAll("button[data-map]").forEach((b) => (b.onclick = () => { mapMineral = b.dataset.map; renderMap(); }));
     SupplyMap.render($("mapsvg"), { shares: t ? t.shares : [], pins, disruptions: dis });
+  }
+
+  // ---------- 2027 readiness (last three decision turns) ----------
+  const READY_FROM = QUARTERS.indexOf("2026Q2");
+  let readyCache = { key: null, rec: null };
+  function readiness() {
+    // Forward-mode recommendation, run as if 2027 started from today's controls and signed deals.
+    // News signal held neutral: the cached Tavily signal post-dates these quarters (no foresight).
+    const key = state.qi + "|" + state.offtakes.map((o) => o.id + o.status).join(",") + "|" + orders.offtakes.join(",");
+    if (readyCache.key !== key) {
+      const probe = Sim.clone(state);
+      probe.qi = QUARTERS.length;
+      for (const id of orders.offtakes) {
+        const cp = COUNTERPARTIES.find((c) => c.id === id);
+        probe.offtakes.push({ id, mineral: cp.mineral, startQi: state.qi + cp.lag[0], status: "pending" });
+      }
+      // Offtake startQi is an absolute quarter index; 2027Q1 = QUARTERS.length, so no shift needed.
+      const rec = {};
+      for (const k of KEYS) rec[k] = MonteCarlo.recommend(probe, k, { signal: 0, paths: 200 });
+      readyCache = { key, rec };
+    }
+    return readyCache.rec;
+  }
+  function readinessPanel() {
+    if (state.qi < READY_FROM) return "";
+    const rec = readiness();
+    const left = QUARTERS.length - state.qi;
+    const rows = KEYS.map((k) => {
+      const have = state.minerals[k].reserveDoC + (orders.buy[k] || 0) - (orders.release[k] || 0);
+      const need = rec[k];
+      const gap = need == null ? null : Math.max(0, need - have);
+      return { k, have, need, gap };
+    });
+    const ready = rows.filter((r) => r.gap === 0).length;
+    return `<div class="ready">
+      <h2 style="margin:0 0 4px">Prepare for 2027</h2>
+      <div class="faint">${left} decision ${left === 1 ? "turn" : "turns"} before the 10 Jan 2027 cliff. Target: stay ≥ 60 DoC in 90% of simulated 2027 futures (neutral news, today's controls).</div>
+      <table class="ready-t"><thead><tr><th>Mineral</th><th>Have</th><th>Need</th><th></th></tr></thead><tbody>
+      ${rows.map((r) => `<tr><td>${MINERALS[r.k].name}</td><td>${r.have.toFixed(0)}</td><td>${r.need == null ? ">2000" : r.need}</td>
+        <td>${r.gap === 0 ? `<span class="chip good">ready</span>` : r.need == null ? "" : `<button class="preset" data-ready="${r.k}" data-to="${r.need}" title="Buy toward the 2027 target (capped by this quarter's limit and budget)">+${Math.ceil(r.gap)}</button>`}</td></tr>`).join("")}
+      </tbody></table>
+      <div class="faint">${ready}/6 minerals ready. Each quarter's buying is capped by import availability, so start early.</div>
+    </div>`;
   }
 
   function renderLog() {
@@ -292,6 +351,7 @@
         <div class="headline">${esc(e.headline)}</div>
         ${Object.entries(e.effects).map(([k, eff]) => effectTags(k, eff)).join("")}
         ${Object.values(e.effects).filter((x) => x.downtimeNote).map((x) => `<div class="banner" style="margin:6px 0">${esc(x.downtimeNote)}</div>`).join("")}
+        ${e.spreadNote ? `<div class="banner info" style="margin:6px 0">${esc(e.spreadNote)}</div>` : ""}
         <div class="lesson">${esc(e.lesson)}</div>
         <div class="srcs">Sources: ${e.sources.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener">${esc(domain(s))}</a>`).join(" · ")}</div>
       </div>`).join("") : `<div class="event-card" style="border-left-color:var(--line)"><div class="headline">No new controls this quarter.</div><div class="lesson">Existing controls still bite while rerouting slowly fills the gap, and prices drift back toward a floor.</div></div>`;
@@ -342,6 +402,7 @@
             <div class="chips" style="margin-top:6px">${cp.flags.length ? cp.flags.map((f) => `<span class="chip ${["owner", "labour", "sanctions"].includes(f.kind) ? "bad" : "warn"}" title="${esc(f.why || "")}${f.blockP ? ` · ${pct(f.blockP)}/quarter block risk` : ""}">${esc(f.label)}</span>`).join("") : `<span class="chip good">${v ? "No flags returned" : "No flags (placeholder)"}</span>`}${cp.usProducer ? `<span class="chip info" title="From Q2 2026, upstream Chinese inputs may be cut off">On China's Jun 2026 control list</span>` : ""}</div>
             ${v ? `<div class="vet">
               ${v.statusNote ? `<div>${esc(v.statusNote)}</div>` : ""}
+              ${v.linkCaveat ? `<div><b>Caveat:</b> ${esc(v.linkCaveat)}</div>` : ""}
               <div>Sayari: ${v.sayariId ? `<code>${esc(v.sayariId)}</code>` : "no entity matched"}${v.matchedName ? ` · ${esc(v.matchedName)}` : ""}${v.owners && v.owners.length ? ` · ultimate owners: ${v.owners.slice(0, 3).map((o) => esc(o.name + (o.country ? ` (${o.country})` : ""))).join("; ")}` : ""}</div>
               <div>Watchlist: ${v.watchlist && v.watchlist.length ? v.watchlist.map(esc).join("; ") : "no hits returned"}${v.riskFactors && v.riskFactors.length ? ` · Risk factors: ${v.riskFactors.slice(0, 5).map((f) => esc(humanFlag(f))).join(", ")}` : ""}</div>
               ${v.annotations && v.annotations.length ? `<div>Tradeverifyd: ${v.annotations.slice(0, 3).map(esc).join("; ")}</div>` : ""}

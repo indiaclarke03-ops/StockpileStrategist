@@ -209,3 +209,20 @@ td:first-child { font-family: var(--sans); }
   .cp > div:last-child { flex-direction: row !important; justify-content: space-between; }
   .bigscore { font-size: 48px; }
 }
+
+.spread { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface-2); display: grid; gap: 4px; }
+.spread-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.spread-head .num { font-weight: 800; color: var(--bad); font-size: 15px; }
+.spread-bars { display: grid; gap: 3px; margin: 2px 0 4px; }
+.spread-bars > div { display: grid; grid-template-columns: 70px 1fr 40px; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-2); }
+.spread-bars i { display: block; height: 7px; border-radius: 4px; background: var(--accent); }
+.spread-bars > div:nth-child(2) i { background: var(--ink-3); }
+.spread-bars b { text-align: right; }
+
+.ready { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.ready-t { margin: 8px 0 6px; font-size: 12.5px; }
+.ready-t th, .ready-t td { padding: 4px 6px; }
+.ready-t button.preset { font-size: 11px; padding: 1px 8px; }
+.cp > div { min-width: 0; }
+.cp .chip { white-space: normal; }
+.vet { overflow-wrap: anywhere; }

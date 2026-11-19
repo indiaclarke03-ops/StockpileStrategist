@@ -427,6 +427,127 @@
         { "label": "Sayari: Chinese-SOE-adjacent", "kind": "other", "source": "sayari" }
       ],
       "game": { "upfront": 150, "docPerQ": 15, "lag": [4, 5], "assumed": true }
+    },
+    {
+      "id": "cp-dysprosium-vrex",
+      "name": "Vietnam Rare Earth Company Limited (VREX)",
+      "country": "Vietnam",
+      "mineral": "dysprosium",
+      "trap": true,
+      "statusNote": "Assumed from general knowledge: operating rare-earth metal/alloy refinery in Thuan Thanh 3 Industrial Park, Bac Ninh; short lag and cheap. Sayari trade records show HS 284690 / 280530 / 850511 shipments.",
+      "sayari": {
+        "entityId": "UmFQVIbABuZo2THKZn0lfw",
+        "matchedName": "CONG TY TNHH MTV DAT HIEM VIET NAM (aliases VREX, Vietnam Rare Land Company Limited; VN enterprise code 2300518205)",
+        "relatedEntityIds": {
+          "mofcomNode_越南稀土有限公司": "NtUQBNTgPHapI3rXYPG6DQ",
+          "VREX Holdco Pte. Ltd. (Singapore)": "wFB5lsY3N3UGa_m5ry9lew",
+          "Shenghe Resources (Singapore) Pte. Ltd.": "QGxVHT3qXxTNxRry1dXjww",
+          "Leshan Shenghe Rare Earth Co., Ltd. (乐山盛和稀土有限公司)": "BCwVf42N_IQIBQPV-jPorw",
+          "Shenghe Resources Holding Co., Ltd. (盛和资源控股股份有限公司)": "uGhovMdFUclDpiw8tpVylw"
+        },
+        "ultimateOwners": [
+          {
+            "name": "Leshan Shenghe Rare Earth Co., Ltd. (has_shareholder / subsidiary_of on MOFCOM node 越南稀土有限公司 'Vietnam Rare Earth Co., Ltd.'; source China MOFCOM Overseas Investment Database; stake size not returned)",
+            "country": "China"
+          },
+          {
+            "name": "Shenghe Resources (Singapore) Pte. Ltd. (has_shareholder 100% of VREX Holdco Pte. Ltd., Singapore ACRA; Sayari flags owned_by_chinese_soe)",
+            "country": "Singapore (Chinese parent)"
+          },
+          {
+            "name": "MP (VN) LLC (former has_shareholder 49.0056% of VREX Holdco)",
+            "country": "United States (former)"
+          }
+        ],
+        "ownerChina": true,
+        "watchlistHits": [
+          "Depth 1: no hits returned (operating node and MOFCOM node)"
+        ],
+        "riskFactors": [
+          "MOFCOM node NtUQBNTgPHapI3rXYPG6DQ: owned_by_chinese_soe, psa_owned_by_chinese_soe",
+          "Operating node UmFQVIbABuZo2THKZn0lfw: basel_aml / cpi_score (country-level) only",
+          "Parent Shenghe Resources Holding: owned_by_chinese_soe, chinese_soe_adjacent, meu_list_contractors"
+        ],
+        "linkCaveat": "find_beneficial_owners on the Vietnamese operating node returned no rows; the ownership chain is on the MOFCOM node (same name in Chinese, no identifiers) and on VREX Holdco, which shares the 'VREX' alias and receives shipments from the operating company. Same-entity match is inferred, not confirmed by an identifier."
+      },
+      "tradeverifyd": {
+        "entityId": "f2c0fd6f-4aea-417a-9afd-2e101daa5f2e",
+        "score": 700,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        {
+          "label": "Sayari: recorded as an overseas subsidiary of Leshan Shenghe Rare Earth (China) in MOFCOM records; holding company VREX Holdco 100% held by Shenghe Resources (Singapore), flagged owned by a Chinese SOE",
+          "kind": "owner",
+          "source": "sayari"
+        }
+      ],
+      "game": {
+        "upfront": 220,
+        "docPerQ": 13,
+        "lag": [
+          4,
+          5
+        ],
+        "assumed": true
+      }
+    },
+    {
+      "id": "cp-dysprosium-instvn",
+      "name": "INST Magnetic New Materials Vietnam",
+      "country": "Vietnam",
+      "mineral": "dysprosium",
+      "trap": true,
+      "statusNote": "Assumed from general knowledge: NdFeB permanent-magnet plant in Cam Khe Industrial Park, Phu Tho; Sayari trade records show HS 850511 exports with shipments through Aug 2026. Short lag, cheap.",
+      "sayari": {
+        "entityId": "cFMNG4m_y4BQHlNK6dZwWg",
+        "matchedName": "CONG TY TNHH INST MAGNETIC NEW MATERIALS VIETNAM (VN enterprise code 2601093186)",
+        "relatedEntityIds": {
+          "Baotou INST Magnetic New Materials Co., Ltd. (China)": "GfZwYj20fr3TSNl6qYRoSA"
+        },
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [
+          "Depth 1: no hits returned"
+        ],
+        "riskFactors": [
+          "Sayari risk factor: forced_labor_uflpa_origin_subtier_product_blueprint",
+          "Sayari risk factor: forced_labor_xinjiang_origin_subtier_product_blueprint",
+          "Sayari risk factor: forced_labor_aspi_origin_subtier_product_blueprint",
+          "Sayari risk factor: forced_labor_sheffield_hallam_university_reports_origin_subtier_product_blueprint",
+          "Sayari risk factor: export_controls_adjacent",
+          "Trade link: Baotou INST Magnetic New Materials Co., Ltd. (China) ships_to this entity"
+        ],
+        "linkCaveat": "find_beneficial_owners returned no rows; the only recorded link to the Chinese namesake is a trade (ships_to) relationship, not ownership."
+      },
+      "tradeverifyd": {
+        "entityId": "17883951-39af-4793-ba55-6888ae612d01",
+        "score": 731,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        {
+          "label": "Sayari: sub-tier forced-labour product-blueprint flags (UFLPA / Xinjiang / ASPI / Sheffield Hallam origin, sub-tier)",
+          "kind": "labour",
+          "source": "sayari"
+        },
+        {
+          "label": "Sayari: receives shipments from Baotou INST Magnetic New Materials (China); no ownership record returned",
+          "kind": "upstream",
+          "source": "sayari"
+        }
+      ],
+      "game": {
+        "upfront": 260,
+        "docPerQ": 11,
+        "lag": [
+          4,
+          5
+        ],
+        "assumed": true
+      }
     }
   ],
   "notFound": [

@@ -88,6 +88,7 @@
     "labour-subtier": { blockP: 0.04, pcPenalty: 3, why: "sub-tier forced-labour flags: some UFLPA detention risk" },
     sanctions: { blockP: 0.08, pcPenalty: 6, why: "sanctions exposure" },
     adjacency: { blockP: 0.02, pcPenalty: 2, why: "trade link to a sanctioned party: compliance review risk" },
+    "upstream-cn": { blockP: 0, pcPenalty: 1, upstreamChina: 0.5, why: "Chinese feedstock: deliveries shrink when Chinese controls bite" },
     "cn-list": { blockP: 0.0, pcPenalty: 0, usList: true, why: "on a Chinese control/sanctions list: upstream Chinese inputs may be cut off" },
     "owner-minority": { blockP: 0, pcPenalty: 2, why: "China-linked minority holder (stake size not returned): disclosure, not control" },
     owner: { blockP: 0, pcPenalty: 0, why: "Chinese owner: deliveries are subject to Chinese controls" },
@@ -99,7 +100,9 @@
     const l = (f.label || "").toLowerCase();
     if (/china sanctions research|sanctioned_other/.test(l)) return "cn-list";
     if (/trade link/.test(l)) return "adjacency";
-    if (/forced.labou?r|child.labou?r|uflpa|xinjiang/.test(l)) return /sub-tier|subsidiary/.test(l) && f.kind !== "labour" ? "labour-subtier" : "labour";
+    // Same flag type → same treatment for every company: sub-tier labour flags are a detention risk.
+    if (/forced.labou?r|child.labou?r|uflpa|xinjiang/.test(l)) return /sub-tier|subsidiary/.test(l) ? "labour-subtier" : "labour";
+    if (f.kind === "upstream" && /china|chinese/.test(l) && /shipments|feedstock|receives|supplied/.test(l)) return "upstream-cn";
     if (f.kind === "owner") return /minority|stake size|size not returned|partial/.test(l) ? "owner-minority" : "owner";
     if (/soe/.test(l)) return "soe";
     if (/law-enforcement|regulatory/.test(l)) return "other";
@@ -120,13 +123,14 @@
           upfront: c.game.upfront, docPerQ: c.game.docPerQ, lag: c.game.lag,
           owner: (sy.ultimateOwners || []).length ? sy.ultimateOwners.slice(0, 2).map((o) => String(o.name).replace(/\s*\(.*$/, "")).join("; ") : "No owners returned",
           ownerChina: controlled,
-          upstreamChina: 0,
+          upstreamChina: Math.max(0, ...flags.map((f) => f.upstreamChina || 0)),
           usProducer: flags.some((f) => f.usList), // exposed to China's June 2026 listing of US firms
           flags, score: typeof tv.score === "number" ? tv.score : null, scoreNorm: null,
           scoreScale: `Tradeverifyd Score v1${level ? `, level ${level}` : ""}; bounds not returned`,
           vetting: {
             // Status notes are the vetting agent's assumptions; strip any hint that gives the puzzle away.
             statusNote: String(c.statusNote || "").replace(/^Assumed from general knowledge:\s*/i, "Status (assumed): ").split(/;\s*|\s+-\s+/).filter((x) => !/\btrap\b/i.test(x)).join("; ").replace(/[,;\s-]+$/, "").replace(/(?<!\.)$/, "."),
+            linkCaveat: (c.linkCaveat || sy.linkCaveat) ? String(c.linkCaveat || sy.linkCaveat).replace(/\btrap\b/gi, "") : null,
             sayariId: sy.entityId, matchedName: sy.matchedName,
             owners: (sy.ultimateOwners || []).map((o) => ({ name: String(o.name).replace(/\s*\(.*$/, ""), country: o.country })),
             watchlist: (sy.watchlistHits || []).map((h) => (typeof h === "string" ? h : h.label || h.name || h.list || JSON.stringify(h))),

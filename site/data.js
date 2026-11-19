@@ -201,6 +201,7 @@
       sources: ["https://source.benchmarkminerals.com/article/ex-china-heavy-rare-earths-continue-to-surge-q3-2026-rare-earths-price-review",
         "https://www.fastmarkets.com/?p=135475"],
       lesson: "A Western reserve pays the ex-China price — and that price has decoupled.",
+      spreadNote: "Benchmark: Dy CIF Europe ≈ 16.3× the DDP China price at end-Q3 2026 (Fastmarkets put it at ~4.9× in August). Chinese magnet makers pay a fraction of what your reserve pays.",
     },
     {
       id: "cn-suspension-extended-2026-11", quarter: "2026Q4", date: "2026-11-09", actor: "China MOFCOM",
@@ -271,6 +272,15 @@
     ],
   };
 
+  // Dysprosium: ex-China vs China price spread, as reported. `knownFrom` = first quarter a player
+  // could have read it (no foresight). Only cited figures; nothing interpolated.
+  const DY_SPREAD = [
+    { knownFrom: "2025Q3", ratio: null, label: "Overseas Dy/Tb supply tight; domestic–overseas price spread widening (Jun 2025)",
+      source: "https://news.metal.com/newscontent/103310477/Dysprosium-and-Terbium-Supplies-Are-Tight-Overseas,-Price-Spread-Between-Rare-Earths-at-Home-and-Abroad-Widens-[[SMM-Analysis]]", outlet: "SMM" },
+    { knownFrom: "2026Q4", ratio: 4.9, label: "Ex-China Dy ≈ 4.9× the China price (Aug 2026)", source: "https://www.fastmarkets.com/?p=135475", outlet: "Fastmarkets" },
+    { knownFrom: "2026Q4", ratio: 16.3, label: "Dy CIF Europe ≈ 16.3× DDP China (end-Q3 2026)", source: "https://source.benchmarkminerals.com/article/ex-china-heavy-rare-earths-continue-to-surge-q3-2026-rare-earths-price-review", outlet: "Benchmark" },
+  ];
+
   const CONFIG = {
     budget: 12000,            // $M — mirrors Project Vault
     politicalCapital: 100,
@@ -282,6 +292,6 @@
     seed: 20230701,
   };
 
-  root.GAME_DATA = { QUARTERS, MINERALS, EVENTS, BACKGROUND, COUNTERPARTIES, FORWARD, CONFIG };
+  root.GAME_DATA = { QUARTERS, MINERALS, EVENTS, BACKGROUND, COUNTERPARTIES, FORWARD, CONFIG, DY_SPREAD };
   if (typeof module !== "undefined") module.exports = root.GAME_DATA;
 })(typeof window !== "undefined" ? window : globalThis);
