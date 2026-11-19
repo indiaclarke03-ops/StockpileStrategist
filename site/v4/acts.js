@@ -55,6 +55,7 @@
       if (gsap && !reduced()) { const tw = gsap.fromTo(next, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out", clearProps: "transform,opacity" }); setTimeout(() => { tw.progress(1); next.style.transform = ""; next.style.opacity = ""; }, 700); }
       if (cur) { cur.style.opacity = ""; cur.style.transform = ""; }
       ENTER[n] && ENTER[n]();
+      if (n > 0) hud();
       const h = next.querySelector("h1, h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
     };
     // Tweens are force-completed on a timer so the router never stalls when rAF is throttled.
