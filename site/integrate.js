@@ -74,6 +74,60 @@
     }
   }
 
+  // ---- Real, cited price anchors per mineral (Tavily-sourced; data/prices/anchors.json) ----
+  if (C.prices && C.prices.minerals) {
+    EXT.prices = {};
+    EXT.pricesFetched = C.prices.fetched;
+    for (const [k, v] of Object.entries(C.prices.minerals)) {
+      if (!D.MINERALS[k]) continue;
+      let index = Array.isArray(v.index) ? v.index.filter((p) => p && p.quarter && typeof p.value === "number") : [];
+      if (!index.length && Array.isArray(v.points) && v.points.length) {
+        // Derive an index from the points if none supplied: first quarter's mean = 100.
+        const byQ = {};
+        for (const p of v.points) if (p.quarter && typeof p.value === "number") (byQ[p.quarter] = byQ[p.quarter] || []).push(p.value);
+        const qs = Object.keys(byQ).sort();
+        const base = qs.length ? byQ[qs[0]].reduce((a, b) => a + b, 0) / byQ[qs[0]].length : 1;
+        index = qs.map((q) => ({ quarter: q, value: (100 * byQ[q].reduce((a, b) => a + b, 0)) / byQ[q].length / base }));
+      }
+      // Dysprosium: a Western reserve pays the EX-CHINA price. Splice: China FOB index until the
+      // ex-China series starts (they coincide then: ~$280/kg Jun 2024), then ex-China rebased onto it.
+      if (k === "dysprosium" && v.index_exchina_mixed && Array.isArray(v.index_exchina_mixed.values) && index.length) {
+        const ex = v.index_exchina_mixed.values.filter((p) => p.quarter && typeof p.value === "number");
+        const join = ex[0] && index.find((p) => p.quarter === ex[0].quarter);
+        if (join) {
+          const f = join.value / ex[0].value;
+          index = [...index.filter((p) => p.quarter < ex[0].quarter), ...ex.map((p) => ({ quarter: p.quarter, value: p.value * f, series: p.series }))];
+          v.seriesUsed = `${v.series} until ${ex[0].quarter}, then ex-China (${v.index_exchina_mixed.caveat || "mixed agencies"})`;
+        }
+      }
+      EXT.prices[k] = { series: v.seriesUsed || v.series, unit: v.unit, points: v.points || [], index, notes: v.notes };
+    }
+    // Real price PATH aligned to the engine's history slots: slot 0 = 2023Q2 (start), slot i = quarter i-1.
+    // Gaps are linearly interpolated, quarters before the first point / after the last are held (flagged).
+    D.REAL_PRICE = {};
+    for (const [k, v] of Object.entries(EXT.prices)) {
+      const slot = (q) => (q === "2023Q2" ? 0 : D.QUARTERS.indexOf(q) + 1);
+      const pts = v.index.map((p) => ({ i: slot(p.quarter), v: p.value })).filter((p) => p.i >= 0).sort((a, b) => a.i - b.i);
+      if (pts.length < 3) continue;
+      const base = pts[0].v, path = [], flag = [];
+      for (let i = 0; i <= D.QUARTERS.length; i++) {
+        const exact = pts.find((p) => p.i === i);
+        if (exact) { path.push((100 * exact.v) / base); flag.push("reported"); continue; }
+        const prev = [...pts].reverse().find((p) => p.i < i), next = pts.find((p) => p.i > i);
+        if (prev && next) { path.push((100 * (prev.v + ((next.v - prev.v) * (i - prev.i)) / (next.i - prev.i))) / base); flag.push("interpolated"); }
+        else { path.push((100 * (prev || next).v) / base); flag.push("held"); }
+      }
+      D.REAL_PRICE[k] = { path, flag, series: v.series, unit: v.unit };
+    }
+  }
+
+  // ---- What governments / industry actually did (Tavily-sourced; data/responses.json) ----
+  if (C.responses && Array.isArray(C.responses.items)) {
+    const qOf = (d) => { const y = String(d).slice(0, 4), m = +String(d).slice(5, 7) || 1; return `${y}Q${Math.floor((m - 1) / 3) + 1}`; };
+    EXT.responses = C.responses.items.filter((r) => r && r.summary && r.source).map((r) => ({ ...r, quarter: r.quarter || qOf(r.date), minerals: (r.minerals || []).map((m) => (/rare|magnet|ree|terbium/i.test(m) ? "dysprosium" : String(m).toLowerCase())) }));
+    EXT.responsesFetched = C.responses.fetched;
+  }
+
   // ---- Forward signal: Tavily lexicon score ----
   if (C.signals && typeof C.signals.signal === "number") {
     EXT.signal = { value: Math.max(-1, Math.min(1, C.signals.signal)), items: C.signals.items || [], fetched: C.signals.fetched, lexicon: C.signals.lexicon };

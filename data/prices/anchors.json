@@ -1,0 +1,1930 @@
+{
+  "fetched": "2026-11-19",
+  "method": "Web search (Tavily) of Fastmarkets, MMTA (Fastmarkets reprints), Argus, Benchmark, USGS MCS 2026, S&P/Platts, CSIS, Reuters, SMM-citing pages; key figures confirmed with tavily_extract where possible. One primary series per mineral (role=primary); other agencies/grades kept as role=secondary or role=exchina, never merged. value = midpoint of the published low-high range (range kept in 'range'); monthly averages dated YYYY-MM. No interpolation: quarters without a cited primary figure are listed in quarters_without_primary_point. index: per quarter, the latest-dated primary point in that quarter, divided by the first available primary point x100 (base quarter in index_base). precision=approx where the source says 'around/near/toward' or the figure is secondhand. Dates for 'Monday/Friday' references were resolved from article context; tweet date decoded from its ID. Game events compared from site/data.js EVENTS priceMult values.",
+  "minerals": {
+    "gallium": {
+      "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+      "unit": "$/kg",
+      "points": [
+        {
+          "quarter": "2023Q2",
+          "date": "2023-06-30",
+          "value": 257.5,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/a-make-or-break-year-for-non-chinese-gallium-market-2024-preview",
+          "quote": "$250-265 per kg just before China's export controls were announced, on June 30",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            250,
+            265
+          ]
+        },
+        {
+          "quarter": "2023Q3",
+          "date": "2023-07-05",
+          "value": 283.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/blue-moon-apex-deal-underscores-gallium-germanium-supply-push",
+          "quote": "in the first session after export controls were announced, Fastmarkets assessed the price at $265-301 per kg on July 5 2023",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            265,
+            301
+          ]
+        },
+        {
+          "quarter": "2023Q3",
+          "date": "2023-09-08",
+          "value": 425.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/china-gallium-germanium-indium-prices-lme-week",
+          "quote": "$400-450 per kg on October 4, unchanged since September 8",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            400,
+            450
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-12-15",
+          "value": 550.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/a-make-or-break-year-for-non-chinese-gallium-market-2024-preview",
+          "quote": "$500-600 per kg on Friday December 15",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            500,
+            600
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-02-02",
+          "value": 525.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/chinas-gallium-export-control-continues-to-squeeze-market-despite-higher-december-exports",
+          "quote": "$500-550 per kg on February 2, unchanged since January 19",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            500,
+            550
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-03-22",
+          "value": 575.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "peak of $550-600 per kg between March 22 and April 10",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            550,
+            600
+          ]
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-04-10",
+          "value": 550.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$500-600 per kg on July 19, unchanged since April 10 (so in force through end-Q2)",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            500,
+            600
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07-19",
+          "value": 550.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$500-600 per kg on July 19",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            500,
+            600
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-09-27",
+          "value": 525.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/brazils-critical-minerals-sector",
+          "quote": "$500-550 per kg on Friday October 4, unchanged from September 27",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            500,
+            550
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12-06",
+          "value": 510.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/chinas-tighter-gallium-germanium-export-controls-more-of-the-same-or-a-shift-in-approach",
+          "quote": "$470-550 per kg on December 6, flat on the session before and since November 8",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            470,
+            550
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12",
+          "value": 575,
+          "unit": "$/kg",
+          "series": "Gallium delivered Rotterdam (agency unnamed)",
+          "source": "https://rarex.com.au/announcements/Vwap9a-high-grade-gallium-re-assay-results-at-cummins-range",
+          "quote": "In December 2024, gallium prices surged to $575 per kilogram (delivered to Rotterdam)",
+          "precision": "approx",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-01",
+          "value": 598.33,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam (monthly average)",
+          "source": "https://mmta.co.uk/gallium-production-is-coming-back-to-europe-after-chinas-export-controls",
+          "quote": "averaged $598.33 per kg in January 2025",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-05",
+          "value": 687,
+          "unit": "$/kg",
+          "series": "Gallium Rotterdam price (CSIS, citing Rotterdam assessment)",
+          "source": "https://www.csis.org/analysis/beyond-rare-earths-chinas-growing-threat-gallium-supply-chains",
+          "quote": "In May 2025, the Rotterdam price of gallium reached $687 per kg",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-01-30",
+          "value": 1475.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/12-billion-us-critical-minerals-stockpile-could-tighten-supply-chains",
+          "quote": "$1,450-1,500 per kg on January 30 ... in-whs China 1,800-1,900 yuan ($259-273)",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1450,
+            1500
+          ]
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03-18",
+          "value": 1850.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/blue-moon-apex-deal-underscores-gallium-germanium-supply-push",
+          "quote": "$1,800-1,900 per kg on March 18",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1800,
+            1900
+          ]
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03",
+          "value": 2101,
+          "unit": "$/kg",
+          "series": "Gallium 4N in-whs Rotterdam (GalliumPrice.com aggregate; disagrees with Fastmarkets)",
+          "source": "https://galliumprice.com/market-data",
+          "quote": "Rotterdam all-time high ~$2,101/kg (March 2026)",
+          "precision": "approx",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-04",
+          "value": 1850,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam (record, per CSIS)",
+          "source": "https://www.csis.org/analysis/us-china-trade-truce-has-not-solved-gallium-problem",
+          "quote": "Spot prices reported by Fastmarkets ... reached a record high of $1,850 per kilogram in April 2026",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-06-29",
+          "value": 2650,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GA-0001 Gallium 99.99% Ga min, in-whs Rotterdam (via Blue Moon PR, LinkedIn)",
+          "source": "https://www.linkedin.com/posts/techmet-ltd_techmets-chairman-ceo-brian-menell-joined-activity-7389768841586704384-gLIp",
+          "quote": "gallium near US$2,650 (Fastmarkets, Rotterdam, late June)",
+          "precision": "approx",
+          "role": "primary"
+        }
+      ],
+      "notes": "Model 2023Q3 x1.27 is too low: Rotterdam went 257.5 -> 425 by Sep 2023 (x1.65) although the first post-announcement session was only +10%. Dec-2024 US ban x1.15: roughly right (Dec 6 flat at ~510, Jan-2025 avg 598 = +17%). Biggest miss: Nov-2025 truce x0.85 -- no cited relief; Rotterdam rose from $687 (May 2025) to $1,450-1,500 (Jan 2026), $1,800-1,900 (Mar 2026), ~$2,650 (late Jun 2026). China domestic stayed ~$245-280/kg throughout, so the game should model an ex-China premium, not a global price. 2025Q3, 2025Q4 and 2026Q3 have no cited Fastmarkets Rotterdam figure.",
+      "index": [
+        {
+          "quarter": "2023Q2",
+          "value": 100.0,
+          "from_date": "2023-06-30",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q3",
+          "value": 165.0,
+          "from_date": "2023-09-08",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q4",
+          "value": 213.6,
+          "from_date": "2023-12-15",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 223.3,
+          "from_date": "2024-03-22",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q2",
+          "value": 213.6,
+          "from_date": "2024-04-10",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 203.9,
+          "from_date": "2024-09-27",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 198.1,
+          "from_date": "2024-12-06",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q1",
+          "value": 232.4,
+          "from_date": "2025-01",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q2",
+          "value": 266.8,
+          "from_date": "2025-05",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q1",
+          "value": 718.4,
+          "from_date": "2026-03-18",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q2",
+          "value": 1029.1,
+          "from_date": "2026-06-29",
+          "precision": "approx"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q2",
+        "value": 257.5,
+        "unit": "$/kg"
+      },
+      "quarters_without_primary_point": [
+        "2025Q3",
+        "2025Q4",
+        "2026Q3"
+      ]
+    },
+    "germanium": {
+      "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+      "unit": "$/kg",
+      "points": [
+        {
+          "quarter": "2023Q2",
+          "date": "2023-06",
+          "value": 1344.5,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam (monthly average)",
+          "source": "https://mmta.co.uk/ai-and-defence-boost-germanium-demand-and-spark-substitution-risks",
+          "quote": "from $1,289-1,400 per kg in June 2023, the month before export controls were announced",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1289,
+            1400
+          ]
+        },
+        {
+          "quarter": "2023Q2",
+          "date": "2023-06-30",
+          "value": 1375.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$1,350-1,400 per kg assessed in the final session before the export controls were announced",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1350,
+            1400
+          ]
+        },
+        {
+          "quarter": "2023Q3",
+          "date": "2023-07-05",
+          "value": 1375.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/blue-moon-apex-deal-underscores-gallium-germanium-supply-push",
+          "quote": "in the first session after export controls were announced ... $1,350-1,400 per kg on July 5 2023",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1350,
+            1400
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-01-03",
+          "value": 1600.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "The assessed price in the first pricing session of 2024, on January 3, was $1,550-1,650 per kg",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            1550,
+            1650
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07-19",
+          "value": 2150.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$2,100-2,200 per kg on July 19",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            2100,
+            2200
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-09-27",
+          "value": 2900.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/brazils-critical-minerals-sector",
+          "quote": "$2,700-3,100 per kg on October 4, also unchanged from September 27",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            2700,
+            3100
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12-06",
+          "value": 2950.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/chinas-tighter-gallium-germanium-export-controls-more-of-the-same-or-a-shift-in-approach",
+          "quote": "$2,900-3,000 per kg on December 6",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            2900,
+            3000
+          ]
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-01",
+          "value": 3150,
+          "unit": "$/kg",
+          "series": "Argus germanium metal 99.999% cif main airport Europe",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "price for germanium metal increasing from $3,150 per kilogram [Jan 2025] to $5,380 per kilogram [Oct 2025] (Argus, Europe)",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-02-21",
+          "value": 3100.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/war-instability-impact-defense-metals-supply-chains",
+          "quote": "$3,000-3,200 per kg on Friday February 21",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            3000,
+            3200
+          ]
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-06-12",
+          "value": 3600.0,
+          "unit": "$/kg",
+          "series": "Argus germanium metal 99.999% cif main airport Europe",
+          "source": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2698766-european-germanium-metal-prices-surge-on-tight-market",
+          "quote": "fresh high of $3,500-3,700/kg cif main airport Europe on 12 June",
+          "precision": "exact",
+          "role": "secondary",
+          "range": [
+            3500,
+            3700
+          ]
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-10",
+          "value": 5380,
+          "unit": "$/kg",
+          "series": "Argus germanium metal 99.999% cif main airport Europe",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "increasing from $3,150 per kilogram to $5,380 per kilogram (January to October 2025)",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-12-11",
+          "value": 6000,
+          "unit": "$/kg",
+          "series": "Argus germanium (press release)",
+          "source": "https://www.argusmedia.com/en/about-argus/media-centre/press-releases/argus-looks-at-the-stresses-in-commodities-markets-for-2026",
+          "quote": "prices for which have more than tripled to around $6,000/kg since controls were introduced in 2023",
+          "precision": "approx",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03-18",
+          "value": 7250.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/blue-moon-apex-deal-underscores-gallium-germanium-supply-push",
+          "quote": "$6,500-8,000 per kg on March 18",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            6500,
+            8000
+          ]
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-04-17",
+          "value": 9000.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/us-says-allies-should-pay-national-security-premium-for-critical-minerals",
+          "quote": "As of April 17, germanium 99.999% Ge, in-whs Rotterdam prices were assessed at $8,000-10,000 per kg",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            8000,
+            10000
+          ]
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-06-29",
+          "value": 10500,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam (via Blue Moon PR, LinkedIn)",
+          "source": "https://www.linkedin.com/posts/techmet-ltd_techmets-chairman-ceo-brian-menell-joined-activity-7389768841586704384-gLIp",
+          "quote": "Germanium sits near US$10,500 a kilogram ... (Fastmarkets, Rotterdam, late June)",
+          "precision": "approx",
+          "role": "primary"
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-07",
+          "value": 11375.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-GER-0003 Germanium 99.999% Ge, in-whs Rotterdam (monthly average)",
+          "source": "https://mmta.co.uk/ai-and-defence-boost-germanium-demand-and-spark-substitution-risks",
+          "quote": "monthly average price ... in July 2026 was $10,000-12,750 per kg",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            10000,
+            12750
+          ]
+        }
+      ],
+      "notes": "Model 2023Q3 x1.2 (assumed) is wrong in timing: Rotterdam was flat at $1,350-1,400 right after the controls and only +16% by Jan 2024; the doubling came in 2024 (Jul-Sep 2024). Dec-2024 ban x1.15: reality ~+2% (2,900 -> 2,950 Dec 6; 3,100 Feb 2025). Nov-2025 truce x0.85: wrong sign -- Argus Europe went $5,380 (Oct 2025) -> ~$6,000 (Dec 2025); Fastmarkets $6,500-8,000 (Mar 2026), $8,000-10,000 (Apr 2026), July-2026 avg $10,000-12,750. Reality has a strong 2025-26 demand-driven trend (AI optics, defence) that no event in the model captures. Fastmarkets Rotterdam gaps 2023Q4, 2024Q2, 2025Q2-Q4 are partly covered by Argus cif Europe points (secondary; ~same level).",
+      "index": [
+        {
+          "quarter": "2023Q2",
+          "value": 100.0,
+          "from_date": "2023-06-30",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q3",
+          "value": 100.0,
+          "from_date": "2023-07-05",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 116.4,
+          "from_date": "2024-01-03",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 210.9,
+          "from_date": "2024-09-27",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 214.5,
+          "from_date": "2024-12-06",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q1",
+          "value": 225.5,
+          "from_date": "2025-02-21",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q1",
+          "value": 527.3,
+          "from_date": "2026-03-18",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q2",
+          "value": 763.6,
+          "from_date": "2026-06-29",
+          "precision": "approx"
+        },
+        {
+          "quarter": "2026Q3",
+          "value": 827.3,
+          "from_date": "2026-07",
+          "precision": "exact"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q2",
+        "value": 1375.0,
+        "unit": "$/kg"
+      },
+      "quarters_without_primary_point": [
+        "2023Q4",
+        "2024Q2",
+        "2025Q2",
+        "2025Q3",
+        "2025Q4"
+      ]
+    },
+    "antimony": {
+      "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot) -- with MB-SB-0002 (same metal, MMTA SG II) where only that grade is cited; the two were identical in 2023 (both $11,250-11,850 on 4 Aug 2023)",
+      "unit": "$/t",
+      "points": [
+        {
+          "quarter": "2023Q3",
+          "date": "2023-08-04",
+          "value": 11550.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot)",
+          "source": "https://www.studocu.com/bo/document/universidad-tecnologica-boliviana/gestion-de-residuos/fastmarkets-minor-metals-prices-daily-2023-08-07/66572058",
+          "quote": "MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam, $/tonne 04 Aug 2023 11250 - 11850 (copy of Fastmarkets daily report)",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            11250,
+            11850
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-11-22",
+          "value": 11400.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot)",
+          "source": "https://www.fastmarkets.com/insights/photovoltaics-to-become-largest-use-of-antimony-twinkling-star-chairman",
+          "quote": "antimony, max 100 ppm Bi, in-whs Rotterdam was $11,200-11,600 per tonne on Wednesday November 22",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            11200,
+            11600
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-02-07",
+          "value": 13800,
+          "unit": "$/t",
+          "series": "Fastmarkets antimony metal Rotterdam (reporter post)",
+          "source": "https://www.linkedin.com/posts/xiaoying-du-b7a6b027_antimony-fastmarkets-activity-7171595841890045955-DykG",
+          "quote": "The antimony metal price in Rotterdam climbed to a 20-month high of $13,800 per tonne on February 7",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-04-12",
+          "value": 13400,
+          "unit": "$/t",
+          "series": "Fastmarkets antimony metal Rotterdam (average of range)",
+          "source": "https://mmta.co.uk/supply-constraints-push-antimony-prices-to-record-high",
+          "quote": "from $13,400 per tonne on 12 April to $22,700 per tonne on 14 June 2024",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-06-14",
+          "value": 22700,
+          "unit": "$/t",
+          "series": "Fastmarkets antimony metal Rotterdam (average of range)",
+          "source": "https://mmta.co.uk/supply-constraints-push-antimony-prices-to-record-high",
+          "quote": "to $22,700 per tonne on 14 June 2024",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07",
+          "value": 22461,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0002 Antimony MMTA standard grade II, in-whs Rotterdam (99.65% min) (monthly average)",
+          "source": "https://www.fastmarkets.com/insights/smuggling-of-antimony-china-launches-crackdown",
+          "quote": "averaged $22,461 per tonne in July 2024, one month before the announcement of controls",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-08",
+          "value": 9.8,
+          "unit": "$/lb",
+          "series": "USGS monthly average (Argus, 99.65% CIF)",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "average monthly antimony price nearly doubled from $9.8 per pound in August to $18.10 per pound in December",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-10",
+          "value": 32433,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0002 Antimony MMTA standard grade II, in-whs Rotterdam (99.65% min) (monthly average)",
+          "source": "https://www.fastmarkets.com/insights/smuggling-of-antimony-china-launches-crackdown",
+          "quote": "By October, the price had jumped to $32,433 per tonne",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12",
+          "value": 39750.0,
+          "unit": "$/t",
+          "series": "Fastmarkets antimony Rotterdam (secondary summary)",
+          "source": "https://www.linkedin.com/posts/discovery-alert-australia_antimonypricing-criticalminerals-activity-7503521105199042560-JoDt",
+          "quote": "Chinese export controls sent Rotterdam antimony prices toward USD 39,500 to 40,000 per tonne after December 2024",
+          "precision": "approx",
+          "role": "primary",
+          "range": [
+            39500,
+            40000
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12",
+          "value": 18.1,
+          "unit": "$/lb",
+          "series": "USGS monthly average (Argus, 99.65% CIF)",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "$18.10 per pound in December [2024]",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-04",
+          "value": 57778,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0002 Antimony MMTA standard grade II, in-whs Rotterdam (99.65% min) (monthly average)",
+          "source": "https://www.fastmarkets.com/insights/smuggling-of-antimony-china-launches-crackdown",
+          "quote": "by April 2025 it was $57,778 per tonne",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-05-09",
+          "value": 58825.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0002 Antimony MMTA standard grade II, in-whs Rotterdam (99.65% min)",
+          "source": "https://www.fastmarkets.com/insights/smuggling-of-antimony-china-launches-crackdown",
+          "quote": "$58,000-59,650 per tonne on May 9",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            58000,
+            59650
+          ]
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-06",
+          "value": 27.5,
+          "unit": "$/lb",
+          "series": "USGS monthly average (Argus, 99.65% CIF)",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "increased an additional 52% to $27.50 per pound by June 2025",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-07-04",
+          "value": 59750,
+          "unit": "$/t",
+          "series": "Fastmarkets antimony (record high)",
+          "source": "https://www.fastmarkets.com/insights/antimony-2026-ample-supply-strategic-demand-to-guide-geopolitical-oversight",
+          "quote": "reaching a historical high of $59,750 per tonne on July 4, 2025",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-08-08",
+          "value": 57250.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot)",
+          "source": "https://x.com/AndreaHotter/status/1953882758310158597",
+          "quote": "Fastmarkets' twice-weekly price assessment for antimony, max 100 ppm Bi, in-whs Rotterdam, was $56,000-58,500 per tonne on Friday (post dated 8 Aug 2025 from tweet ID)",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            56000,
+            58500
+          ]
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-11",
+          "value": 20.3,
+          "unit": "$/lb",
+          "series": "USGS monthly average (Argus, 99.65% CIF)",
+          "source": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+          "quote": "followed by a decrease to $20.30 per pound in November",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-06-18",
+          "value": 11.8,
+          "unit": "$/lb",
+          "series": "SMM Europe antimony metal (via Crux Investor)",
+          "source": "https://www.cruxinvestor.com/posts/antimony-has-become-a-security-commodity-western-governments-are-betting-billions-to-catch-up",
+          "quote": "as of June 18, 2026, US antimony metal averaged $14.50 per pound against $11.80 per pound in Europe ... according to Shanghai Metals Market",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-06",
+          "value": 51800,
+          "unit": "$/t",
+          "series": "Strategic Metals Invest retail tracker (DISAGREES with Fastmarkets/SMM)",
+          "source": "https://www.linkedin.com/pulse/antimony-squeeze-how-little-known-metal-became-test-supply-chain-loxjf",
+          "quote": "antimony sat around $51,800 per tonne in mid-June 2026",
+          "precision": "approx",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-08-05",
+          "value": 19250.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot)",
+          "source": "https://www.fastmarkets.com/insights/correction-to-antimony-max-100ppm-bi-in-whs-rotterdam-assessment-on-august-5",
+          "quote": "The price assessment for August 5 has therefore been corrected to $18,000-20,500 per tonne",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            18000,
+            20500
+          ]
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-09-04",
+          "value": 18650.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-SB-0001 Antimony max 100 ppm Bi, in-whs Rotterdam (99.65% ingot)",
+          "source": "https://www.fastmarkets.com/insights/europes-antimony-market-faces-uncertainty-after-years-of-volatility",
+          "quote": "$18,300-19,000 per tonne on October 14, flat since September 4",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            18300,
+            19000
+          ]
+        }
+      ],
+      "notes": "No cited 2023Q2 Rotterdam figure (USGS 2023 avg $5.60/lb Jan-Nov only), so index base = 2023Q3. Reality surged BEFORE the policy events: +70% Apr-Jun 2024 (Myanmar/China raw-material squeeze) with no event in the model. Sep-2024 controls x1.5 (assumed): Jul avg 22,461 -> Oct avg 32,433 = x1.44, close. Dec-2024 ban x1.40: Oct avg -> ~39,750 Dec = x1.23, but the rally continued to ~$58-59k by Apr-Jul 2025 (x1.45 more) -- model under-shoots the 2025 H1 peak. Nov-2025 truce x0.85: timing and size wrong -- decline began after the 4 Jul 2025 record, USGS/Argus was already $20.30/lb (~$44.8k/t) in Nov 2025, and Fastmarkets Rotterdam was $18-19k by Aug-Oct 2026 (-69% from peak), driven by new SE Asian smelters and demand destruction. Strategic Metals Invest's ~$51,800 (Jun 2026) conflicts with Fastmarkets and SMM ($11.80/lb = ~$26k/t); kept as a flagged secondary point. Gaps: 2023Q2, 2025Q1 (no FM point), 2025Q4/2026Q1/2026Q2 (FM).",
+      "index": [
+        {
+          "quarter": "2023Q3",
+          "value": 100.0,
+          "from_date": "2023-08-04",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q4",
+          "value": 98.7,
+          "from_date": "2023-11-22",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 119.5,
+          "from_date": "2024-02-07",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q2",
+          "value": 196.5,
+          "from_date": "2024-06-14",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 194.5,
+          "from_date": "2024-07",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 344.2,
+          "from_date": "2024-12",
+          "precision": "approx"
+        },
+        {
+          "quarter": "2025Q2",
+          "value": 509.3,
+          "from_date": "2025-05-09",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q3",
+          "value": 495.7,
+          "from_date": "2025-08-08",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q3",
+          "value": 161.5,
+          "from_date": "2026-09-04",
+          "precision": "exact"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q3",
+        "value": 11550.0,
+        "unit": "$/t"
+      },
+      "quarters_without_primary_point": [
+        "2023Q2",
+        "2025Q1",
+        "2025Q4",
+        "2026Q1",
+        "2026Q2"
+      ]
+    },
+    "graphite": {
+      "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+      "unit": "$/t",
+      "points": [
+        {
+          "quarter": "2023Q2",
+          "date": "2023-06-01",
+          "value": 685.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/chinas-flake-spherical-graphite-prices-fall-further-european-flake-market-rises",
+          "quote": "weekly price assessment for graphite flake 94% C, -100 mesh, fob China, was $670-700 per tonne on Thursday [June 1]",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            670,
+            700
+          ]
+        },
+        {
+          "quarter": "2023Q2",
+          "date": "2023-06-01",
+          "value": 697.5,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0039 Graphite flake 94% C, -100 mesh, cif Europe",
+          "source": "https://www.fastmarkets.com/insights/chinas-flake-spherical-graphite-prices-fall-further-european-flake-market-rises",
+          "quote": "graphite flake 94% C, -100 mesh (-194), cif Europe, was $650-745 per tonne on June 1",
+          "precision": "exact",
+          "role": "secondary",
+          "range": [
+            650,
+            745
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-10-19",
+          "value": 610.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0039 Graphite flake 94% C, -100 mesh, cif Europe",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$600-620 per tonne assessed on October 19, 2023 - the last session before the export control was announced",
+          "precision": "exact",
+          "role": "secondary",
+          "range": [
+            600,
+            620
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-11",
+          "value": 560,
+          "unit": "$/t",
+          "series": "Benchmark Flake Graphite -100 mesh 94-95% C, FOB China (monthly average)",
+          "source": "https://source.benchmarkminerals.com/article/graphite-prices-tick-up-following-chinas-proposed-export-regulations",
+          "quote": "increase of 3.7% in the price of flake graphite (FOB China -100, 94-95% C) to $560 per tonne",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-12-07",
+          "value": 557.5,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$540-575 per tonne on December 7, 2023, the first week after the implementation of export controls",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            540,
+            575
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-12-28",
+          "value": 552.5,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/natural-graphite-under-pressure-from-synthetics-amid-oversupply-slow-trade-flows",
+          "quote": "dropped by 33.43% to $530-575 per tonne on December 28, 2023 from January 5, 2023 at $830 per tonne",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            530,
+            575
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-03-14",
+          "value": 490.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/natural-graphite-under-pressure-from-synthetics-amid-oversupply-slow-trade-flows",
+          "quote": "the price falling to $470-510 on March 14 and remaining there ever since",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            470,
+            510
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07-18",
+          "value": 465.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "$450-480 per tonne on July 18, down by $90-95 (16.59%) per tonne from $540-575 per tonne on December 7, 2023",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            450,
+            480
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07-18",
+          "value": 700.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0039 Graphite flake 94% C, -100 mesh, cif Europe",
+          "source": "https://www.fastmarkets.com/insights/markets-largely-adjusted-to-chinas-germanium-gallium-graphite-export-controls-one-year-on",
+          "quote": "cif Europe was $650-750 per tonne on July 18 ... up by 14.75% from the $600-620 per tonne assessed on October 19, 2023",
+          "precision": "exact",
+          "role": "secondary",
+          "range": [
+            650,
+            750
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-10-31",
+          "value": 460.0,
+          "unit": "$/t",
+          "series": "Fastmarkets MB-GRA-0042 Graphite flake 94% C, -100 mesh, fob China",
+          "source": "https://www.fastmarkets.com/insights/poor-demand-natural-graphite-flake-china",
+          "quote": "-100 mesh (-194), fob China was $450-470 per tonne on Thursday October 31 ... down by 17% from $530-577 per tonne on January 4",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            450,
+            470
+          ]
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-07",
+          "value": 435,
+          "unit": "$/t",
+          "series": "Benchmark Flake Graphite -100 mesh 94-95% C, FOB China (monthly average)",
+          "source": "https://a.storyblok.com/f/333611/x/ca71ef05e1/natural-graphite-price-assessment-full-assessment-august-2025-3-2.pdf",
+          "quote": "-100 MESH, 94-95% C, FOB CHINA ... LAST MONTH $435",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-08",
+          "value": 425,
+          "unit": "$/t",
+          "series": "Benchmark Flake Graphite -100 mesh 94-95% C, FOB China (monthly average)",
+          "source": "https://a.storyblok.com/f/333611/x/ca71ef05e1/natural-graphite-price-assessment-full-assessment-august-2025-3-2.pdf",
+          "quote": "FOB China -100 mesh material fell to an average of ... $425/tonne for ... 94-95% C concentrate",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-06/2026-08",
+          "value": 3050,
+          "unit": "CNY/t",
+          "series": "Benchmark Flake Graphite -100 mesh 94-95% C, DDP China",
+          "source": "https://source.benchmarkminerals.com/article/feedstock-costs-rise-but-aam-prices-hold-firm-anode-and-graphite-q3-2026-price-review",
+          "quote": "-100 mesh, 94-95% C DDP China grade remained flat at RMB 3,050/t, extending its multi-month plateau at close to an all-time low",
+          "precision": "exact",
+          "role": "secondary"
+        }
+      ],
+      "notes": "Model Dec-2023 controls x1.0 + 10% panic: direction right for China FOB (no spike) but reality FELL -- $685 (Jun 2023) -> ~$553 (Dec 2023) -> ~$460 (Oct 2024), i.e. -33% over 2023 and -17% more in 2024, on oversupply and synthetic-anode substitution. Only Europe showed a control premium: cif Europe -100 mesh $600-620 (19 Oct 2023) -> $650-750 (18 Jul 2024), +15%. The panic multiplier is not supported for China FOB; if kept, apply it to an ex-China/Europe price. Benchmark FOB China kept falling to $425 (Aug 2025) and Benchmark DDP China sat near all-time lows (RMB 3,050/t, Jun-Aug 2026). No cited Fastmarkets FOB China -100 mesh figure found for 2025-2026 (2023Q3, 2024Q2, 2025-2026 empty in the primary series).",
+      "index": [
+        {
+          "quarter": "2023Q2",
+          "value": 100.0,
+          "from_date": "2023-06-01",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q4",
+          "value": 80.7,
+          "from_date": "2023-12-28",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 71.5,
+          "from_date": "2024-03-14",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 67.9,
+          "from_date": "2024-07-18",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 67.2,
+          "from_date": "2024-10-31",
+          "precision": "exact"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q2",
+        "value": 685.0,
+        "unit": "$/t"
+      },
+      "quarters_without_primary_point": [
+        "2023Q3",
+        "2024Q2",
+        "2025Q1",
+        "2025Q2",
+        "2025Q3",
+        "2025Q4",
+        "2026Q1",
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    "dysprosium": {
+      "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China (China-linked). Ex-China series (Fastmarkets ex-whs Rotterdam, Benchmark/Argus CIF Europe, Platts/S&P CIF/CIP North America) kept as role=exchina.",
+      "unit": "$/kg",
+      "points": [
+        {
+          "quarter": "2023Q2",
+          "date": "2023-05",
+          "value": 1951.75,
+          "unit": "CNY/kg",
+          "series": "China domestic dysprosium oxide 99.5% (Chinatungsten Online monthly average)",
+          "source": "http://m.bearheart-magnet.com/news/price-trend-of-rare-earth-products-in-china-in-68275528.html",
+          "quote": "the average price of dysprosium oxide was 1,951,750 yuan/ton, down 2.05% month-on-month [May 2023]",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-11-30",
+          "value": 375.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/no-way-around-price-premium-for-non-chinese-rare-earth-products-less-common-metals-chairman",
+          "quote": "dysprosium oxide 99.5%, fob China increased to $370-380 per kg on Thursday November 30",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            370,
+            380
+          ]
+        },
+        {
+          "quarter": "2023Q4",
+          "date": "2023-12",
+          "value": 2674.545,
+          "unit": "CNY/kg",
+          "series": "China domestic dysprosium oxide 99.5% (Chinatungsten Online monthly average)",
+          "source": "http://news.chinatungsten.com/en/tungsten-product-news/160810-tpn-12923.html",
+          "quote": "Dysprosium oxide had an average price of 2,674,545 per ton [Dec 2023]",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-01-04",
+          "value": 365.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/a-new-heavy-rare-earth-is-discovered-in-chinas-bayan-obo-region",
+          "quote": "$300-350 per kg on Thursday January 11, from $350-380 per kg on January 4",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            350,
+            380
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-01-11",
+          "value": 325.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/a-new-heavy-rare-earth-is-discovered-in-chinas-bayan-obo-region",
+          "quote": "$300-350 per kg on Thursday January 11",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            300,
+            350
+          ]
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-04-18",
+          "value": 305.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/china-rare-earth-prices-turn-higher-as-sellers-insist-on-higher-prices",
+          "quote": "increased to $275-335 per kg on April 18",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            275,
+            335
+          ]
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-06-04",
+          "value": 280.0,
+          "unit": "$/kg",
+          "series": "Argus dysprosium oxide 99.5% cif Europe (monthly)",
+          "source": "https://www.argusmedia.com/-/media/project/argusmedia/mainsite/english/documents-and-files/sample-reports/argus-rare-earths-monthly.pdf",
+          "quote": "The monthly assessment for dysprosium oxide settled at $270-290/kg cif Europe on 4 June",
+          "precision": "exact",
+          "role": "exchina",
+          "range": [
+            270,
+            290
+          ]
+        },
+        {
+          "quarter": "2024Q2",
+          "date": "2024-06-06",
+          "value": 285.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/chinese-rare-earth-prices-continue-to-fall-amid-low-demand",
+          "quote": "fell to $260-310 per kg on June 6",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            260,
+            310
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-07-18",
+          "value": 255.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/what-will-happen-to-rare-earth-markets-in-2025",
+          "quote": "fell to $230-280 per kg on July 18, compared with $350-380 per kg on January 4",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            230,
+            280
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-12-19",
+          "value": 245.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/what-will-happen-to-rare-earth-markets-in-2025",
+          "quote": "standing at $220-270 per kg on December 19, a drop of 33% from January 4",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            220,
+            270
+          ]
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-01-02",
+          "value": 245.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/future-of-critical-minerals-2025-preview",
+          "quote": "$220-270 per kg on January 2, unchanged from the previous week",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            220,
+            270
+          ]
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-04",
+          "value": 1659.545,
+          "unit": "CNY/kg",
+          "series": "China domestic dysprosium oxide 99.5% (Chinatungsten Online monthly average)",
+          "source": "http://news.chinatungsten.com/en/rare-earth-news/170099-tpn-2934.html",
+          "quote": "Dysprosium oxide: 1,659,545 yuan/ton, down 2.49% month-on-month [April 2025 average]",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-07",
+          "value": 800,
+          "unit": "$/kg",
+          "series": "Benchmark dysprosium oxide CIF Europe",
+          "source": "https://source.benchmarkminerals.com/article/rare-earth-prices-show-regional-bifurcation-following-export-restrictions-imposed-by-china",
+          "quote": "Benchmark assessing Dy oxide (CIF Europe) at $800/kg ... In China, however, prices held steady in July [2025]",
+          "precision": "exact",
+          "role": "exchina"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-09-18",
+          "value": 837.5,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0004 Dysprosium oxide 99.5%, ex-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/neo-adds-heavy-rare-earth-line-opens-ev-motor-magnet-plant",
+          "quote": "dysprosium oxide 99.5% ex-whs Rotterdam at $825-850 per kg on September 18 ... more than triple the Chinese export price",
+          "precision": "exact",
+          "role": "exchina",
+          "range": [
+            825,
+            850
+          ]
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-09-18",
+          "value": 255.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/neo-adds-heavy-rare-earth-line-opens-ev-motor-magnet-plant",
+          "quote": "the Chinese export price assessment of $230-280 per kg on the same day",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            230,
+            280
+          ]
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-11-19",
+          "value": 900,
+          "unit": "$/kg",
+          "series": "Dysprosium oxide Rotterdam (Reuters)",
+          "source": "https://www.reuters.com/sustainability/climate-energy/west-scrambles-fill-heavy-rare-earth-gap-china-rivalry-deepens-2025-11-19",
+          "quote": "the price of dysprosium oxide in Rotterdam at $900 per kg, more than triple ...",
+          "precision": "exact",
+          "role": "exchina"
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03-10",
+          "value": 317,
+          "unit": "$/kg",
+          "series": "SMM dysprosium oxide FOB China",
+          "source": "https://rare-earth-mining.com/rare-earth-market-pricing-analysis-march-2026",
+          "quote": "Dysprosium oxide traded at $189.58/kg on China's domestic market on 10 March 2026, with the FOB China export price at $317/kg",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03-31",
+          "value": 1200,
+          "unit": "$/kg",
+          "series": "S&P Global Platts dysprosium oxide North America (launch)",
+          "source": "https://theoregongroup.com/latest-news/yttrium-oxide-x125-europe-china-heavy-rare-earth-curbs",
+          "quote": "Platts ... assessing dysprosium oxide in North America at US$4,100/kg on October 30, up from US$1,200/kg when the assessment was launched on March 31",
+          "precision": "exact",
+          "role": "exchina"
+        },
+        {
+          "quarter": "2026Q2",
+          "date": "2026-05",
+          "value": 1450,
+          "unit": "$/kg",
+          "series": "Argus ex-China dysprosium oxide (via Reuters, secondhand)",
+          "source": "https://rare-earth-mining.com/rare-earth-prices",
+          "quote": "Argus data cited by Reuters ... put dysprosium oxide near US$1,450/kg [by May 2026]",
+          "precision": "approx",
+          "role": "exchina"
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-08-27",
+          "value": 300.0,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0001 Dysprosium oxide 99.5%, fob China",
+          "source": "https://www.fastmarkets.com/insights/chinas-looming-november-export-controls-test-rare-earth-refining-recycling-ambitions",
+          "quote": "compared to $270-330 per kg fob China [Aug 27]",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            270,
+            330
+          ]
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-08-27",
+          "value": 1462.5,
+          "unit": "$/kg",
+          "series": "Fastmarkets MB-DY-0004 Dysprosium oxide 99.5%, ex-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/chinas-looming-november-export-controls-test-rare-earth-refining-recycling-ambitions",
+          "quote": "dysprosium oxide 99.5%, ex-whs Rotterdam was $1,250-1,675 per kg on August 27",
+          "precision": "exact",
+          "role": "exchina",
+          "range": [
+            1250,
+            1675
+          ]
+        },
+        {
+          "quarter": "2026Q3",
+          "date": "2026-09-18",
+          "value": 3250,
+          "unit": "$/kg",
+          "series": "S&P Global Platts dysprosium oxide CIP North America (trade)",
+          "source": "https://www.spglobal.com/energy/en/news-research/latest-news/metals/091826-rare-earths-higher-priced-dysprosium-terbium-oxide-trade-the-focus-in-sept-cif-north-america-rees",
+          "quote": "Dysprosium oxide sells at $3,250/kg CIP North America",
+          "precision": "exact",
+          "role": "exchina"
+        }
+      ],
+      "notes": "Model Apr-2025 HREE licensing x3.0 (reported) matches EX-CHINA only: Europe went from ~$280 (Argus cif Europe, Jun 2024) to $800 (Benchmark, Jul 2025) = x2.9 and $825-850 (Fastmarkets Rotterdam, Sep 2025). China FOB did NOT move: $220-270 (Jan 2025) -> $230-280 (Sep 2025) -> $270-330 (Aug 2026); China domestic Apr-2025 average fell 2.5% m/m. If the game uses one global price it over-states China-linked cost by ~3x. Oct-2025 x1.1: Rotterdam $837.5 -> $900 (Nov 2025) = +7.5%, close. 2026Q3 x2.5 (reported): depends on series -- North America CIP $1,200 (Mar 2026) -> $3,250 (Sep 2026) = x2.7 supports it; Fastmarkets Rotterdam $837.5 (Sep 2025) -> $1,462.5 (Aug 2026) is only x1.75. Ex-China quotes cover small lots; Adamas (Feb 2026) argues volume-backed Dy transactions averaged ~$224/kg. Primary index base = 2023Q4 (no cited 2023Q2-Q3 Fastmarkets FOB figure).",
+      "index": [
+        {
+          "quarter": "2023Q4",
+          "value": 100.0,
+          "from_date": "2023-11-30",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 86.7,
+          "from_date": "2024-01-11",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q2",
+          "value": 76.0,
+          "from_date": "2024-06-06",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 68.0,
+          "from_date": "2024-07-18",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 65.3,
+          "from_date": "2024-12-19",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q1",
+          "value": 65.3,
+          "from_date": "2025-01-02",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q3",
+          "value": 68.0,
+          "from_date": "2025-09-18",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q3",
+          "value": 80.0,
+          "from_date": "2026-08-27",
+          "precision": "exact"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q4",
+        "value": 375.0,
+        "unit": "$/kg"
+      },
+      "quarters_without_primary_point": [
+        "2023Q2",
+        "2023Q3",
+        "2025Q2",
+        "2025Q4",
+        "2026Q1",
+        "2026Q2"
+      ],
+      "index_exchina_mixed": {
+        "caveat": "Mixed agencies/delivery points (Argus cif Europe, Benchmark CIF Europe, Fastmarkets ex-whs Rotterdam, Reuters, Platts/S&P North America). Indicative only; base = Argus cif Europe 4 Jun 2024 midpoint $280.",
+        "values": [
+          {
+            "quarter": "2024Q2",
+            "value": 100.0,
+            "series": "Argus dysprosium oxide 99.5% cif Europe (monthly)"
+          },
+          {
+            "quarter": "2025Q3",
+            "value": 299.1,
+            "series": "Fastmarkets MB-DY-0004 Dysprosium oxide 99.5%, ex-whs Rotterdam"
+          },
+          {
+            "quarter": "2025Q4",
+            "value": 321.4,
+            "series": "Dysprosium oxide Rotterdam (Reuters)"
+          },
+          {
+            "quarter": "2026Q1",
+            "value": 428.6,
+            "series": "S&P Global Platts dysprosium oxide North America (launch)"
+          },
+          {
+            "quarter": "2026Q2",
+            "value": 517.9,
+            "series": "Argus ex-China dysprosium oxide (via Reuters, secondhand)"
+          },
+          {
+            "quarter": "2026Q3",
+            "value": 1160.7,
+            "series": "S&P Global Platts dysprosium oxide CIP North America (trade)"
+          }
+        ]
+      }
+    },
+    "cobalt": {
+      "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+      "unit": "$/lb",
+      "points": [
+        {
+          "quarter": "2023Q2",
+          "date": "2023-04-06",
+          "value": 16.95,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/standard-grade-cobalt-metal-price-consolidates",
+          "quote": "cobalt, standard grade, in-whs Rotterdam, was $16.50-17.40 per lb on April 6",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            16.5,
+            17.4
+          ]
+        },
+        {
+          "quarter": "2023Q2",
+          "date": "2023-05-17",
+          "value": 14.375,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/key-takeaways-from-cobalt-congress-2023",
+          "quote": "$13.75-15.00 per lb on Wednesday May 17",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            13.75,
+            15.0
+          ]
+        },
+        {
+          "quarter": "2023Q3",
+          "date": "2023-08-04",
+          "value": 16.5,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.studocu.com/bo/document/universidad-tecnologica-boliviana/gestion-de-residuos/fastmarkets-minor-metals-prices-daily-2023-08-07/66572058",
+          "quote": "MB-CO-0005 Cobalt standard grade, in-whs Rotterdam, $/lb 04 Aug 2023 16 - 17 (copy of Fastmarkets daily; rounded)",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            16,
+            17
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-01-22",
+          "value": 13.45,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.vinachem.com.vn/content/market-and-product-vnc/cobalt-oversupply-brings-change-to-long-term-contracts.html",
+          "quote": "$12.70-14.20 per lb on Monday January 22",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            12.7,
+            14.2
+          ]
+        },
+        {
+          "quarter": "2024Q1",
+          "date": "2024-03-26",
+          "value": 13.7,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cobalt-metal-price-stable",
+          "quote": "$12.60-14.80 per lb on April 5, unchanged since March 26",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            12.6,
+            14.8
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-09-11",
+          "value": 11.275,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cobalt-market-split-over-cmocs-expectation-of-easing-supply-pressure",
+          "quote": "$10.25-12.30 per lb on Wednesday ... lowest point since 2016",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            10.25,
+            12.3
+          ]
+        },
+        {
+          "quarter": "2024Q3",
+          "date": "2024-09-20",
+          "value": 10.925,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cobalt-price-slips-to-new-low-amid-persistent-oversupply",
+          "quote": "$10.00-11.85 per lb on Friday [September 20]",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            10.0,
+            11.85
+          ]
+        },
+        {
+          "quarter": "2024Q4",
+          "date": "2024-10-28",
+          "value": 10.8,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cmoc-cobalt-producer-exceeds-2024-guidance",
+          "quote": "$9.80-11.80 per lb on Monday, widening upward from $9.80-11.75 per lb on October 25",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            9.8,
+            11.8
+          ]
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-02-19",
+          "value": 9.95,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/drc-prepares-for-new-decision-on-cobalt-export-ban-in-june",
+          "quote": "reached its lowest point earlier this year at $9.50-10.40 per lb on February 19",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            9.5,
+            10.4
+          ]
+        },
+        {
+          "quarter": "2025Q1",
+          "date": "2025-03",
+          "value": 15,
+          "unit": "$/lb",
+          "series": "Fastmarkets cobalt standard grade (Glencore H1 2025 report)",
+          "source": "https://www.glencore.com/.rest/api/v1/documents/static/07647168-ed29-49b5-a379-9a3c7eb87a55/GLEN-2025-Half-Year-Report.pdf",
+          "quote": "Cobalt metal prices rallied sharply, peaking at around $15/lb in March",
+          "precision": "approx",
+          "role": "primary"
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-05-14",
+          "value": 15.875,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/drc-prepares-for-new-decision-on-cobalt-export-ban-in-june",
+          "quote": "assessed at $15.25-16.50 per lb on Wednesday May 14",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            15.25,
+            16.5
+          ]
+        },
+        {
+          "quarter": "2025Q2",
+          "date": "2025-06-30",
+          "value": 15,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam (low-end, spot)",
+          "source": "https://www.glencore.com/.rest/api/v1/documents/static/07647168-ed29-49b5-a379-9a3c7eb87a55/GLEN-2025-Half-Year-Report.pdf",
+          "quote": "Fastmarkets cobalt standard grade, Rotterdam ($/lb) (low-end) Spot 30 Jun 2025: 15",
+          "precision": "exact",
+          "role": "secondary"
+        },
+        {
+          "quarter": "2025Q3",
+          "date": "2025-08-19",
+          "value": 15.5,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/uploads/2025/09/BMT190825_Tracker-sample.pdf",
+          "quote": "Fastmarkets' in-whs Rotterdam price remaining range bound between $15-16 per lb since the DRC announced its cobalt export ban",
+          "precision": "approx",
+          "role": "primary",
+          "range": [
+            15,
+            16
+          ]
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-10-10",
+          "value": 19.9,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cobalt-market-outlook-2025-drc-quota-system",
+          "quote": "$19.70-20.10 per lb on Friday ... The low end of the range is up by 23% since September 22",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            19.7,
+            20.1
+          ]
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-11-07",
+          "value": 23.53,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam (daily average of range)",
+          "source": "https://mmta.co.uk/cobalt-beyond-the-congo-a-search-for-supply-alternatives",
+          "quote": "On Friday November 7, the average of Fastmarkets' daily price assessment ... was $23.53 per lb. This is up from $9.95 per lb on February 20",
+          "precision": "exact",
+          "role": "primary"
+        },
+        {
+          "quarter": "2025Q4",
+          "date": "2025-12-15",
+          "value": 24.325,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/cme-cobalt-metal-futures-annual-trading-volume-breaks-new-record",
+          "quote": "$23.75-24.90 per lb on Monday December 15",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            23.75,
+            24.9
+          ]
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-01-06",
+          "value": 25.2,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/miner-managem-to-switch-to-cobalt-sulfate-production-instead-of-metal",
+          "quote": "$24.75-25.65 per lb on January 6",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            24.75,
+            25.65
+          ]
+        },
+        {
+          "quarter": "2026Q1",
+          "date": "2026-03-20",
+          "value": 26.15,
+          "unit": "$/lb",
+          "series": "Fastmarkets MB-CO-0005 Cobalt standard grade, in-whs Rotterdam",
+          "source": "https://www.fastmarkets.com/insights/correction-to-rationale-of-cobalt-standard-grade-in-whs-rotterdam",
+          "quote": "the price in the previous session [before Monday March 23] was $25.65-26.65 per lb",
+          "precision": "exact",
+          "role": "primary",
+          "range": [
+            25.65,
+            26.65
+          ]
+        }
+      ],
+      "notes": "The closest fit of the six. DRC ban Feb-2025 x1.5 (reported): $9.95 (20 Feb) -> ~$15 (Mar) -> $15.25-16.50 (May) = x1.5-1.6, correct. Quota Oct-2025 x1.6 (assumed): ~$15.5 (Aug 2025) -> $24.3 (15 Dec 2025) = x1.57, correct. 2026Q2 quota ease x0.975: no cited 2026Q2 Fastmarkets point; level was $25.65-26.65 (Mar 2026) and the CME/Voltaire update put the standard-grade mid at $22.93 (16 Oct 2026) and $22.15 (23 Oct 2026), i.e. a mild drift down, consistent in sign. Reality also has a 2023-24 slide (-25%, oversupply from CMOC) before the DRC ban that the model doesn't need but should start from (index ~75 by late 2024). A Fastmarkets correction quoting $23.75-27.15 for a 'September 2' was excluded because its year is not stated on the page. Hydroxide (Fastmarkets cif China) moved far more: $5.65-5.75 (21 Feb 2025) -> $19.50-20.20 (Oct 2025), +245%. Gaps: 2023Q4, 2024Q2, 2026Q2, 2026Q3.",
+      "index": [
+        {
+          "quarter": "2023Q2",
+          "value": 100.0,
+          "from_date": "2023-05-17",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2023Q3",
+          "value": 114.8,
+          "from_date": "2023-08-04",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q1",
+          "value": 95.3,
+          "from_date": "2024-03-26",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q3",
+          "value": 76.0,
+          "from_date": "2024-09-20",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2024Q4",
+          "value": 75.1,
+          "from_date": "2024-10-28",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q1",
+          "value": 104.3,
+          "from_date": "2025-03",
+          "precision": "approx"
+        },
+        {
+          "quarter": "2025Q2",
+          "value": 110.4,
+          "from_date": "2025-05-14",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2025Q3",
+          "value": 107.8,
+          "from_date": "2025-08-19",
+          "precision": "approx"
+        },
+        {
+          "quarter": "2025Q4",
+          "value": 169.2,
+          "from_date": "2025-12-15",
+          "precision": "exact"
+        },
+        {
+          "quarter": "2026Q1",
+          "value": 181.9,
+          "from_date": "2026-03-20",
+          "precision": "exact"
+        }
+      ],
+      "index_base": {
+        "quarter": "2023Q2",
+        "value": 14.375,
+        "unit": "$/lb"
+      },
+      "quarters_without_primary_point": [
+        "2023Q4",
+        "2024Q2",
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  }
+}

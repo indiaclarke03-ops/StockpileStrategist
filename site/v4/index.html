@@ -25,6 +25,8 @@
     </div>
   </header>
 
+  <nav id="coach" class="coach hidden" aria-label="Your progress"></nav>
+
   <main id="acts">
     <!-- Act 0: cold open -->
     <section class="act" data-act="0" aria-labelledby="a0-title">
@@ -52,6 +54,7 @@
               <p class="lede">The line stops if supply falls by more than <b class="num" id="thr-v">25%</b> for a quarter.</p>
               <input type="range" id="thr" min="10" max="40" step="1" value="25" aria-label="Loss threshold" />
               <div class="faint">Default 25%, the Resilience Atlas's worked threshold. Lower means a more fragile line.</div>
+              <div class="thr-live" id="thr-live"></div>
             </div>
             <div class="factory" id="factory" aria-label="Factory status"></div>
           </div>
@@ -69,6 +72,7 @@
           <p class="lede" id="a2-lede"></p>
           <div class="reveal-stats hidden" id="a2-stats"></div>
           <div class="chips" id="a2-tools"></div>
+          <div class="explore hidden" id="a2-explore"></div>
           <p class="fineprint" id="a2-fine"></p>
         </div>
         <div class="net-wrap"><div class="badge-illus hidden" id="a2-badge">Illustrative network — not measured</div><div id="net" class="net"></div></div>
@@ -85,6 +89,7 @@
           <div class="distance" id="distance"></div>
           <div class="levers">
             <div class="lever" id="lever-stock"></div>
+            <div class="lever" id="lever-stress"></div>
             <div class="lever" id="lever-offtake"></div>
           </div>
         </div>
@@ -104,7 +109,7 @@
           <div class="replay-controls"><button class="ghost" id="btn-speed">2× speed</button><button class="ghost" id="btn-skip">Skip to end</button></div>
         </div>
         <div class="replay-grid">
-          <div class="news" id="news" aria-live="polite"></div>
+          <div class="replay-side"><div class="why-q" id="why-q"></div><div class="realworld" id="realworld"></div><div class="news" id="news" aria-live="polite"></div></div>
           <div class="timeline-wrap"><div id="net4" class="net net4"></div><svg id="timeline" class="timeline" role="img" aria-label="Reserve and factory status over time"></svg><div class="validation hidden" id="validation"></div></div>
         </div>
         <div class="pause hidden" id="pause" role="dialog" aria-modal="false"></div>
@@ -117,6 +122,7 @@
       <div class="cliff">
         <div class="eyebrow">Act 5 · The cliff · 10 January 2027</div>
         <h2 id="a5-title" class="display-2" aria-live="polite">1,000 futures</h2>
+        <div class="whatif hidden" id="whatif"></div>
         <div class="fan-wrap"><canvas id="fan" aria-label="1,000 simulated futures of your reserve"></canvas><div class="fan-labels" id="fan-labels"></div></div>
         <div class="report hidden" id="report"></div>
       </div>
@@ -138,6 +144,7 @@
   <script src="../sim.js"></script>
   <script src="../montecarlo.js"></script>
   <script src="rst.js"></script>
+  <script src="guide.js"></script>
   <script src="missions.js"></script>
   <script src="globe.js"></script>
   <script src="network.js"></script>

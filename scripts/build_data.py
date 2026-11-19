@@ -19,6 +19,8 @@ FILES = {
     "trade": DATA / "trade" / "trade.json",
     "live": DATA / "live.json",
     "counterparties": DATA / "counterparties.json",
+    "prices": DATA / "prices" / "anchors.json",
+    "responses": DATA / "responses.json",
 }
 
 

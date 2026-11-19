@@ -161,15 +161,27 @@
       state.politicalCapital -= shortfall * 0.2 * p.criticality;
 
       const prevPrice = m.priceIdx;
+      // Real-price mode: history follows cited real prices (Fastmarkets via Tavily, data/prices);
+      // the player's own buying/selling still moves the price on top and decays (assumed).
+      const real = D.REAL_PRICE && CONFIG.realPrices !== false ? D.REAL_PRICE[k] : null;
+      if (real) {
+        m.impact = (m.impact || 1) * (1 + (p.eta * m.buyQ) / p.marketDepth) * (1 - (p.eta * m.releaseQ) / p.marketDepth / 2);
+        const target = real.path[state.qi + 1];
+        m.priceIdx = Math.max(5, target * m.impact);
+        m.impact = 1 + (m.impact - 1) * (1 - CONFIG.meanReversion * 2);
+        touched[k] = real.flag[state.qi + 1] === "reported" ? "reported" : "interpolated";
+      }
       let price = m.priceIdx * priceMult[k]
         * (1 + (p.eta * m.buyQ) / p.marketDepth)
         * (1 - (p.eta * m.releaseQ) / p.marketDepth / 2)
         * (1 + m.panic);
-      if (!touched[k]) {
-        const floor = 100 * (1 + m.cutNet);
-        price += CONFIG.meanReversion * (floor - price);
+      if (!real) {
+        if (!touched[k]) {
+          const floor = 100 * (1 + m.cutNet);
+          price += CONFIG.meanReversion * (floor - price);
+        }
+        m.priceIdx = Math.max(20, price);
       }
-      m.priceIdx = Math.max(20, price);
       m.panic *= 0.5; if (m.panic < 0.005) m.panic = 0;
 
       const storage = CONFIG.storageRate * reserveValue(state, k);

@@ -16,7 +16,7 @@
     ctx = { G, k, qi: 0, speed: 1, skip: false, target: G.stockDays, pendingRelease: 0, pendingOff: [...G.signed], decisions: [], rows: [], ghostRows: [], timer: null };
     U.$("btn-a4").classList.add("hidden");
     U.$("validation").classList.add("hidden");
-    U.$("news").innerHTML = "";
+    U.$("news").innerHTML = ""; U.$("why-q").innerHTML = ""; U.$("realworld").innerHTML = "";
     U.$("pause").classList.add("hidden");
     // Player run + do-nothing ghost, same history.
     ctx.s = Sim.newState();
@@ -57,12 +57,16 @@
       ctx.ghostRows.push({ q, downtime: gr.downtime });
       ctx.qi++;
       const hits = rep.events.filter((e) => e.effects[ctx.k]);
+      ctx.lastRep = rep;
       if (!ctx.skip) {
+        Guide.tick("watch");
+        whyQuarter(q, rep, ghostRep, hits);
+        realWorld(q);
         U.$("a4-title").innerHTML = `${qLabel(q)} · ${mr.downtime > 0.5 ? `<span style="color:var(--danger)">line stopped ${Math.round(mr.downtime)} days</span>` : `<span style="color:var(--ok)">line running</span>`}`;
         news(q, rep.events, hits);
         if (hits.length) shock(hits);
         else ctx.net.undim();
-        drawTimeline();
+        drawTimeline(); priceMini();
         if (PAUSES[q]) { pause(q); return; }
         ctx.timer = setTimeout(loop, (UI.reduced() ? 2200 : 4200) / ctx.speed);
         return;
@@ -104,6 +108,47 @@
     return { direct, linked };
   }
 
+  /** Why this quarter went the way it did, for the mission mineral: where a quarter's supply came from. */
+  function whyQuarter(q, rep, ghostRep, hits) {
+    const U = root.UI, m = rep.minerals[ctx.k], g = ghostRep.minerals[ctx.k], Q = 91.25;
+    const imports = Math.min(Q, m.avail * Q), off = Math.min(Q - imports, m.offtake || 0), drawn = Math.min(Q - imports - off, m.drawn || 0), gap = Math.max(0, Q - imports - off - drawn);
+    const seg = (v, c, l) => (v > 0.3 ? `<span style="width:${(v / Q) * 100}%;background:${c}" title="${l}: ${Math.round(v)} days"></span>` : "");
+    const cause = hits.length ? `${U.esc(hits[0].actor)}: ${U.esc(hits[0].headline)}` : m.avail < 0.98 ? "Earlier controls are still in force; rerouting fills part of the gap." : "Imports flowed normally.";
+    const dp = m.priceTo / m.priceFrom - 1;
+    U.$("why-q").innerHTML = `<h4>Why ${qLabel(q)} went this way · ${U.esc(ctx.G.mission.name)}</h4>
+      <div class="faint">${cause}</div>
+      <div class="wf" role="img" aria-label="Where this quarter's supply came from">${seg(imports, "#3987e5", "Imports")}${seg(off, "#5fc08f", "Offtake deliveries")}${seg(drawn, "#E08A52", "From your reserve")}${seg(gap, "#FF5A4E", "Unmet")}</div>
+      <div class="wf-legend"><span><i style="background:#3987e5"></i>Imports ${Math.round((imports / Q) * 100)}%</span>${off > 0.3 ? `<span><i style="background:#5fc08f"></i>Offtakes ${Math.round(off)} d</span>` : ""}<span><i style="background:#E08A52"></i>Reserve drawn ${Math.round(drawn)} d</span><span><i style="background:#FF5A4E"></i>Unmet ${Math.round(gap)} d</span></div>
+      <div style="margin-top:6px">${Guide.chips([{ k: "Line stopped", delta: m.downtime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "If you'd done nothing", delta: g.downtime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Price", delta: dp * 100, unit: "%", goodIfDown: true, fmt: (v) => Math.round(v) }])}</div>`;
+  }
+
+  /** What governments and industry actually did this quarter (Tavily-sourced, data/responses.json). */
+  function realWorld(q) {
+    const U = root.UI;
+    const items = (EXT.responses || []).filter((it) => it.quarter === q && (!it.minerals || !it.minerals.length || it.minerals.includes(ctx.k) || it.minerals.includes("all")));
+    const score = (it) => ((it.minerals || []).includes(ctx.k) ? 1 : 0);
+    const chosen = items.sort((a, b) => score(b) - score(a)).slice(0, 3);
+    U.$("realworld").innerHTML = chosen.length ? `<h4>What the real world did · ${qLabel(q)}</h4>${chosen.map((it) => `<div class="item"><b>${U.esc(it.actor)}</b> · ${U.esc(it.date)} — ${U.esc(it.summary)}${it.amountUSD ? ` <span class="mini">${U.fmt$(it.amountUSD / 1e6)}</span>` : ""} <a href="${U.esc(it.source)}" target="_blank" rel="noopener">${U.esc(U.domain(it.source))}</a></div>`).join("")}` : "";
+  }
+
+  /** Model price index vs real, cited price anchors (indexed), revealed up to the current quarter. */
+  function priceMini() {
+    const U = root.UI, host = U.$("timeline").parentElement;
+    let svg = host.querySelector(".price-mini");
+    if (!svg) { host.insertAdjacentHTML("beforeend", `<svg class="price-mini" viewBox="0 0 900 90" role="img" aria-label="Model price vs real prices"></svg><div class="faint price-note"></div>`); svg = host.querySelector(".price-mini"); }
+    const hist = ctx.s.minerals[ctx.k].hist.price.slice(1), n = QUARTERS.length;
+    const real = ((EXT.prices || {})[ctx.k] || {}).index || [];
+    const realKnown = real.filter((p) => QUARTERS.indexOf(p.quarter) >= 0 && QUARTERS.indexOf(p.quarter) < ctx.qi);
+    const max = Math.max(150, ...hist, ...realKnown.map((p) => p.value)) * 1.1;
+    const X = (i) => 46 + ((i + 0.5) / n) * (900 - 60), Y = (v) => 82 - (v / max) * 70;
+    svg.innerHTML = `<text x="46" y="10">${U.esc(ctx.G.mission.name)} price you pay (line: real path + your buying impact) vs cited real prices (dots), first point = 100</text>
+      <line x1="46" x2="886" y1="${Y(100)}" y2="${Y(100)}" stroke="rgba(148,163,184,.25)" stroke-dasharray="3 4"/>
+      ${hist.length > 1 ? `<polyline points="${hist.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="#AEB6C4" stroke-width="1.8"/>` : ""}
+      ${realKnown.map((p) => `<circle cx="${X(QUARTERS.indexOf(p.quarter))}" cy="${Y(p.value)}" r="4.5" fill="#E08A52"><title>${p.quarter}: real ${Math.round(p.value)} (index)</title></circle>`).join("")}`;
+    const meta = (EXT.prices || {})[ctx.k];
+    host.querySelector(".price-note").textContent = meta ? `Real prices: ${meta.series || ""} (${meta.unit || ""}), ${real.length} cited points from Tavily-sourced reporting. ${meta.notes ? String(meta.notes).slice(0, 200) : ""}` : "No cited price series cached for this mineral.";
+  }
+
   function shock(hits) {
     const { direct, linked } = hitSets(hits);
     ctx.net.undim();
@@ -120,9 +165,17 @@
     const choices = q === "2025Q4"
       ? [{ id: "sell", b: "Sell half", s: `Recover ≈${U.fmt$(0.5 * Sim.reserveValue(s, ctx.k) * 0.9)} at today's price` }, { id: "hold", b: "Hold", s: "Keep the reserve as it is" }, { id: "buy", b: "Keep buying +30 days", s: "Prices are lower now" }]
       : [{ id: "buy", b: "Buy 30 more days", s: `Target ${Math.round(ctx.target + 30)} days of cover` }, { id: "hold", b: "Hold course", s: `Stay at ${Math.round(ctx.target)} days` }, clean ? { id: "deal", b: `Sign ${clean.name}`, s: `${U.fmt$(clean.upfront)} · ${clean.docPerQ} d/qtr · lag ${clean.lag[0]}–${clean.lag[1]}q`, cp: clean.id } : null].filter(Boolean);
+    // Preview the consequence of each choice before committing (sim.js cost + price-impact model).
+    const P = D.MINERALS[ctx.k], d30 = Math.min(30, Sim.maxBuy(s, ctx.k));
+    const preview = {
+      buy: [{ k: "Cost now", delta: -Sim.quoteBuy(s, ctx.k, d30), unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Price", delta: ((P.eta * d30) / P.marketDepth) * 100, unit: "%", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Runtime", delta: 30 / ctx.G.threshold, unit: " d", fmt: (v) => Math.round(v) }],
+      hold: [{ k: "Budget", delta: 0, unit: "", fmt: () => "kept" }],
+      sell: [{ k: "Cash", delta: 0.5 * Sim.reserveValue(s, ctx.k) * 0.9, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Reserve", delta: -Math.floor(m.reserveDoC / 2), unit: " d", fmt: (v) => Math.round(v) }],
+      deal: clean ? [{ k: "Upfront", delta: -clean.upfront, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Supply", delta: clean.docPerQ, unit: " d/qtr", fmt: (v) => v }] : [],
+    };
     el.innerHTML = `<div class="eyebrow" style="margin-bottom:6px">Decision · ${PAUSES[q]}</div><h3>${U.esc(copy.h)}</h3><div class="faint">${U.esc(copy.q)} Reserve: <b class="num">${Math.round(m.reserveDoC)} days</b> · Budget <b class="num">${U.fmt$(s.budget)}</b></div>
       ${intel.length ? `<div class="intel">${intel.slice(0, 2).map((i) => `<div>📰 <a href="${U.esc(i.url)}" target="_blank" rel="noopener">${U.esc(i.title)}</a> <span class="faint">${U.esc(i.source)} · ${U.esc(i.date)}</span></div>`).join("")}</div>` : ""}
-      <div class="choices" role="group" aria-label="Choices">${choices.map((c) => `<button data-c="${c.id}" ${c.cp ? `data-cp="${c.cp}"` : ""}><b>${U.esc(c.b)}</b><span>${U.esc(c.s)}</span></button>`).join("")}</div>`;
+      <div class="choices" role="group" aria-label="Choices">${choices.map((c) => `<button data-c="${c.id}" ${c.cp ? `data-cp="${c.cp}"` : ""}><b>${U.esc(c.b)}</b><span>${U.esc(c.s)}</span>${Guide.chips(preview[c.id] || [])}</button>`).join("")}</div>`;
     el.classList.remove("hidden");
     const btns = [...el.querySelectorAll("button")];
     btns[0].focus();
@@ -134,6 +187,10 @@
         if (c === "sell") { const half = Math.floor(m.reserveDoC / 2); const val = (half / Math.max(1, m.reserveDoC)) * Sim.reserveValue(s, ctx.k) * 0.9; m.reserveDoC -= half; s.budget += val; ctx.target = Math.max(0, m.reserveDoC); }
         if (c === "deal") ctx.pendingOff.push(b.dataset.cp);
         ctx.decisions.push({ q, choice: b.querySelector("b").textContent, cp: b.dataset.cp });
+        const st = Guide.STEPS[4].steps.find((x) => x.id === "decide");
+        if (st) st.label = `Make 4 decisions (${Math.min(4, ctx.decisions.length)}/4)`;
+        if (ctx.decisions.length >= 4) Guide.tick("decide");
+        Guide.log(4, `${PAUSES[q]}: ${b.querySelector("b").textContent}`, preview[c] || [], PAUSE_COPY[q].h);
         el.classList.add("hidden");
         ctx.timer = setTimeout(loop, 600);
       };
@@ -180,8 +237,11 @@
       <p style="margin:8px 0 4px">${histEvents.length} ${U.esc(G.mission.name.toLowerCase())} events, 2023–26. Hit directly: <b>${direct.size ? U.esc(names(direct)) : "no supplier node (the shock landed upstream)"}</b>.${linked.size ? ` Hit through structural links or shared feedstock: <b>${U.esc(names(linked))}</b>.` : ""}</p>
       <p class="faint" style="margin:0">${inSample ? "Honesty note: this network's Σ was estimated from 2023–26 shipments, so this is an in-sample check, not a held-out test." : "The network's correlations are assumed structure, not fit to this history. Links count as \"hit\" only by inference."} ${verdict === "miss" ? "A miss is still a lesson: the model ranks how a loss is most likely to happen, not which shock history chose." : ""}</p>`;
     ctx.net.undim();
+    Guide.tick("watch"); Guide.tick("decide"); Guide.tick("validate");
+    priceMini();
+    Guide.log(4, "History replayed", [{ k: "Days lost", delta: yours, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Doing nothing", delta: ghost, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }], `Validation: ${verdict}`);
     U.$("btn-a4").classList.remove("hidden");
-    U.$("btn-a4").onclick = () => Router.show(5);
+    U.$("btn-a4").onclick = () => { Guide.tick("go4"); Router.show(5); };
     U.$("btn-a4").focus();
   }
 

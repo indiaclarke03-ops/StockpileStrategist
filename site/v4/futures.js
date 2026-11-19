@@ -29,14 +29,45 @@
     const counts = { extend: 0, lapse: 0, deal: 0 };
     res.paths.forEach((p) => counts[p.branch]++);
     U.$("fan-labels").innerHTML = Object.entries(BR).map(([b, v]) => `<span>${v.l} · <b class="num">${counts[b]}</b> <i style="background:${v.c}"></i></span>`).join("") + `<span>Line stops <i style="background:${FAIL}"></i></span>`;
+    U.$("whatif").classList.add("hidden");
     draw(res, () => {
+      Guide.tick("fan");
       U.$("a5-title").innerHTML = `In <span class="num" id="surv">0</span> of 1,000 simulated futures, your factory keeps running.`;
       U.countUp(U.$("surv"), survived, { duration: 1.4, format: (v) => Math.round(v).toLocaleString() });
       report(G, res, survived, signal);
+      Guide.tick("card");
+      whatIf(G, signal, survived);
     });
   }
 
-  function draw(res, done) {
+  /** What-if controls: every change re-runs the 1,000 futures instantly from your final state. */
+  function whatIf(G, baseSignal, baseSurvived) {
+    const U = root.UI, k = G.mission.id, el = U.$("whatif");
+    const w = (G.whatif = { extra: 0, signal: baseSignal, thr: G.threshold, show: { extend: true, lapse: true, deal: true } });
+    el.classList.remove("hidden");
+    el.innerHTML = `<label>What if you'd held more going into 2027? <div class="slider-row"><input type="range" id="w-extra" min="0" max="120" step="5" value="0"><b id="w-extra-v">+0 days</b></div></label>
+      <label>News signal (Tavily lexicon: −1 calm · +1 escalation) <div class="slider-row"><input type="range" id="w-sig" min="-1" max="1" step="0.05" value="${baseSignal}"><b id="w-sig-v">${baseSignal >= 0 ? "+" : ""}${baseSignal.toFixed(2)}</b></div></label>
+      <label>Line stops at a shortfall of <div class="slider-row"><input type="range" id="w-thr" min="10" max="40" step="1" value="${Math.round(G.threshold * 100)}"><b id="w-thr-v">${Math.round(G.threshold * 100)}%</b></div></label>
+      <div><div class="hud-k">Show branches</div><div class="branch-chips">${Object.entries(BR).map(([b, v]) => `<button data-br="${b}" aria-pressed="true"><i style="display:inline-block;width:10px;height:3px;background:${v.c};vertical-align:middle;margin-right:5px"></i>${v.l.split(":")[0]}</button>`).join("")}</div></div>
+      <div><div class="hud-k">Survive in the what-if</div><div class="delta" id="w-out" aria-live="polite">${baseSurvived} / 1,000</div><div class="faint" id="w-cliff"></div></div>`;
+    const rerun = () => {
+      const s = G.history.state;
+      const res = MonteCarlo.run(s, { paths: 1000, signal: w.signal, track: k, failAt: w.thr, seed: 2027, overrideStart: w.extra ? { [k]: s.minerals[k].reserveDoC + w.extra } : null });
+      const surv = res.paths.filter((p) => p.failQ < 0).length, d = surv - baseSurvived;
+      U.$("w-out").innerHTML = `${surv} / 1,000 ${Guide.chips([{ k: "vs your plan", delta: d, unit: "", fmt: (v) => Math.round(v) }])}`;
+      U.$("w-cliff").textContent = `Cliff branches: extend ${Math.round(res.cliffWeights.extend * 100)}% · lapse ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}%`;
+      draw(res, null, { instant: true, show: w.show });
+      Guide.tick("whatif");
+    };
+    U.$("w-extra").oninput = (e) => { w.extra = +e.target.value; U.$("w-extra-v").textContent = `+${w.extra} days`; rerun(); };
+    U.$("w-sig").oninput = (e) => { w.signal = +e.target.value; U.$("w-sig-v").textContent = `${w.signal >= 0 ? "+" : ""}${w.signal.toFixed(2)}`; rerun(); };
+    U.$("w-thr").oninput = (e) => { w.thr = +e.target.value / 100; U.$("w-thr-v").textContent = `${e.target.value}%`; rerun(); };
+    el.querySelectorAll("[data-br]").forEach((b) => (b.onclick = () => { const on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", on); w.show[b.dataset.br] = on; rerun(); }));
+    const logIt = () => Guide.log(5, "What-if", [{ k: "Extra reserve", delta: w.extra, unit: " d", fmt: (v) => Math.round(v) }, { k: "Signal", delta: w.signal, unit: "", fmt: (v) => v.toFixed(2) }], U.$("w-out").textContent.split(" ").slice(0, 3).join(" ") + " survive");
+    ["w-extra", "w-sig", "w-thr"].forEach((id) => (U.$(id).onchange = logIt));
+  }
+
+  function draw(res, done, opts = {}) {
     const cv = root.UI.$("fan"), dpr = Math.min(2, devicePixelRatio || 1);
     const W = cv.clientWidth, H = cv.clientHeight;
     cv.width = W * dpr; cv.height = H * dpr;
@@ -55,8 +86,8 @@
       c.fillStyle = "rgba(255,90,78,.10)"; c.fillRect(L, y(0) - 6, W - L - R, 6);
     };
     axes();
-    const paths = res.paths;
-    const reduced = root.UI.reduced();
+    const paths = opts.show ? res.paths.filter((p) => opts.show[p.branch]) : res.paths;
+    const reduced = root.UI.reduced() || opts.instant;
     const batch = reduced ? paths.length : 40;
     let i = 0;
     c.globalCompositeOperation = "lighter";
@@ -70,7 +101,7 @@
         }
       }
       if (i < paths.length) setTimeout(step, 16); // timer, not rAF: keeps drawing in throttled/background tabs
-      else { c.globalCompositeOperation = "source-over"; ribbon(); done && done(); }
+      else { c.globalCompositeOperation = "source-over"; if (paths.length) ribbon(); done && done(); }
     };
     const ribbon = () => {
       const q = (arr, p) => { const a = arr.slice().sort((u, v) => u - v); return a[Math.floor(p * (a.length - 1))]; };
@@ -85,7 +116,7 @@
       c.fillText("median", x(n) + 6, y(p50[n]) + 4);
       c.fillStyle = "#AEB6C4"; c.fillText("P10–P90", x(n) + 6, y(p90[n]) + 4);
     };
-    setTimeout(step, 30);
+    if (opts.instant) step(); else setTimeout(step, 30);
   }
   const hexA = (hex, a) => { const v = parseInt(hex.slice(1), 16); return `rgba(${v >> 16},${(v >> 8) & 255},${v & 255},${a})`; };
 
@@ -121,8 +152,8 @@
       <p>The past week's headlines are scored with a published keyword lexicon: escalation terms +1, de-escalation −1. The signal shifts the cliff branches: extend ${Math.round(res.cliffWeights.extend * 100)}% · lapse ${Math.round(res.cliffWeights.lapse * 100)}% · new deal ${Math.round(res.cliffWeights.deal * 100)}% (base 45/35/20, <span class="pill assumed">assumed</span>).</p>
       <ul>${((EXT.signal || {}).items || []).map((i) => `<li><a href="${U.esc(i.url)}" target="_blank" rel="noopener">${U.esc(i.title)}</a> <span class="faint">${U.esc(i.source || "")} · ${U.esc(i.date || "")} · ${i.score > 0 ? "+1" : i.score < 0 ? "−1" : "0"} ${U.esc((i.matched || []).join(", "))}</span></li>`).join("")}</ul>`);
     U.$("a5-dock").innerHTML = `<button class="ghost" id="btn-again">Play another mineral</button><button class="primary big" id="btn-share" data-primary>Share result</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Open Analyst mode</a>`;
-    U.$("btn-again").onclick = () => { Object.assign(G, { guess: [], faults: [], stockDays: 0, signed: [], investigated: new Set(), investCost: 0, dStart: null, dNow: null, regime: "stress" }); Router.show(1); };
-    U.$("btn-share").onclick = () => Share.card(G);
+    U.$("btn-again").onclick = () => { Guide.tick("share"); Object.assign(G, { guess: [], faults: [], stockDays: 0, signed: [], investigated: new Set(), investCost: 0, dStart: null, dNow: null, regime: "stress" }); Router.show(1); };
+    U.$("btn-share").onclick = () => { Guide.tick("share"); Share.card(G); };
   }
 
   root.Futures = { start };

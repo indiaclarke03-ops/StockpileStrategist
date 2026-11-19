@@ -1,0 +1,569 @@
+{
+ "mineral": "gallium",
+ "hs": [
+  "811292",
+  "282590",
+  "381800",
+  "293190"
+ ],
+ "hsSeries": [],
+ "fetched": "2026-11-19",
+ "granularity": null,
+ "measure": "value_share_usgs",
+ "synthetic": true,
+ "badge": "Illustrative network - not measured",
+ "demandMonthly": 100,
+ "units": "normalised (100 = average total monthly US gallium-metal imports); only meanVolume = 100 x meanShare is given, no time series",
+ "periods": [],
+ "syntheticReason": "Sayari bills of lading hold almost no gallium metal. HS 811292 arriving USA (234 rows, all 3 pages pulled in full mode) is a basket: after removing the standard HS text, gallium appears in only ~5 rows for 2023-01..2026-10 (mostly niobium, indium, titanium and mis-coded consolidated cargo). Free-text queries for gallium terms (gallium metal/ingot/6N/oxide/arsenide/nitride, UN 2803, trimethylgallium, GaCl3) gave 93 + 138 rows; after dedup and dropping empty-cylinder returns there are only 6 gallium-METAL lots in 46 months (Kite Metals LUX x3, Mexico x1 month, Turkey x1 in transit), and no Canadian rows at all (truck/air freight is not in US BOL data). The other gallium-bearing rows are MOCVD precursors and GaAs scrap whose gross weights are mostly cylinders and other chemicals. No node reaches 18 months; quarterly metal coverage is <=3 quarters per node. So volumes are left empty; per-node Sayari lot counts are kept in raw as evidence only.",
+ "tier1": [
+  {
+   "id": "ca",
+   "label": "Canada - high-purity refiners (5N Plus, Montreal; Neo Performance) - refines imported low-purity Ga and recycled scrap",
+   "country": "CAN",
+   "volumes": {},
+   "meanShare": 0.28,
+   "meanVolume": 28.0,
+   "shareEvidence": "reported (USGS MCS 2026: US gallium-metal import sources 2021-24 Canada 28%); not covered by trade.json (no USA<-CAN corridor in tia_trade_flow)",
+   "raw": {
+    "measure": "see fields",
+    "sayariGalliumLots_2023_01_to_2026_10": {
+     "total": 0,
+     "byKind": {},
+     "byQuarter": {},
+     "byShipperCountry": {}
+    },
+    "sayariGalliumMetalLots": [],
+    "sayariCountNote": "Count of US-arrival shipment rows whose shipper free text names gallium (metal, GaAs, or Ga precursors such as trimethylgallium / GaCl3), deduplicated, empty-cylinder returns and GaN consumer devices removed. Evidence of who ships, NOT a volume: gross weights are dominated by cylinders and co-shipped chemicals.",
+    "sayariNote": "No gallium-text rows from Canada in Sayari: US-Canada gallium moves by truck/air, which US bills of lading (ocean) do not cover. HS 811292 CAN rows (21) are consolidated groceries/household goods (Odyssey Shipping) mis-tagged with 811292."
+   },
+   "companies": [
+    {
+     "name": "5N PLUS INC.",
+     "sayariId": "T1jyafeqjImfRxe81cHODg"
+    }
+   ],
+   "owners": [
+    "5N Plus: Sayari find_beneficial_owners -> Caisse de depot et placement du Quebec (AQKTt4Ueu-TAppsZ0zpH4w, Quebec state pension fund; this is the source of the owned_by_soe flag - not Chinese)"
+   ],
+   "flags": [
+    "Sayari risk tags on 5N Plus: forced_labor_xinjiang_origin_subtier, owned_by_soe (CDPQ), soe_adjacent",
+    "Assumed: refining feed is largely imported Chinese low-purity gallium plus recycled scrap",
+    "Rio Tinto/Indium Corp Quebec pilot (first gallium 2025, demo plant <=3.5 t/yr) is not yet a material supplier"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "USGS MCS 2026 gallium (Tavily); Sayari search_entities(\"5N Plus\") + find_beneficial_owners(T1jyafeqjImfRxe81cHODg); Sayari search_trade_facets(shipments, hs 811292, USA, departure CAN = 21 non-gallium rows)"
+  },
+  {
+   "id": "jp",
+   "label": "Japan - refiners and GaAs-scrap recyclers (Dowa Metals & Mining, Sumitomo Chemical, JX/Nippon trading houses)",
+   "country": "JPN",
+   "volumes": {},
+   "meanShare": 0.22,
+   "meanVolume": 22.0,
+   "shareEvidence": "reported (USGS MCS 2026: Japan 22% of 2021-24 US gallium-metal imports); trade.json Comtrade HS 811292 basket Japan 30.4% of four covered partners in 2025",
+   "raw": {
+    "measure": "see fields",
+    "sayariGalliumLots_2023_01_to_2026_10": {
+     "total": 2,
+     "byKind": {
+      "GaAs (wafer scrap/powder)": 2
+     },
+     "byQuarter": {
+      "2026Q1": 2
+     },
+     "byShipperCountry": {
+      "JPN": 2
+     }
+    },
+    "sayariGalliumMetalLots": [],
+    "sayariCountNote": "Count of US-arrival shipment rows whose shipper free text names gallium (metal, GaAs, or Ga precursors such as trimethylgallium / GaCl3), deduplicated, empty-cylinder returns and GaN consumer devices removed. Evidence of who ships, NOT a volume: gross weights are dominated by cylinders and co-shipped chemicals.",
+    "comtradeUSD_811292": {
+     "2023": 15910850,
+     "2024": 18303634,
+     "2025": 14945626
+    },
+    "comtradeNote": "HS 811292 is a basket (gallium, germanium, indium, niobium, vanadium unwrought/waste/powders) - not gallium-only"
+   },
+   "companies": [
+    {
+     "name": "DOWA METALS & MINING CO LTD",
+     "sayariId": "vohVOtPY0UWVsbw3MuoXtw"
+    },
+    {
+     "name": "SANCT CORPORATION",
+     "sayariId": "vwjQCDZm38THwF7ixEY_yA"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Japan has small primary output (USGS) but mostly refines/recycles; Chinese low-purity feed assumed",
+    "Sayari shows only 2 Japan-linked GaAs lots (2026-01, Sanct Corp -> Neo Rare Metals Oklahoma)"
+   ],
+   "chinaLinked": false,
+   "evidence": "synthetic",
+   "source": "USGS MCS 2026 (Tavily); data/trade/trade.json gallium.comtrade; Sayari search_entities(\"Dowa Metals & Mining\"); Sayari gallium free-text shipment queries (see method)"
+  },
+  {
+   "id": "cn",
+   "label": "China direct - gallium metal and Ga chemicals (precursor makers Jiangsu Nata, Nouryon Ningbo; GaCl3 traders)",
+   "country": "CHN",
+   "volumes": {},
+   "meanShare": 0.18,
+   "meanVolume": 18.0,
+   "shareEvidence": "reported (USGS MCS 2026: China 18% of 2021-24 US gallium-metal imports); trade.json Comtrade HS 811292 China share of covered partners 0.557 (2023), 0.635 (2024), 0.320 (2025) - basket, four partners only",
+   "raw": {
+    "measure": "see fields",
+    "sayariGalliumLots_2023_01_to_2026_10": {
+     "total": 33,
+     "byKind": {
+      "Ga chemical/precursor": 33
+     },
+     "byQuarter": {
+      "2023Q3": 11,
+      "2023Q4": 1,
+      "2024Q1": 1,
+      "2024Q2": 13,
+      "2024Q3": 2,
+      "2025Q1": 1,
+      "2025Q3": 2,
+      "2026Q2": 1,
+      "2026Q4": 1
+     },
+     "byShipperCountry": {
+      "CHN": 32,
+      "Prc": 1
+     }
+    },
+    "sayariGalliumMetalLots": [],
+    "sayariCountNote": "Count of US-arrival shipment rows whose shipper free text names gallium (metal, GaAs, or Ga precursors such as trimethylgallium / GaCl3), deduplicated, empty-cylinder returns and GaN consumer devices removed. Evidence of who ships, NOT a volume: gross weights are dominated by cylinders and co-shipped chemicals.",
+    "comtradeUSD_811292": {
+     "2023": 32791847,
+     "2024": 53325054,
+     "2025": 15776202
+    }
+   },
+   "companies": [
+    {
+     "name": "AMERICAN INTERNATIONAL CARGO SERVICES (CHINA) LIMITED",
+     "sayariId": "DscuKy6TApIqfrjr99FnsA"
+    },
+    {
+     "name": "JIANGSU NATA OPTO-ELECTRONIC MATERI",
+     "sayariId": "WG6C1Ce9afnJGFtq_QcFKQ"
+    },
+    {
+     "name": "PENAVICO INTERNATIONAL LOGISTICS CO",
+     "sayariId": "JWxPemPLfu4AuXpRcKaurQ"
+    },
+    {
+     "name": "GLOBAL FREIGHT SERVICES (SHANGHAI) CO., LTD. NINGBO BRANCH",
+     "sayariId": "1gUmQqYVH3yCwFiL2EKbuA"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "China export controls on gallium from Aug 2023; outright ban on exports to the US from 2024-12-03; ban suspended 2025-11-09 until 2026-11-27 (licences still required; military end-use ban not suspended)",
+    "Direct metal flow collapses 2025 (Comtrade China value -70% vs 2024)",
+    "Sayari CHN gallium-text rows are precursors (trimethylgallium/triethylgallium) and GaCl3, not metal"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "USGS MCS 2026; Reuters via investing.com and Fastmarkets (Tavily); trade.json; Sayari free-text gallium shipment queries"
+  },
+  {
+   "id": "de",
+   "label": "Germany - refiners/recyclers (PPM Pure Metals, Buss & Buss scrap) and MOCVD precursor makers (Dockweiler Chemicals)",
+   "country": "DEU",
+   "volumes": {},
+   "meanShare": 0.16,
+   "meanVolume": 16.0,
+   "shareEvidence": "reported (USGS MCS 2026: Germany 16% of 2021-24 US gallium-metal imports); not covered by trade.json",
+   "raw": {
+    "measure": "see fields",
+    "sayariGalliumLots_2023_01_to_2026_10": {
+     "total": 12,
+     "byKind": {
+      "Ga chemical/precursor": 11,
+      "GaAs (wafer scrap/powder)": 1
+     },
+     "byQuarter": {
+      "2023Q2": 2,
+      "2023Q4": 1,
+      "2024Q2": 1,
+      "2024Q3": 1,
+      "2024Q4": 3,
+      "2025Q1": 2,
+      "2026Q1": 1,
+      "2026Q2": 1
+     },
+     "byShipperCountry": {
+      "DEU": 12
+     }
+    },
+    "sayariGalliumMetalLots": [],
+    "sayariCountNote": "Count of US-arrival shipment rows whose shipper free text names gallium (metal, GaAs, or Ga precursors such as trimethylgallium / GaCl3), deduplicated, empty-cylinder returns and GaN consumer devices removed. Evidence of who ships, NOT a volume: gross weights are dominated by cylinders and co-shipped chemicals."
+   },
+   "companies": [
+    {
+     "name": "PPM Pure Metals GmbH",
+     "sayariId": "UjlIx_PaHuDNRXGkntLbnA"
+    },
+    {
+     "name": "DOCKWEILER CHEMICALS GMBH",
+     "sayariId": "b6xucwJhwZNwK-RVQylU6Q"
+    },
+    {
+     "name": "DP WORLD LOGISTICS GERMANY B.V. & CO",
+     "sayariId": "Wf7YXPt70wqIDrVPCejVIQ"
+    },
+    {
+     "name": "VERSUM MATERIALS GERMANY GMBH",
+     "sayariId": "6COf1mwmvxCa2Rf3rYuAcA"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Germany has no primary gallium output since AOS Stade idled in 2016 (Reuters/BGR); China supplied 55% of German gallium imports in 2022 (BGR via Reuters)",
+    "Reuters: a German plant run by Chinese-owned Vital Pure Metal Solutions produced gallium in the past",
+    "Sayari PPM Pure Metals duplicate node brsQTtOhNQuAW_eKnpwhpQ tagged sanctioned_adjacent, soe_adjacent"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "USGS MCS 2026; Reuters via finance.yahoo.com (Tavily); Sayari search_entities(\"PPM Pure Metals GmbH\"); Sayari free-text gallium shipment queries"
+  },
+  {
+   "id": "other",
+   "label": "Other (UK/Slovakia/Korea refiners, Benelux metal traders e.g. Kite Metals, Taiwan GaAs scrap and precursors, Russia, transshipment)",
+   "country": "OTH",
+   "volumes": {},
+   "meanShare": 0.16,
+   "meanVolume": 16.0,
+   "shareEvidence": "reported (USGS MCS 2026: other 16% of 2021-24 US gallium-metal imports); trade.json Comtrade HS 811292 Korea 37.6% of covered partners in 2025 is mostly basket metals (likely indium), not gallium",
+   "raw": {
+    "measure": "see fields",
+    "sayariGalliumLots_2023_01_to_2026_10": {
+     "total": 45,
+     "byKind": {
+      "Ga chemical/precursor": 29,
+      "GaAs (wafer scrap/powder)": 10,
+      "Ga metal": 6
+     },
+     "byQuarter": {
+      "2023Q1": 6,
+      "2023Q2": 5,
+      "2023Q3": 1,
+      "2023Q4": 4,
+      "2024Q1": 3,
+      "2024Q2": 7,
+      "2024Q3": 4,
+      "2024Q4": 1,
+      "2025Q1": 3,
+      "2025Q2": 2,
+      "2025Q3": 1,
+      "2025Q4": 1,
+      "2026Q1": 4,
+      "2026Q3": 2,
+      "2026Q4": 1
+     },
+     "byShipperCountry": {
+      "TWN": 21,
+      "RUS": 4,
+      "IND": 2,
+      "LUX/BEL/NLD": 6,
+      "MEX": 2,
+      "unknown": 6,
+      "TUR": 1,
+      "KOR": 1,
+      "HKG": 1,
+      "SGP": 1
+     }
+    },
+    "sayariGalliumMetalLots": [
+     {
+      "date": "2023-04-18",
+      "grossKg": 80.0,
+      "shipper": "KITE METALS SARL",
+      "sayariId": "XqBnXyFr21Z9ioUtWeieSw",
+      "buyer": "ATLANTIC METALS & ALLOYS LLC"
+     },
+     {
+      "date": "2023-06-07",
+      "grossKg": 192.0,
+      "shipper": "KITE METALS SARL",
+      "sayariId": "XqBnXyFr21Z9ioUtWeieSw",
+      "buyer": "ATLANTIC METALS & ALLOYS LLC"
+     },
+     {
+      "date": "2023-10-24",
+      "grossKg": 3399.0,
+      "shipper": "ROMEU MEXICO SA DE CV",
+      "sayariId": "T9-G21IbQ2vRj4QaDC4H3w",
+      "buyer": "Metro Plastics (kenya) Limited"
+     },
+     {
+      "date": "2023-10-24",
+      "grossKg": 1219.0,
+      "shipper": "METAL RGICA LAZCANO,S.A.DE C.V.",
+      "sayariId": "SJsopG_nDkk1RPeiycdDlA",
+      "buyer": "Metro Plastics (kenya) Limited"
+     },
+     {
+      "date": "2025-05-03",
+      "grossKg": 9189.0,
+      "shipper": "FLEXIM TRADING CO",
+      "sayariId": "Lshbsi1HUgzFFBTV0-uK8Q",
+      "buyer": "SONNIG TRADING FZ-LLC"
+     },
+     {
+      "date": "2025-11-04",
+      "grossKg": 63.0,
+      "shipper": "KITE METALS SARL",
+      "sayariId": "XqBnXyFr21Z9ioUtWeieSw",
+      "buyer": "ATLANTIC METALS AND ALLOYS, LLC"
+     }
+    ],
+    "sayariCountNote": "Count of US-arrival shipment rows whose shipper free text names gallium (metal, GaAs, or Ga precursors such as trimethylgallium / GaCl3), deduplicated, empty-cylinder returns and GaN consumer devices removed. Evidence of who ships, NOT a volume: gross weights are dominated by cylinders and co-shipped chemicals.",
+    "comtradeUSD_811292_Korea": {
+     "2023": 10170729,
+     "2024": 12336171,
+     "2025": 18513415
+    }
+   },
+   "companies": [
+    {
+     "name": "SAFC HITECH TAIWAN CO. LTD",
+     "sayariId": "_dir5KkWsGdx7LZSlmNNXQ"
+    },
+    {
+     "name": "Weihao Resources Recycling Co., Ltd.",
+     "sayariId": "4Zp1BYNZqLWdOdCDkoCMYw"
+    },
+    {
+     "name": "ООО \"ДАЛХИМ\"",
+     "sayariId": "t-mFXuU5k7UEiV8ZqMZraA"
+    },
+    {
+     "name": "KITE METALS SARL",
+     "sayariId": "XqBnXyFr21Z9ioUtWeieSw"
+    },
+    {
+     "name": "NOURYON FUNCTIONAL CHEMICALS B.V.",
+     "sayariId": "JvPuOgM-K9J8yLwmdAulgQ"
+    },
+    {
+     "name": "KINTETSU WORLD EXPRESS (TAIWAN) INC",
+     "sayariId": "ryxOphr7qJTtvfULmsyO-w"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Kite Metals SARL (LUX) -> Atlantic Metals & Alloys: the only recurring gallium-METAL shipper in Sayari (2023-04, 2023-06, 2025-11; 63-192 kg gross)",
+    "Turkey 2025-05: 3,519 kg net gallium (Flexim Trading) in transit to Bolivia free zone via US port - possible rerouting, not US consumption",
+    "Reuters: during the China ban some US importers routed material through third countries"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "USGS MCS 2026; trade.json; Sayari free-text gallium shipment queries"
+  }
+ ],
+ "tier2": [
+  {
+   "id": "cn-alumina-ga",
+   "label": "Chinese alumina-refinery primary low-purity gallium (Chalco, Shandong/Shanxi/Guangxi refiners)",
+   "country": "CHN",
+   "feeds": [
+    "cn",
+    "ca",
+    "jp",
+    "de",
+    "other"
+   ],
+   "share": {
+    "cn": 0.95,
+    "ca": 0.6,
+    "jp": 0.5,
+    "de": 0.55,
+    "other": 0.5
+   },
+   "shareEvidence": {
+    "cn": "assumed",
+    "ca": "assumed",
+    "jp": "assumed",
+    "de": "reported",
+    "other": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "USGS MCS 2025: China 99% of world primary low-purity gallium (Tavily, pubs.usgs.gov/periodicals/mcs2025/mcs2025-gallium.pdf); de 0.55 = China share of German gallium imports 2022 (BGR via Reuters, finance.yahoo.com) used as a proxy; other shares assumed. Chinese refiners not resolved in Sayari."
+  },
+  {
+   "id": "scrap-recycle",
+   "label": "New-scrap recycling of GaAs/GaN fab scrap (Japan, Canada, Germany, Slovakia, US) - feed itself often made from Chinese primary Ga",
+   "country": "OTH",
+   "feeds": [
+    "jp",
+    "ca",
+    "de",
+    "other"
+   ],
+   "share": {
+    "jp": 0.4,
+    "ca": 0.3,
+    "de": 0.3,
+    "other": 0.2
+   },
+   "shareEvidence": {
+    "jp": "assumed",
+    "ca": "assumed",
+    "de": "assumed",
+    "other": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "USGS MCS 2025: gallium recovered from new scrap in Canada, China, Japan, Slovakia and the US; secondary high-purity capacity ~280 t/yr vs 340 t/yr refined (Tavily). Sayari shows the scrap trade: Weihao Resources Recycling / Gramter (TWN, 4Zp1BYNZqLWdOdCDkoCMYw, gReVJDK6BHrv29qli0muvA) and Buss & Buss (DEU, 4PpnRRDcs1iP5jA1PRbDFQ) ship GaAs wafer scrap to Neo Rare Metals (US). Shares assumed."
+  },
+  {
+   "id": "non-cn-primary",
+   "label": "Non-China primary low-purity gallium (Japan, Korea, Russia; ~1% of world)",
+   "country": "OTH",
+   "feeds": [
+    "jp",
+    "other"
+   ],
+   "share": {
+    "jp": 0.1,
+    "other": 0.1
+   },
+   "shareEvidence": {
+    "jp": "assumed",
+    "other": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "USGS MCS 2025 and Reuters factbox (Tavily): Japan, Korea and Russia produce ~10 t/yr primary gallium. Russian LLC PGLZ shipped 6N gallium to Atlantic Metals & Alloys in 2022 (Sayari Russia export records). Shares assumed."
+  },
+  {
+   "id": "rio-tinto-qc",
+   "label": "Rio Tinto / Indium Corp gallium from alumina refining, Saguenay (Quebec) - pilot",
+   "country": "CAN",
+   "feeds": [
+    "ca"
+   ],
+   "share": {
+    "ca": 0.01
+   },
+   "shareEvidence": {
+    "ca": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "Rio Tinto release 2025 (riotinto.com, Tavily): first gallium extracted; demo plant up to 3.5 t/yr planned, commercial 40 t/yr possible (5-10% of world). counterparties.json cp-gallium-riotinto (Sayari bJ0jFR91ZQTsHtsn2bcTDA, Rio Tinto Fer et Titane). Near-zero current share assumed; a game option, not current supply."
+  },
+  {
+   "id": "de-kz-restart",
+   "label": "Restart candidates: German (Stade) and Kazakh (Pavlodar) primary gallium",
+   "country": "KAZ",
+   "feeds": [
+    "de",
+    "other"
+   ],
+   "share": {
+    "de": 0.1,
+    "other": 0.05
+   },
+   "shareEvidence": {
+    "de": "assumed",
+    "other": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "USGS MCS 2025: Germany, Hungary, Kazakhstan ceased primary production 2013-2016; USGS World Minerals Outlook notes possible new capacity in Germany, Kazakhstan, Korea (Tavily: finance.yahoo.com). Shares assumed and forward-looking."
+  }
+ ],
+ "links": [
+  {
+   "a": "ca",
+   "b": "cn",
+   "reason": "Shared Chinese feedstock: Canadian high-purity refining uses imported low-purity gallium and recycled scrap that trace back to Chinese primary output (China ~99% of world primary)",
+   "evidence": [
+    "https://pubs.usgs.gov/periodicals/mcs2025/mcs2025-gallium.pdf",
+    "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-gallium.pdf",
+    "Sayari T1jyafeqjImfRxe81cHODg (5N Plus)"
+   ],
+   "evidenceLevel": "assumed (structural, from USGS world supply shares); no Sayari supplier edge pulled",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "jp",
+   "b": "cn",
+   "reason": "Shared Chinese feedstock for Japanese refiners/recyclers",
+   "evidence": [
+    "https://pubs.usgs.gov/periodicals/mcs2025/mcs2025-gallium.pdf"
+   ],
+   "evidenceLevel": "assumed",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "de",
+   "b": "cn",
+   "reason": "Germany has no primary output; China supplied 55% of German gallium imports in 2022; a German plant was run by Chinese-owned Vital Pure Metal Solutions",
+   "evidence": [
+    "https://finance.yahoo.com/news/1-germany-says-preparing-possible-144248626.html"
+   ],
+   "evidenceLevel": "reported (BGR via Reuters)",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "other",
+   "b": "cn",
+   "reason": "Transshipment: during the Dec-2024 to Nov-2025 China ban, US importers routed material through third countries; Benelux traders and Taiwan/HK precursor flows sit in this node",
+   "evidence": [
+    "https://www.investing.com/news/economic-indicators/china-suspends-ban-on-exports-of-gallium-germanium-antimony-to-us-4344344",
+    "https://www.fastmarkets.com/insights/china-suspends-export-prohibition-on-superhard-materials-us",
+    "Sayari XqBnXyFr21Z9ioUtWeieSw (Kite Metals)"
+   ],
+   "evidenceLevel": "reported (Reuters, general); node-specific routing not shown in Sayari",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "jp",
+   "b": "ca",
+   "reason": "Shared GaAs new-scrap pool: both recycle fab scrap from the same Asian wafer makers; scrap shippers (Taiwan Weihao/Gramter, Japan Sanct) sell into the same buyers",
+   "evidence": [
+    "Sayari 4Zp1BYNZqLWdOdCDkoCMYw",
+    "Sayari gReVJDK6BHrv29qli0muvA",
+    "Sayari vwjQCDZm38THwF7ixEY_yA",
+    "https://pubs.usgs.gov/periodicals/mcs2025/mcs2025-gallium.pdf"
+   ],
+   "evidenceLevel": "assumed (scrap trade seen in Sayari; buyer is US, not Canadian/Japanese refiners)",
+   "rhoStress": 0.8
+  }
+ ],
+ "comparison": "USGS MCS 2026 (gallium metal, HTS 8112.92.1000, 2021-24): Canada 28 / Japan 22 / China 18 / Germany 16 / other 16 % - used for meanShare. USGS MCS 2025 (2020-23): Japan 24 / China 19 / Germany 19 / Canada 17 / other 21 %. trade.json (Comtrade HS 811292 basket, USD, partners CHN/JPN/KOR/MEX only): totals 58.9M / 84.0M / 49.2M for 2023/24/25; China share 0.557 / 0.635 / 0.320; Korea 37.6% in 2025. Direction agrees with the ban: China falls in 2025. Levels do not: the basket includes indium/germanium/niobium, and Canada and Germany are missing from the covered corridors. USGS MCS 2026 also says 2025 US gallium-metal imports were more than double 2024 at ~$580/kg, while GaAs wafer imports fell 24%. Sayari counts (gallium-bearing US lots 2023-01..2026-10, excl. empties): ca 0, jp 2, cn 33, de 12, other 45 - shipment counts, not volume.",
+ "method": [
+  "Read STOCKPILE_V4_BRIEF.md section 5; data/network/antimony.json and dysprosium.json (schema); data/trade/trade.json (gallium); data/counterparties.json (cp-gallium-riotinto)",
+  "Sayari search_trade_facets(scope=shipments, query='gallium', arrival_country=USA, hs_code=811292, date_from=2023-01-01, bucket_limit=20) -> 234 (same as query='*': the query term matched the HS description, so it did not filter)",
+  "Sayari search_trade_facets(scope=shipments, query='*', arrival_country=USA, hs_code=811292, date_from=2023-01-01, bucket_limit=20) -> 234; departure JPN 37, DEU 35, CAN 21, BEL 14, MYS 14, NLD 12, MEX 11, CHN 10; earliest 2019-10-11 (date filter loose)",
+  "Sayari search_shipments(query='*', arrival_country=USA, hs_code=811292, date_from=2023-01-01, response_mode=full, limit=100) + 2 page_token continuations (offsets 100, 200): 234 unique rows; local filter on free-text description after stripping the standard HS 8112 text",
+  "Sayari search_trade_facets(scope=shipments, query='gallium', arrival_country=USA, date_from=2023-01-01) -> 1,189 rows (matches HS 8112xx description text; not usable)",
+  "Sayari search_trade_facets + search_shipments(full, limit=100) with query '\"gallium metal\" | \"gallium ingot\" | \"gallium ingots\" | \"metal gallium\" | \"gallium 99.99\" | \"gallium 6N\" | \"gallium 4N\" | \"gallium oxide\" | \"gallium arsenide\" | \"gallium nitride\" | \"galio metalico\" | \"high purity gallium\" | \"ГАЛЛИЙ\"', arrival USA, date_from 2023-01-01 -> 93 rows (one page); hs buckets 811299 47, 811292 10, 292990 6, 382569 4, 282590 2, 381800 1",
+  "Sayari search_shipments(full, limit=100) with query '\"UN 2803\" | \"UN2803\" | ... | \"trimethylgallium\" | \"TMGa\" | \"gallium trichloride\"', arrival USA, date_from 2023-01-01 -> first 100 of 138 rows (second page not pulled)",
+  "Processing (local Python): date = arrival else departure; kept 2023-01..2026-10; gallium if free text (not HS text) matches GALLI/GALIO/ГАЛЛИЙ/TMGA; classified metal / GaAs / Ga chemical; dropped empty-cylinder returns and GaN chargers (12 rows); dedup on (date, gross kg, kind); node by shipper/departure country",
+  "Sayari search_entities('5N Plus'), find_beneficial_owners(T1jyafeqjImfRxe81cHODg, depth 2) -> CDPQ shareholder",
+  "Sayari search_entities('Dowa Metals & Mining'), search_entities('PPM Pure Metals GmbH')",
+  "Tavily tavily_search('USGS Mineral Commodity Summaries 2026 gallium import sources United States') -> mcs2026-gallium.pdf",
+  "Tavily tavily_search('China gallium export ban United States suspended November 2025 transshipment') -> Fastmarkets, Reuters (investing.com), CNBC, CIRS",
+  "Tavily tavily_search('gallium imports Canada Japan Germany recycled scrap Chinese feedstock 5N Plus Dowa PPM Pure Metals') -> mcs2025-gallium.pdf, Reuters factbox, Reuters Germany/BGR",
+  "Tavily tavily_search('Rio Tinto gallium Sorel-Tracy Quebec demonstration plant 2025 tonnes') -> riotinto.com release, Mining Technology",
+  "Reused data/trade/trade.json gallium.comtrade (Tradeverifyd tia_trade_flow HS 811292); no new Tradeverifyd call (USA corridors cover only CHN/JPN/KOR/MEX)"
+ ],
+ "caveats": [
+  "SYNTHETIC: no time series. volumes{} and periods[] are empty by design; the game must use an illustrative covariance and show the 'Illustrative network - not measured' badge (brief 5.4).",
+  "meanShare = USGS 2021-24 average share of US gallium-METAL import value (HTS 8112.92.1000). It predates the Dec-2024 China ban; 2025 China share is much lower (Comtrade basket share fell from 0.635 to 0.320).",
+  "GaAs wafers (HS 3818, ~79% of US gallium use per USGS) and MOCVD precursors are not in the shares.",
+  "Comtrade HS 811292 is a basket (Ga, Ge, In, Nb, V); Korea's large 2025 value is most likely indium, so it is not used as a gallium share.",
+  "Sayari counts in raw are shipment-row counts of gallium-bearing lots, not volumes; most are precursors or scrap with gross weights dominated by packaging. Canada has zero rows because overland freight is not covered.",
+  "The UN-2803/precursor query returned 138 rows; only the first 100 were pulled.",
+  "All tier-2 shares are assumed except de <- cn-alumina-ga (0.55, BGR 2022 import share used as a proxy).",
+  "counterparties.json names Rio Tinto Fer et Titane (Sorel-Tracy); the reported gallium pilot is at Rio Tinto's Saguenay alumina refinery with Indium Corporation. The Sayari entity may be the wrong Rio Tinto unit.",
+  "Mexico 2023-10 and Turkey 2025-05 gallium lots name non-US consignees (Kenya, Bolivia free zone): likely transit records, not US consumption.",
+  "No covariance computed (game computes it)."
+ ]
+}
