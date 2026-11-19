@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stockpile Strategist</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">◆</span>
+      <div>
+        <div class="brand-name">Stockpile Strategist</div>
+        <div class="brand-sub">National critical-minerals reserve · v2</div>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="top-actions">
+      <button class="ghost" id="btn-about">About the data</button>
+      <button class="ghost" id="btn-reset">Restart</button>
+    </div>
+  </header>
+
+  <main id="game" class="layout">
+    <aside class="panel intel" id="intel"></aside>
+    <section class="minerals" id="minerals"></section>
+    <aside class="panel orders" id="orders"></aside>
+    <section class="panel mapwrap" id="mapwrap"></section>
+    <section class="panel log" id="log"></section>
+  </main>
+
+  <main id="endscreen" class="end hidden"></main>
+
+  <div class="overlay hidden" id="overlay"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+  <script src="data.js"></script>
+  <script src="data_cache.js"></script>
+  <script src="integrate.js"></script>
+  <script src="sim.js"></script>
+  <script src="montecarlo.js"></script>
+  <script src="map.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

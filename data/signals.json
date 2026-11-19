@@ -1,0 +1,170 @@
+{
+  "fetched": "2026-11-19",
+  "method": "Tavily tavily_search, topic=news, time_range=week (2026-11-12..19); 4 queries. Each item's headline+returned snippet scored with the lexicon: item score = sign(#escalation terms matched - #de-escalation terms matched), counting each term at most once. signal = mean item score, clamped to [-1,1]. Undated results and social-media posts (LinkedIn/Instagram/Facebook/YouTube) excluded.",
+  "queries": [
+    "China rare earth export control suspension January 2027",
+    "China export controls gallium germanium antimony",
+    "DRC cobalt export quota 2027",
+    "critical minerals stockpile"
+  ],
+  "lexicon": {
+    "escalation": [
+      "ban",
+      "tighten",
+      "control list",
+      "retaliat*",
+      "restrict*",
+      "suspend exports",
+      "halt"
+    ],
+    "deescalation": [
+      "extend suspension",
+      "extension",
+      "general licence/license",
+      "truce",
+      "ease/easing",
+      "resume",
+      "lift"
+    ]
+  },
+  "items": [
+    {
+      "date": "2026-11-19",
+      "title": "Inside the Army's 75 Year Plan to Escape China's Rare Earth Dominance",
+      "url": "https://oilprice.com/Energy/Energy-General/Inside-the-Armys-75-Year-Plan-to-Escape-Chinas-Rare-Earth-Dominance.html",
+      "source": "oilprice.com",
+      "query": "China rare earth export control suspension January 2027",
+      "score": 1,
+      "matched": [
+        "+tighten",
+        "+restrict*"
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "title": "China Extends Rare Earth Export-Control Suspension to January 2027 as Dysprosium Hits $4,100/kg",
+      "url": "https://rareearthexchanges.com/news/china-dysprosium-export-controls-2027",
+      "source": "rareearthexchanges.com",
+      "query": "China rare earth export control suspension January 2027",
+      "score": -1,
+      "matched": [
+        "-extend suspension"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "title": "As the Nvidia scandal threatens to reignite trade tensions at Trump-Xi talks, Beijing still holds the rare earths",
+      "url": "https://www.atlanticcouncil.org/blogs/econographics/as-the-nvidia-scandal-threatens-to-reignite-trade-tensions-at-trump-xi-talks-beijing-still-holds-the-rare-earths",
+      "source": "atlanticcouncil.org",
+      "query": "China rare earth export control suspension January 2027",
+      "score": 0,
+      "matched": [
+        "+retaliat*",
+        "+restrict*",
+        "-extend suspension",
+        "-truce"
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "title": "China Extends Suspension of Rare Earth Export Controls",
+      "url": "https://www.thompsonhinesmartrade.com/2026/11/china-extends-suspension-of-rare-earth-export-controls",
+      "source": "thompsonhinesmartrade.com",
+      "query": "China rare earth export control suspension January 2027",
+      "score": -1,
+      "matched": [
+        "+restrict*",
+        "-extend suspension",
+        "-extension",
+        "-truce",
+        "-ease/easing"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "title": "US graphite supply remains exposed to China despite diversification push: NOVONIX CEO",
+      "url": "https://www.fastmarkets.com/insights/us-graphite-supply-exposed-to-china-despite-diversification-push",
+      "source": "fastmarkets.com",
+      "query": "China export controls gallium germanium antimony",
+      "score": 1,
+      "matched": [
+        "+halt"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "title": "Copper, tungsten and antimony supply capacity to grow under 2% a year to 2030",
+      "url": "https://theoregongroup.com/latest-news/copper-tungsten-and-antimony-supply-capacity-to-grow-under-2-a-year-to-2030",
+      "source": "theoregongroup.com",
+      "query": "China export controls gallium germanium antimony",
+      "score": 1,
+      "matched": [
+        "+ban",
+        "+restrict*"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "title": "US Chip Curbs Force Xi to Weigh Response Before Trump Summit",
+      "url": "https://www.bloomberg.com/news/articles/2026-11-17/us-chip-curbs-force-xi-to-weigh-response-before-trump-summit",
+      "source": "bloomberg.com",
+      "query": "China export controls gallium germanium antimony",
+      "score": 0,
+      "matched": [
+        "+restrict*",
+        "-truce"
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "title": "Over the Union's Head",
+      "url": "https://www.oneroinstitute.org/research/over-the-unions-head",
+      "source": "oneroinstitute.org",
+      "query": "DRC cobalt export quota 2027",
+      "score": 1,
+      "matched": [
+        "+ban",
+        "+restrict*"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "title": "The US-DRC minerals deal: time to show what's on the table",
+      "url": "https://politicsofpoverty.oxfamamerica.org/whats-on-the-table",
+      "source": "oxfamamerica.org",
+      "query": "DRC cobalt export quota 2027",
+      "score": 0,
+      "matched": []
+    },
+    {
+      "date": "2026-11-12",
+      "title": "Project Vault: The US$12bn critical minerals stockpile could rely on these ASX companies",
+      "url": "https://stockhead.com.au/resources/project-vault-the-us12bn-critical-minerals-stockpile-could-rely-on-these-asx-companies",
+      "source": "stockhead.com.au",
+      "query": "critical minerals stockpile",
+      "score": 0,
+      "matched": []
+    },
+    {
+      "date": "2026-11-13",
+      "title": "Op-Ed: Europe is stockpiling critical minerals. Wonderful. Can anyone actually use them?",
+      "url": "https://www.mining.com/op-ed-europe-is-stockpiling-critical-minerals-wonderful-can-anyone-actually-use-them",
+      "source": "mining.com",
+      "query": "critical minerals stockpile",
+      "score": 1,
+      "matched": [
+        "+restrict*"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "title": "Canada-South Korea Critical Mineral Supply Chain Co-operation",
+      "url": "https://www.asiapacific.ca/publication/canada-south-korea-critical-mineral-supply-chain-cooperation",
+      "source": "asiapacific.ca",
+      "query": "critical minerals stockpile",
+      "score": 0,
+      "matched": []
+    }
+  ],
+  "signal": 0.25
+}

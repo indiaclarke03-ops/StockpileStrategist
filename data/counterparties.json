@@ -1,0 +1,437 @@
+{
+  "fetched": "2026-11-19",
+  "method": "Sayari MCP: search_entities (entity resolution by name + identifiers), find_beneficial_owners (compact, upstream ownership; top results only), check_watchlist (max_depth 1 = direct links only unless noted; limit 2-3), risk_levels taken from the search row or get_entity_summary of the selected entity. Tradeverifyd MCP: search_entities -> entity_score -> annotation_count (search) / entity_annotations. All findings are tool outputs recorded verbatim-ish; they are data-provider signals, not allegations. 'No hits returned' means only that the call returned nothing at the depth/limit used. game.* fields are ASSUMED calibration, not data.",
+  "counterparties": [
+    {
+      "id": "cp-gallium-riotinto",
+      "name": "Rio Tinto Fer et Titane",
+      "country": "Canada",
+      "mineral": "gallium",
+      "statusNote": "Assumed from general knowledge: gallium recovery at Sorel-Tracy (Quebec) is at demonstration/pilot stage; commercial-scale plant not yet producing, so long lag.",
+      "sayari": {
+        "entityId": "bJ0jFR91ZQTsHtsn2bcTDA",
+        "matchedName": "RIO TINTO FER ET TITANE INC",
+        "ultimateOwners": [
+          { "name": "Rio Tinto plc", "country": "United Kingdom" },
+          { "name": "Rio Tinto Eastern Investments B.V. (via Rio Tinto Canada Inc.)", "country": "Netherlands" },
+          { "name": "Shining Prospect Pte. Ltd. (4-hop partial path via a possibly_same_as Rio Tinto plc node; Sayari country tag GBR)", "country": "United Kingdom (as tagged)" }
+        ],
+        "ownerChina": false,
+        "watchlistHits": [
+          "Depth 1: ships_to Development Bank of the Republic of Belarus (Sayari: sanctioned - EU, CHE SECO, CAN GAC, JPN MOF, NZL MFAT, UKR NSDC lists) - trade-record link"
+        ],
+        "riskFactors": [
+          "Sayari risk factor: law_enforcement_action (recent)",
+          "Sayari risk factor: regulatory_action",
+          "Sayari risk factor: owned_by_regulatory_action_entity / owner_of_regulatory_action_entity",
+          "Sayari risk factor: sanctioned_adjacent",
+          "Sayari risk factor: soe_adjacent",
+          "Parent Rio Tinto plc node carries psa_owner_of_chinese_soe"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "1a6a01cf-db36-4c8d-9491-2300519b55a7",
+        "score": 742,
+        "scale": "Tradeverifyd Score v1.0.0; tool returns score + score_level only (level 'Low'); numeric bounds not returned by the tool",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: direct trade link to a sanctioned Belarusian state bank", "kind": "sanctions", "source": "sayari" },
+        { "label": "Sayari: recent law-enforcement / regulatory-action flags", "kind": "other", "source": "sayari" },
+        { "label": "Sayari: minority holder Shining Prospect Pte. Ltd. appears in parent chain (partial path)", "kind": "owner", "source": "sayari" }
+      ],
+      "game": { "upfront": 400, "docPerQ": 6, "lag": [8, 12], "assumed": true }
+    },
+    {
+      "id": "cp-germanium-umicore",
+      "name": "Umicore",
+      "country": "Belgium",
+      "mineral": "germanium",
+      "statusNote": "Assumed from general knowledge: established germanium refiner/recycler (Olen, Belgium), producing today.",
+      "sayari": {
+        "entityId": "lflY_4yqfFwbwq2-Rs0jMA",
+        "matchedName": "NV UMICORE SA",
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: basel_aml (country-level)",
+          "Sayari risk factor: cpi_score (country-level)",
+          "Sayari risk factor: eu_high_risk_third"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "0379c4cb-0812-4945-9eee-5c4bca7b098c",
+        "score": 742,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [],
+      "game": { "upfront": 350, "docPerQ": 7, "lag": [4, 6], "assumed": true }
+    },
+    {
+      "id": "cp-germanium-teck",
+      "name": "Teck Resources",
+      "country": "Canada",
+      "mineral": "germanium",
+      "statusNote": "Assumed from general knowledge: germanium is a by-product of the Trail (BC) zinc-lead operation, producing today.",
+      "sayari": {
+        "entityId": "SSinh9Wz9qBVieFj8dW92A",
+        "matchedName": "TECK RESOURCES LTD",
+        "ultimateOwners": [
+          { "name": "Temagami Mining Company", "country": "Canada" },
+          { "name": "SMM Resources Incorporated", "country": "Japan" },
+          { "name": "Capital Research Global Investors", "country": "United States" },
+          { "name": "Fullbloom Investment Corporation -> China Investment Corporation -> State Council of the PRC (returned on a second Teck node e6PXb5yJQlRUKgkJBPXZfw, Quebec registry record; stake size and date not returned)", "country": "China" }
+        ],
+        "ownerChina": true,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: regulatory_action",
+          "Sayari risk factor: owner_of_regulatory_action_entity",
+          "Sayari risk factor: esg_score_medium",
+          "Second Teck node (e6PXb5yJQlRUKgkJBPXZfw): owned_by_chinese_soe, owned_by_soe"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "b18d0953-d901-4850-9182-8942045822c7",
+        "score": 700,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: shareholder path to China Investment Corporation (state-owned) via Fullbloom Investment Corp; stake size/currency of record not returned", "kind": "owner", "source": "sayari" }
+      ],
+      "game": { "upfront": 300, "docPerQ": 6, "lag": [4, 6], "assumed": true }
+    },
+    {
+      "id": "cp-antimony-koreazinc",
+      "name": "Korea Zinc",
+      "country": "South Korea",
+      "mineral": "antimony",
+      "statusNote": "Assumed from general knowledge: Onsan smelter recovers antimony (and other minor metals) as by-products; producing today.",
+      "sayari": {
+        "entityId": "fN8L_yT2Qh5_sHX3052Vfg",
+        "matchedName": "KOREA ZINC COMPANY LTD",
+        "ultimateOwners": [
+          { "name": "Korean individual shareholders returned in Hangul (e.g. 최창걸, 최정운, 최내현, 이세림, CHOI JENNIE)", "country": "South Korea" },
+          { "name": "Korea Circuit Co., Ltd. (CHN/HKG filter; Korean company with multi-country tags)", "country": "South Korea" }
+        ],
+        "ownerChina": false,
+        "watchlistHits": [
+          "Depth 1: receives_from JSC Dalpolimetall (Russia; Sayari: sanctioned_ukr_nsdc) - trade-record link"
+        ],
+        "riskFactors": [
+          "Sayari risk factor: regulatory_action",
+          "Sayari risk factor: sanctioned_adjacent",
+          "Sayari risk factor: chinese_soe_adjacent / soe_adjacent",
+          "Sayari risk factor: export_to_soe",
+          "Sayari risk factor: reputational_risk_financial_crime (incl. historic)",
+          "Sayari risk factor: esg_score_medium"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "ad5a9846-e95a-4666-988f-75176373e2b5",
+        "score": 741,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: direct trade link to a UKR NSDC-listed Russian supplier", "kind": "sanctions", "source": "sayari" },
+        { "label": "Sayari: Chinese-SOE-adjacent; exports to SOEs", "kind": "upstream", "source": "sayari" }
+      ],
+      "game": { "upfront": 300, "docPerQ": 9, "lag": [4, 6], "assumed": true }
+    },
+    {
+      "id": "cp-antimony-perpetua",
+      "name": "Perpetua Resources",
+      "country": "United States",
+      "mineral": "antimony",
+      "statusNote": "Assumed from general knowledge: Stibnite Gold Project (Idaho) is a development project (permitted, construction phase); no antimony output yet, so long lag.",
+      "sayari": {
+        "entityId": "aJP7Ncp5ArnGuUlJXFPq2A",
+        "matchedName": "PERPETUA RESOURCES CORP.",
+        "ultimateOwners": [
+          { "name": "Insider/officer shareholders from SEC filings (e.g. Bogert L Michael, Cherry Jonathan, Largent Jessica Marie)", "country": "United States" }
+        ],
+        "ownerChina": false,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: psa_owned_by_regulatory_action_entity",
+          "Sayari risk factor: basel_aml / cpi_score (country-level)"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "ece27e63-d902-42a7-9c1f-720b71732bd3",
+        "score": 705,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [],
+      "game": { "upfront": 600, "docPerQ": 12, "lag": [9, 12], "assumed": true }
+    },
+    {
+      "id": "cp-antimony-usac",
+      "name": "United States Antimony Corp",
+      "country": "United States",
+      "mineral": "antimony",
+      "statusNote": "Assumed from general knowledge: small operating smelter (Thompson Falls, MT) plus Mexican operations; producing but low volume.",
+      "sayari": {
+        "entityId": "s9TYrTWOVkO1mwu1sptuig",
+        "matchedName": "UNITED STATES ANTIMONY CORP",
+        "ultimateOwners": [
+          { "name": "Insider/director shareholders from SEC filings (e.g. John M. Keane, Gary C. Evans, Russell Lawrence)", "country": "United States" }
+        ],
+        "ownerChina": false,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: controlled_by_mass_business_registration",
+          "Sayari risk factor: esg_score_medium"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "92101f32-ddc9-4e5d-9ea7-b963b5122272",
+        "score": 740,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": [],
+        "matchCaveat": "Tradeverifyd node aliases look conflated with unrelated 'USAC' entities (NAICS shown as telecom); score may not reflect the antimony company alone"
+      },
+      "flags": [],
+      "game": { "upfront": 150, "docPerQ": 5, "lag": [4, 7], "assumed": true }
+    },
+    {
+      "id": "cp-graphite-syrah",
+      "name": "Syrah Resources",
+      "country": "Australia (Balama mine, Mozambique; Vidalia, US)",
+      "mineral": "graphite",
+      "statusNote": "Assumed from general knowledge: Balama natural-graphite mine has produced intermittently; Vidalia (Louisiana) active-anode plant ramping. Medium lag.",
+      "sayari": {
+        "entityId": "ex1GaqYc9OHlM2KgDrK-5w",
+        "matchedName": "Syrah Resources Limited",
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: controlled_by_mass_business_registration",
+          "Sayari risk factor: pep_adjacent"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "fec604d3-949f-4800-a2cb-8f32e3738128",
+        "score": 742,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [],
+      "game": { "upfront": 350, "docPerQ": 12, "lag": [5, 9], "assumed": true }
+    },
+    {
+      "id": "cp-dysprosium-lynas",
+      "name": "Lynas Rare Earths",
+      "country": "Australia (separation in Malaysia)",
+      "mineral": "dysprosium",
+      "statusNote": "Assumed from general knowledge: producing; heavy rare earth (Dy/Tb) separation at Kuantan, Malaysia began 2025.",
+      "sayari": {
+        "entityId": "_VakZUDye4u06kwWbJzxtw",
+        "matchedName": "Lynas CORP LTD",
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [
+          "Depth 1: no hits returned",
+          "Depth 2 (trade paths only): via NPM Silmet OU -> sanctioned Russian firm; via Treibacher Industrie AG -> EVRAZ entities (OFAC SDN)"
+        ],
+        "riskFactors": [
+          "Sayari risk factor: forced_labor_uflpa_origin_subtier",
+          "Sayari risk factor: forced_labor_xinjiang_origin_subtier",
+          "Sayari risk factor: chinese_soe_adjacent",
+          "Sayari risk factor: export_to_chinese_soe",
+          "Sayari risk factor: pep_adjacent",
+          "Sayari risk factor: mass_address_usage"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "0b0e83ba-1614-422a-9b28-a888a60d3a1b",
+        "score": 707,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": [],
+        "matchCaveat": "Matched node is LYNAS KALGOORLIE PTY LTD with Lynas group aliases"
+      },
+      "flags": [
+        { "label": "Sayari: sub-tier forced-labour exposure flags (UFLPA / Xinjiang origin, sub-tier)", "kind": "upstream", "source": "sayari" },
+        { "label": "Sayari: exports to Chinese SOEs", "kind": "other", "source": "sayari" }
+      ],
+      "game": { "upfront": 750, "docPerQ": 8, "lag": [4, 8], "assumed": true }
+    },
+    {
+      "id": "cp-dysprosium-mp",
+      "name": "MP Materials",
+      "country": "United States",
+      "mineral": "dysprosium",
+      "statusNote": "Assumed from general knowledge: Mountain Pass producing light REE; heavy REE (Dy/Tb) separation and magnet output still ramping in 2026. Brief notes China added MP to a control list in Jun 2026.",
+      "sayari": {
+        "entityId": "Unk38325H3t1PnRjnBsY8A",
+        "matchedName": "MP Materials Corp. / DE",
+        "ultimateOwners": [
+          { "name": "Shenghe Resources Holding Co., Ltd. (has_beneficial_owner, path length 1; stake size/date not returned)", "country": "China" },
+          { "name": "BlackRock, Inc.", "country": "United States" },
+          { "name": "Wellington Management Company, LLP", "country": "United States" }
+        ],
+        "ownerChina": true,
+        "watchlistHits": [
+          "Depth 1: no hits returned",
+          "Depth 2: paths via institutional holder BlackRock to unrelated listed entities (not specific to MP)"
+        ],
+        "riskFactors": [
+          "Sayari summary: sanctioned=true, risk factor sanctioned_other; sources list includes 'China Sanctions Research'",
+          "Sayari risk factor: law_enforcement_action (recent)",
+          "Sayari risk factor: controlled_by_mass_business_registration"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "a67850d4-5e10-474a-930c-4e161a03a3e6",
+        "score": 740,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: Shenghe Resources Holding (China) listed as beneficial owner; size not returned", "kind": "owner", "source": "sayari" },
+        { "label": "Sayari: 'sanctioned_other' flag sourced from China Sanctions Research", "kind": "sanctions", "source": "sayari" }
+      ],
+      "game": { "upfront": 600, "docPerQ": 6, "lag": [6, 10], "assumed": true }
+    },
+    {
+      "id": "cp-dysprosium-neo",
+      "name": "Neo Performance Materials",
+      "country": "Canada (separation plant in Narva, Estonia)",
+      "mineral": "dysprosium",
+      "statusNote": "Assumed from general knowledge: Silmet separation plant (Estonia) operating; Narva magnet plant opened 2025. Feedstock sourcing is the constraint.",
+      "sayari": {
+        "entityId": "oyGHo2rqFY3UVm-O494tEQ",
+        "matchedName": "Neo Performance Materials Inc",
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: basel_aml / cpi_score (country-level) only on parent",
+          "Subsidiary Neo Performance Materials (Singapore) Pte. Ltd. (zxk2RJBQEJGQ1sjwGEq29g): forced_labor_aspi_origin_subtier_product_blueprint",
+          "Subsidiary NPM Silmet OU (oL_RaY4cMyRgAwlPn1Cb-g, seen in Lynas watchlist path): exports_conflict_minerals, sanctioned_adjacent"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "26d88aa6-09e1-4ac7-b75a-157d9f1a1a14",
+        "score": 705,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: subsidiary carries sub-tier forced-labour product-blueprint flag", "kind": "upstream", "source": "sayari" }
+      ],
+      "game": { "upfront": 400, "docPerQ": 5, "lag": [4, 8], "assumed": true }
+    },
+    {
+      "id": "cp-cobalt-jervois",
+      "name": "Jervois Finland",
+      "country": "Finland",
+      "mineral": "cobalt",
+      "statusNote": "Assumed from general knowledge: Kokkola cobalt refinery operating (largest outside China); parent Jervois Global went through a 2025 restructuring, adding counterparty risk.",
+      "sayari": {
+        "entityId": "4Uxz0SaH1wLITVnZkuL9lQ",
+        "matchedName": "JERVOIS FINLAND OY",
+        "ultimateOwners": [],
+        "ownerChina": null,
+        "watchlistHits": [
+          "Depth 1: ships_to OOO NPF 'Baltiyskaya Manufaktura' (Russia; Sayari: sanctioned_ukr_nsdc) - trade-record link"
+        ],
+        "riskFactors": [
+          "Sayari risk factor: sanctioned_adjacent",
+          "Sayari risk factor: soe_adjacent",
+          "Sayari risk factor: eu_high_risk_third"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "110af979-299b-40d1-8c5f-61c74e8a1859",
+        "score": 745,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: direct trade link to a UKR NSDC-listed Russian buyer", "kind": "sanctions", "source": "sayari" }
+      ],
+      "game": { "upfront": 450, "docPerQ": 10, "lag": [4, 6], "assumed": true }
+    },
+    {
+      "id": "cp-cobalt-huayue",
+      "name": "PT Huayue Nickel Cobalt",
+      "country": "Indonesia",
+      "mineral": "cobalt",
+      "trap": true,
+      "statusNote": "Assumed from general knowledge: operating HPAL plant (Morowali) producing mixed hydroxide precipitate containing cobalt; short lag, cheap - this is the trap.",
+      "sayari": {
+        "entityId": "d36wLU72WGaWpEduWzxfNw",
+        "matchedName": "HUAYUE NICKEL COBALT",
+        "ultimateOwners": [
+          { "name": "CHEN XUEHUA (has_beneficial_owner; address recorded in Tongxiang City, Zhejiang Province, China)", "country": "China (per recorded address; Sayari country tag IDN)" },
+          { "name": "HSIEH WEI-TONG (has_beneficial_owner; address Taipei)", "country": "Taiwan" }
+        ],
+        "ownerChina": true,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: forced_labor_uflpa_origin_subtier",
+          "Sayari risk factor: forced_labor_xinjiang_origin_subtier (+ product_blueprint)",
+          "Sayari risk factor: forced_labor_sheffield_hallam_university_reports_origin_subtier",
+          "Sayari risk factor: exports_ilab_child_labor",
+          "Sayari risk factor: chinese_soe_adjacent / soe_adjacent"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "22f4ee65-6741-41bf-a214-9d2ec875bcc0",
+        "score": 702,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: beneficial owner with a recorded address in Zhejiang, China", "kind": "owner", "source": "sayari" },
+        { "label": "Sayari: sub-tier forced-labour flags (UFLPA / Xinjiang origin, sub-tier) and ILAB child-labour export flag", "kind": "labour", "source": "sayari" }
+      ],
+      "game": { "upfront": 200, "docPerQ": 14, "lag": [4, 5], "assumed": true }
+    },
+    {
+      "id": "cp-cobalt-cdm",
+      "name": "Congo Dongfang International Mining",
+      "country": "DR Congo",
+      "mineral": "cobalt",
+      "trap": true,
+      "statusNote": "Assumed from general knowledge: operating cobalt/copper processor in Lubumbashi; short lag, cheap - second trap.",
+      "sayari": {
+        "entityId": "EAwCyIuK-Fvkh5EkL030wg",
+        "matchedName": "CONGO DONGFANG INTERNATIONAL MINING",
+        "ultimateOwners": [
+          { "name": "CHEN HONGLIANG (has_shareholder via possibly_same_as node WILX7jbTOvX-5YH1RShG-Q; Sayari country tags CHN, COD)", "country": "China" },
+          { "name": "CHEN XUEHUA (has_shareholder via same node)", "country": "DR Congo (as tagged)" }
+        ],
+        "ownerChina": true,
+        "watchlistHits": [],
+        "riskFactors": [
+          "Sayari risk factor: chinese_soe_adjacent",
+          "Sayari risk factor: basel_aml / cpi_score (country-level)"
+        ]
+      },
+      "tradeverifyd": {
+        "entityId": "e51b44c8-6ab6-4f4c-bd14-00ad33ece9f3",
+        "score": 700,
+        "scale": "Tradeverifyd Score v1.0.0; level 'Low'; numeric bounds not returned",
+        "annotations": []
+      },
+      "flags": [
+        { "label": "Sayari: shareholder tagged China (CHN) in ownership records", "kind": "owner", "source": "sayari" },
+        { "label": "Sayari: Chinese-SOE-adjacent", "kind": "other", "source": "sayari" }
+      ],
+      "game": { "upfront": 150, "docPerQ": 15, "lag": [4, 5], "assumed": true }
+    }
+  ],
+  "notFound": [
+    "Not searched (time/budget): Dowa (Japan, gallium), Nyrstar, NOVONIX, Westwater, Iluka, Electra Battery Materials - no tool results recorded, so they are not included",
+    "Umicore NV SA, Syrah Resources Ltd, Lynas Corp Ltd, Neo Performance Materials Inc, Jervois Finland Oy: find_beneficial_owners returned no owner rows (ownerChina left null)"
+  ],
+  "notes": "1) Traps: PT Huayue Nickel Cobalt and Congo Dongfang International Mining are the clear traps (Sayari ownership records point to China-tagged owners; Huayue also carries sub-tier forced-labour flags). MP Materials and Teck are 'partial' cases: Sayari returns a China-linked holder (Shenghe; Fullbloom/CIC) but no stake size or date, so the game should treat these as minority/possibly historical stakes rather than control. 2) Tradeverifyd scores sit in a narrow 700-745 band, all level 'Low', and every entity returned annotation_count 0 (entity_annotations for Huayue also returned 0 records); the score does not separate traps from clean names, so the game should lean on Sayari flags for its warning signals. 3) Watchlist hits are network/trade-record links (ships_to / receives_from), not direct listings of the company itself; Sayari 'psa_' and '_adjacent' risk factors describe proximity, not wrongdoing. 4) Several Sayari and Tradeverifyd nodes are conflated (USAC aliases; Umicore node titled 'Ultra Move'; two Teck nodes with different owner data); verify before showing on screen. 5) country-level flags basel_aml / cpi_score appear on nearly every entity and are omitted from game flags. 6) All game.* values (upfront $M, docPerQ, lag quarters) are assumptions keyed to production status, not tool outputs."
+}

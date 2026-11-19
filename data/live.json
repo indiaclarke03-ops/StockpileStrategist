@@ -1,0 +1,30 @@
+{
+ "fetched": "2026-11-19",
+ "copper": {
+  "symbol": "CU", "name": "Copper", "value": 6.5649, "unit": "USD/lb", "currency": "USD",
+  "date": "2026-09-01", "change30dPct": null, "change90dPct": null, "trend": null,
+  "priceSource": "public_benchmark",
+  "source": "Tradeverifyd tia_commodity_price(symbol_or_name='copper') -> tv-data-commodities",
+  "note": "Timestamp is 2026-09-01, ~11 weeks older than the fetch date; label as 'as of 2026-09-01', not live."
+ },
+ "otherPrices": {
+  "cobalt": {"value": null, "result": "error", "error": "NOT_FOUND: No commodity price for \"cobalt\"", "source": "Tradeverifyd tia_commodity_price(symbol_or_name='cobalt')"}
+ },
+ "disruptions": [],
+ "disruptionCalls": [
+  {"region": "drc", "call": "tia_get_disruptions(region='COD', min_severity='warning')", "result": "empty"},
+  {"region": "drc", "call": "tia_get_disruptions(lat=-10.71, lon=25.47, radius_nm=300) [Kolwezi, Lualaba/Katanga]", "result": "empty"},
+  {"region": "inner-mongolia", "call": "tia_get_disruptions(region='CHN', min_severity='warning') [country-level, covers Inner Mongolia and Jiangxi]", "result": "empty"},
+  {"region": "inner-mongolia", "call": "tia_get_disruptions(lat=40.65, lon=109.84, radius_nm=300) [Baotou]", "result": "empty"},
+  {"region": "jiangxi", "call": "tia_get_disruptions(lat=25.83, lon=114.93, radius_nm=250) [Ganzhou]", "result": "empty"},
+  {"region": "myanmar", "call": "tia_get_disruptions(region='MMR', min_severity='warning')", "result": "empty"},
+  {"region": "myanmar", "call": "tia_get_disruptions(lat=25.38, lon=97.40, radius_nm=250) [Myitkyina, Kachin]", "result": "empty"},
+  {"region": "indonesia", "call": "tia_get_disruptions(region='IDN', min_severity='warning')", "result": "empty"},
+  {"region": "indonesia", "call": "tia_get_disruptions(lat=-2.85, lon=121.95, radius_nm=300) [Morowali, Sulawesi]", "result": "empty"}
+ ],
+ "disruptionSanityCheck": {
+  "call": "tia_get_disruptions(min_severity='warning') with no region",
+  "result": "40 found (1 GDACS: Tropical Cyclone AKVAN-26, cyclone, warning, India, from 2026-11-16T18:00; 39 NOAA US severe-weather warnings). None in producing regions. Confirms the tool is live and the regional empties are genuine.",
+  "note": "Feeds are GDACS + NOAA natural hazards only (earthquake, cyclone, flood, volcano, drought, wildfire, severe_weather); no conflict, policy or mine-site events."
+ }
+}

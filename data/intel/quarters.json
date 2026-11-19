@@ -1,0 +1,933 @@
+{
+  "fetched": "2026-11-19",
+  "method": "Tavily tavily_search, topic=news, date window [quarter_start-90d, quarter_start-1d], filter_by_published_date=true; 3-6 queries per quarter; items kept only if a publication date (Tavily published_date or date embedded in URL) is strictly before quarter start. date_basis records which.",
+  "caveats": [
+    "Tavily published_date for some aggregator/Google-redirect results is a crawl-bucket date; where the URL carries a date, the URL date is used instead.",
+    "Google redirect URLs were dropped; only direct publisher URLs are kept."
+  ],
+  "quarters": {
+    "2023Q3": {
+      "window": [
+        "2023-04-02",
+        "2023-06-30"
+      ],
+      "queries": [
+        "China export controls gallium germanium",
+        "rare earth export restrictions China",
+        "critical minerals cobalt graphite supply",
+        "cobalt price DRC",
+        "rare earth magnet technology export ban China",
+        "antimony gallium germanium prices"
+      ],
+      "items": [
+        {
+          "date": "2023-04-04",
+          "title": "Is it time to embrace Congo's artisanal cobalt miners?",
+          "url": "https://www.reuters.com/markets/commodities/is-it-time-embrace-congos-artisanal-cobalt-miners-2023-04-04",
+          "source": "reuters.com",
+          "summary": "Reuters commentary on artisanal cobalt mining in the DRC, quoting Microsoft that the problems will take a coalition to solve.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2023-04-14",
+          "title": "Critical minerals take central stage in US-China rivalry",
+          "url": "https://www.mining.com/web/critical-minerals-take-central-stage-in-us-china-rivalry",
+          "source": "mining.com",
+          "summary": "Reports that China is considering banning certain rare earth magnet technology exports after US chip export curbs, and that fears are growing of wider mineral export restrictions.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2023-05-25",
+          "title": "How to Secure Critical Minerals for Clean Energy Without Alienating China",
+          "url": "https://www.cfr.org/articles/how-secure-critical-minerals-clean-energy-without-alienating-china",
+          "source": "cfr.org",
+          "summary": "Notes China's December 2022 draft to add rare earth refining technologies to its export-prohibited catalogue, possibly in retaliation for US export controls.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2023-06-08",
+          "title": "China ramps up rare-earth production to meet EV, wind power demand",
+          "url": "https://asia.nikkei.com/business/materials/china-ramps-up-rare-earth-production-to-meet-ev-wind-power-demand",
+          "source": "asia.nikkei.com",
+          "summary": "State-owned Chinese producers are expanding rare earth output in response to higher government quotas.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date (approximate; aggregator date)"
+        }
+      ],
+      "note": "Window predates China's July 2023 gallium/germanium announcement; little mineral-specific export-control news was available. Nikkei date is the aggregator-assigned date and should be treated as approximate (within window)."
+    },
+    "2023Q4": {
+      "window": [
+        "2023-07-03",
+        "2023-09-30"
+      ],
+      "queries": [
+        "China export controls gallium germanium",
+        "graphite export China rare earth cobalt",
+        "critical minerals stockpile",
+        "germanium gallium prices export permits",
+        "rare earths cobalt prices China"
+      ],
+      "items": [
+        {
+          "date": "2023-07-04",
+          "title": "China slaps curbs on chipmaking metals in tech war with U.S., Europe",
+          "url": "https://www.cnbc.com/2023/07/04/china-imposes-export-curbs-on-chipmaking-metals-in-tech-war-with-the-us.html",
+          "source": "cnbc.com",
+          "summary": "China will require exporters to obtain licences to ship some gallium and germanium compounds from Aug. 1, citing national security.",
+          "minerals": [
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2023-07-06",
+          "title": "Pentagon has strategic germanium stockpile but no gallium reserves",
+          "url": "https://www.reuters.com/markets/commodities/pentagon-has-strategic-germanium-stockpile-no-gallium-reserves-2023-07-06",
+          "source": "reuters.com",
+          "summary": "A Pentagon spokesperson said the US holds a strategic germanium stockpile but no inventory reserves of gallium.",
+          "minerals": [
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2023-08-01",
+          "title": "China gallium, germanium export curbs kick in; wait for permits starts",
+          "url": "https://www.reuters.com/markets/commodities/chinas-controls-take-effect-wait-gallium-germanium-export-permits-begins-2023-08-01",
+          "source": "reuters.com",
+          "summary": "China's export controls on some gallium and germanium products took effect, with traders braced for a drop in international supply.",
+          "minerals": [
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2023-09-27",
+          "title": "The U.S. Government Should Stockpile More Critical Minerals",
+          "url": "https://warontherocks.com/the-u-s-government-should-stockpile-more-critical-minerals",
+          "source": "warontherocks.com",
+          "summary": "Argues the National Defense Stockpile holds insufficient critical mineral stocks for a long US-China conflict and should be expanded quickly.",
+          "minerals": [],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2024Q1": {
+      "window": [
+        "2023-10-03",
+        "2023-12-31"
+      ],
+      "queries": [
+        "China graphite export controls",
+        "China bans export rare earth processing technology"
+      ],
+      "items": [
+        {
+          "date": "2023-10-20",
+          "title": "China, world's top graphite producer, tightens exports of key battery material",
+          "url": "https://www.reuters.com/world/china/china-require-export-permits-some-graphite-products-dec-1-2023-10-20",
+          "source": "reuters.com",
+          "summary": "China said it will require export permits for some graphite products from Dec. 1 to protect national security.",
+          "minerals": [
+            "graphite"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2023-10-24",
+          "title": "China to impose export controls on graphite-related items",
+          "url": "https://www.fastmarkets.com/insights/china-to-impose-export-controls-on-graphite-related-items",
+          "source": "fastmarkets.com",
+          "summary": "Lists nine graphite items, including natural flake and spherical graphite, that will need dual-use export licences from Dec. 1.",
+          "minerals": [
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2023-12-19",
+          "title": "China's Export Controls on Critical Minerals",
+          "url": "https://www.fticonsulting.com/insights/articles/chinas-export-controls-critical-minerals-gallium-germanium-graphite",
+          "source": "fticonsulting.com",
+          "summary": "Summarises China's gallium and germanium licensing since Aug. 1 and new controls on high-purity synthetic and natural flake graphite from Dec. 1.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2023-12-21",
+          "title": "China bans export of rare earth processing technology, citing national security",
+          "url": "https://www.straitstimes.com/asia/east-asia/china-bans-export-of-rare-earth-processing-technology-citing-national-security",
+          "source": "straitstimes.com",
+          "summary": "China banned the export of rare earth extraction and separation technology, a move expected to hit heavy rare earths hardest.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2024Q2": {
+      "window": [
+        "2024-01-02",
+        "2024-03-31"
+      ],
+      "queries": [
+        "China critical minerals export controls",
+        "cobalt price glut DRC Indonesia",
+        "antimony price rally supply"
+      ],
+      "items": [
+        {
+          "date": "2024-01-08",
+          "title": "What China's Ban on Rare Earths Processing Technology Exports Means",
+          "url": "https://www.csis.org/analysis/what-chinas-ban-rare-earths-processing-technology-exports-means",
+          "source": "csis.org",
+          "summary": "CSIS notes the US is particularly exposed on heavy rare earths, where China separates 99.9 percent of supply.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-01-29",
+          "title": "Impact on commodities due to chaos in the Red Sea",
+          "url": "https://www.reuters.com/business/autos-transportation/impact-commodities-due-chaos-red-sea-2024-01-29",
+          "source": "reuters.com",
+          "summary": "Antimony prices hit their highest since September 2022 as European and US buyers faced delayed Asian shipments.",
+          "minerals": [
+            "antimony"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2024-02-28",
+          "title": "Gaming out China's next export controls on critical minerals",
+          "url": "https://triviumchina.com/research/gaming-out-chinas-next-export-controls-on-critical-minerals",
+          "source": "triviumchina.com",
+          "summary": "Ranks minerals by risk of new Chinese export controls after gallium, germanium and graphite curbs and the rare earth magnet technology ban.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "graphite",
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-03-04",
+          "title": "Indonesia and China killed the nickel market",
+          "url": "https://www.mining.com/web/indonesia-and-china-killed-the-nickel-market",
+          "source": "mining.com",
+          "summary": "Op-ed comparing China's hold on Indonesian nickel with its grip on DRC cobalt, which is mined in Congo and processed in China.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2024Q3": {
+      "window": [
+        "2024-04-02",
+        "2024-06-30"
+      ],
+      "queries": [
+        "antimony prices record China supply",
+        "tariffs graphite critical minerals China Section 301",
+        "rare earth regulations China cobalt price"
+      ],
+      "items": [
+        {
+          "date": "2024-04-03",
+          "title": "Critical Metal Hit by China Curbs Has More Than Doubled in Price",
+          "url": "https://www.bloomberg.com/news/articles/2024-04-03/critical-metal-hit-by-china-curbs-has-more-than-doubled-in-price",
+          "source": "bloomberg.com",
+          "summary": "Gallium prices are close to their highest since 2011 as China's export restrictions crimp global supply.",
+          "minerals": [
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-05-14",
+          "title": "U.S. Trade Representative Katherine Tai to Take Further Action on China Tariffs After Releasing Statutory Four-Year Review",
+          "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2024/may/us-trade-representative-katherine-tai-take-further-action-china-tariffs-after-releasing-statutory",
+          "source": "ustr.gov",
+          "summary": "USTR proposes Section 301 increases including a 25% tariff on Chinese natural graphite in 2026.",
+          "minerals": [
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-05-14",
+          "title": "Experts React: Energy and Trade Implications of Tariffs on Chinese Imports",
+          "url": "https://www.csis.org/analysis/experts-react-energy-and-trade-implications-tariffs-chinese-imports",
+          "source": "csis.org",
+          "summary": "CSIS experts note the one-year delay in natural graphite tariffs reflects the shortage of non-Chinese graphite supply.",
+          "minerals": [
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-05-17",
+          "title": "Outlook for key minerals - Global Critical Minerals Outlook 2024",
+          "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2024/outlook-for-key-minerals",
+          "source": "iea.org",
+          "summary": "IEA finds N-1 supply for nickel and cobalt barely meets a 35% diversification threshold, and graphite is even more concentrated.",
+          "minerals": [
+            "cobalt",
+            "graphite",
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2024Q4": {
+      "window": [
+        "2024-07-03",
+        "2024-09-30"
+      ],
+      "queries": [
+        "China antimony export controls",
+        "China rare earth regulations cobalt prices graphite",
+        "gallium germanium exports China"
+      ],
+      "items": [
+        {
+          "date": "2024-07-09",
+          "title": "Developing Domestic Production Capacity for the Battery Supply Chain",
+          "url": "https://fas.org/publication/critical-thinking-on-critical-minerals",
+          "source": "fas.org",
+          "summary": "Describes oversupply and low prices in cobalt and graphite after 2023 and new 301 tariffs on cobalt ores and natural flake graphite.",
+          "minerals": [
+            "cobalt",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-08-08",
+          "title": "Keeping value chains at home",
+          "url": "https://merics.org/en/report/keeping-value-chains-home",
+          "source": "merics.org",
+          "summary": "MERICS finds Chinese gallium and germanium exports to the US, Japan and the Netherlands disappeared once the 2023 controls were enforced.",
+          "minerals": [
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-08-15",
+          "title": "China's curbs on exports of strategic minerals",
+          "url": "https://www.reuters.com/markets/commodities/chinas-curbs-exports-strategic-minerals-2024-08-15",
+          "source": "reuters.com",
+          "summary": "China said it will impose export limits on antimony, adding to a series of curbs on strategic minerals.",
+          "minerals": [
+            "antimony",
+            "gallium",
+            "germanium",
+            "graphite"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2024-08-16",
+          "title": "Explainer: What is antimony and why is China curbing its exports?",
+          "url": "https://www.reuters.com/markets/commodities/what-is-antimony-why-is-china-curbing-its-exports-2024-08-16",
+          "source": "reuters.com",
+          "summary": "China will impose export controls on some antimony products from Sept. 15, citing national security.",
+          "minerals": [
+            "antimony"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2024-08-20",
+          "title": "China's Antimony Export Restrictions: The Impact on U.S. National Security",
+          "url": "https://www.csis.org/analysis/chinas-antimony-export-restrictions-impact-us-national-security",
+          "source": "csis.org",
+          "summary": "CSIS warns there is no large alternative antimony source and that, as with gallium, exports may flatline for months.",
+          "minerals": [
+            "antimony",
+            "gallium"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2025Q1": {
+      "window": [
+        "2024-10-03",
+        "2024-12-31"
+      ],
+      "queries": [
+        "China bans exports gallium germanium antimony to United States",
+        "graphite export China rare earth cobalt DRC",
+        "rare earth export restrictions"
+      ],
+      "items": [
+        {
+          "date": "2024-10-31",
+          "title": "China's export controls on critical minerals aren't starving the United States—at least so far",
+          "url": "https://www.piie.com/blogs/realtime-economics/2024/chinas-export-controls-critical-minerals-arent-starving-united-states",
+          "source": "piie.com",
+          "summary": "PIIE argues China's approach has relied on export licensing rather than outright bans, so US supply chains have not halted.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-11-07",
+          "title": "Material world: How Europe can compete with China in the race for Africa's critical minerals",
+          "url": "https://ecfr.eu/publication/material-world-how-europe-can-compete-with-china-in-the-race-for-africas-critical-minerals",
+          "source": "ecfr.eu",
+          "summary": "ECFR describes China's growing control of African mining, particularly cobalt in the DRC.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-12-03",
+          "title": "China bans export of critical minerals to US as trade tensions escalate",
+          "url": "https://www.reuters.com/markets/commodities/china-bans-exports-gallium-germanium-antimony-us-2024-12-03",
+          "source": "reuters.com",
+          "summary": "China banned exports to the United States of gallium, germanium and antimony.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2024-12-04",
+          "title": "China Imposes Its Most Stringent Critical Minerals Export Restrictions Yet Amidst Escalating U.S.-China Tech War",
+          "url": "https://www.csis.org/analysis/china-imposes-its-most-stringent-critical-minerals-export-restrictions-yet-amidst",
+          "source": "csis.org",
+          "summary": "CSIS notes the ban is the first targeted at the US and that graphite exports face greater scrutiny.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2024-12-05",
+          "title": "How Should We Interpret Chinese Critical Mineral Export Restrictions",
+          "url": "https://thebreakthrough.org/issues/energy/how-should-we-interpret-chinese-critical-mineral-export-restrictions",
+          "source": "thebreakthrough.org",
+          "summary": "Breakthrough Institute suggests Beijing could clamp down on rare earth exports next if they become scarce domestically.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2025Q2": {
+      "window": [
+        "2025-01-01",
+        "2025-03-31"
+      ],
+      "queries": [
+        "Congo suspends cobalt exports",
+        "China export controls critical minerals tungsten antimony gallium",
+        "rare earths graphite China supply risk"
+      ],
+      "items": [
+        {
+          "date": "2025-02-10",
+          "title": "China readies for a trade war with Trump",
+          "url": "https://www.gisreportsonline.com/r/china-trump-trade-war",
+          "source": "gisreportsonline.com",
+          "summary": "Notes the ban on gallium, germanium and antimony shipments to the US and that graphite and tungsten face greater scrutiny.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-02-14",
+          "title": "Rocks vs. Chips",
+          "url": "https://carnegieendowment.org/research/2025/02/rocks-vs-chips",
+          "source": "carnegieendowment.org",
+          "summary": "Carnegie finds the December bans had modest immediate effects but triggered stockpiling and price spikes in gallium and germanium.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-02-19",
+          "title": "How China is weaponising its dominance in critical minerals trade",
+          "url": "https://eastasiaforum.org/2025/02/19/how-china-is-weaponising-its-dominance-in-critical-minerals-trade",
+          "source": "eastasiaforum.org",
+          "summary": "Links China's gallium and germanium controls to its past rare earth restrictions.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-02-24",
+          "title": "Congo bans cobalt exports for four months to curb oversupply",
+          "url": "https://www.reuters.com/markets/commodities/congo-suspends-cobalt-exports-four-months-counter-oversupply-bloomberg-news-2025-02-24",
+          "source": "reuters.com",
+          "summary": "The DRC, the world's top cobalt producer, temporarily halted cobalt exports for four months.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        }
+      ]
+    },
+    "2025Q3": {
+      "window": [
+        "2025-04-02",
+        "2025-06-30"
+      ],
+      "queries": [
+        "China rare earth export controls dysprosium magnets shortage",
+        "Congo extends cobalt export ban",
+        "antimony gallium germanium prices smuggling export"
+      ],
+      "items": [
+        {
+          "date": "2025-04-14",
+          "title": "The Consequences of China's New Rare Earths Export Restrictions",
+          "url": "https://www.csis.org/analysis/consequences-chinas-new-rare-earths-export-restrictions",
+          "source": "csis.org",
+          "summary": "On April 4 China required licences for seven medium and heavy rare earths, including dysprosium, and related magnets.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-05-14",
+          "title": "Smuggling of antimony: China launches crackdown",
+          "url": "https://www.fastmarkets.com/insights/smuggling-of-antimony-china-launches-crackdown",
+          "source": "fastmarkets.com",
+          "summary": "China launched a crackdown on smuggling of export-controlled minerals; Rotterdam antimony averaged $57,778/t in April 2025, about 157% above July 2024.",
+          "minerals": [
+            "antimony",
+            "gallium",
+            "germanium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-06-03",
+          "title": "What to Know About China's Halt of Rare Earth Exports",
+          "url": "https://www.nytimes.com/2025/06/03/business/rare-earth-metals-china.html",
+          "source": "nytimes.com",
+          "summary": "China has suspended almost all exports since April 4 of seven rare earth metals and magnets made from three of them.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-06-10",
+          "title": "China's export restrictions on rare earths causes alarm for automotive industry",
+          "url": "https://think.ing.com/articles/chinas-crackdown-on-rare-earth-causes-alarm-automotive-industry",
+          "source": "think.ing.com",
+          "summary": "ING says the issue is a supply bottleneck rather than a global shortage, with shipments falling after licensing began.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-06-21",
+          "title": "Congo Extends Cobalt Export Ban by Three Months to Curb Supplies",
+          "url": "https://www.bloomberg.com/news/articles/2025-06-21/congo-extends-cobalt-export-ban-by-three-months-to-curb-supplies",
+          "source": "bloomberg.com",
+          "summary": "The DRC extended its temporary cobalt export ban by three months to rein in a glut.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        }
+      ]
+    },
+    "2025Q4": {
+      "window": [
+        "2025-07-03",
+        "2025-09-30"
+      ],
+      "queries": [
+        "Congo cobalt export quotas replace ban",
+        "Pentagon MP Materials rare earth magnet deal price floor",
+        "China rare earth exports licences gallium germanium antimony graphite"
+      ],
+      "items": [
+        {
+          "date": "2025-07-10",
+          "title": "MP Materials seals mega rare-earths deal with US to break China's grip",
+          "url": "https://www.reuters.com/business/mp-materials-partners-with-department-defense-boost-us-rare-earth-magnet-supply-2025-07-10",
+          "source": "reuters.com",
+          "summary": "MP Materials unveiled a multibillion-dollar deal with the US government to boost rare earth magnet output.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-07-21",
+          "title": "China quietly issues 2025 rare earth quotas",
+          "url": "https://www.kitco.com/news/off-the-wire/2025-07-21/china-quietly-issues-2025-rare-earth-quotas",
+          "source": "kitco.com",
+          "summary": "China issued its first 2025 rare earth mining and smelting quotas without the usual public statement.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-08-20",
+          "title": "China's rare earth magnet exports hit six-month high in July",
+          "url": "https://www.kitco.com/news/off-the-wire/2025-08-20/chinas-rare-earth-magnet-exports-hit-six-month-high-july",
+          "source": "kitco.com",
+          "summary": "China's rare earth magnet exports rose nearly 75% from June to 5,577 tonnes in July.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-09-21",
+          "title": "Congo to End Cobalt Export Ban in October, Introduces Quotas",
+          "url": "https://www.bloomberg.com/news/articles/2025-09-21/congo-to-end-cobalt-export-ban-in-october-introduces-quotas",
+          "source": "bloomberg.com",
+          "summary": "The DRC's cobalt export ban will end on Oct. 15 and be replaced by a quota policy.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        }
+      ]
+    },
+    "2026Q1": {
+      "window": [
+        "2025-10-03",
+        "2025-12-31"
+      ],
+      "queries": [
+        "China expands rare earth export controls October",
+        "China suspends ban gallium germanium antimony exports to US",
+        "DRC cobalt export quota prices",
+        "China suspends October 9 rare earth export controls one year general licence"
+      ],
+      "items": [
+        {
+          "date": "2025-10-09",
+          "title": "China expands rare earths restrictions, targets defense and chips users",
+          "url": "https://www.reuters.com/world/china/china-tightens-rare-earth-export-controls-2025-10-09",
+          "source": "reuters.com",
+          "summary": "China added five rare earth elements to its controls and required licences for some foreign-made products containing Chinese rare earths.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-10-23",
+          "title": "DRC cobalt export quotas, price surge | LME Week 2025",
+          "url": "https://www.fastmarkets.com/insights/drc-cobalt-export-quotas-lme-week-2025",
+          "source": "fastmarkets.com",
+          "summary": "Cobalt hydroxide prices were 245% above pre-ban levels as quotas set below half of usual monthly exports.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2025-11-07",
+          "title": "China Suspends Some Export Controls on Critical Minerals but Retains Others",
+          "url": "https://www.nytimes.com/2025/11/07/business/china-rare-earth-export-controls.html",
+          "source": "nytimes.com",
+          "summary": "China followed through on post-summit promises to suspend some controls but kept others in place.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2025-11-09",
+          "title": "China halts ban on gallium, germanium, antimony exports to US, but controls remain",
+          "url": "https://www.reuters.com/world/china/china-suspends-ban-exports-gallium-germanium-antimony-us-2025-11-09",
+          "source": "reuters.com",
+          "summary": "China suspended its US-specific export ban on the three metals while keeping them under dual-use licensing; Fastmarkets reports the suspension runs to Nov. 27, 2026.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony"
+          ],
+          "date_basis": "date in URL"
+        }
+      ]
+    },
+    "2026Q2": {
+      "window": [
+        "2026-01-01",
+        "2026-03-31"
+      ],
+      "queries": [
+        "China export controls critical minerals Japan dual-use",
+        "Project Vault critical minerals stockpile",
+        "cobalt antimony gallium prices 2026",
+        "Congo cobalt quota shipments prices"
+      ],
+      "items": [
+        {
+          "date": "2026-01-06",
+          "title": "Dried-up feedstock pipeline sends cobalt prices soaring in 2025, deficit seen next year: 2026 preview",
+          "url": "https://www.fastmarkets.com/insights/dried-up-feedstock-pipeline-cobalt-prices-soaring-2025-deficit",
+          "source": "fastmarkets.com",
+          "summary": "DRC quotas will restrict cobalt exports to 87,000 t in 2026 and 2027, and little material had left the country under the new system.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-01-07",
+          "title": "Japan condemns China's dual-use export ban as rare earth curbs loom",
+          "url": "https://www.reuters.com/world/asia-pacific/japan-says-chinas-dual-use-export-ban-unacceptable-rare-earths-crosshairs-2026-01-07",
+          "source": "reuters.com",
+          "summary": "Japan called China's ban on dual-use exports to its military \"absolutely unacceptable.\"",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2026-01-13",
+          "title": "China's Rare Earth Campaign Against Japan",
+          "url": "https://www.csis.org/analysis/chinas-rare-earth-campaign-against-japan",
+          "source": "csis.org",
+          "summary": "On Jan. 6 China restricted dual-use exports to Japan, a definition covering rare earths, gallium, germanium, graphite and magnets.",
+          "minerals": [
+            "dysprosium",
+            "gallium",
+            "germanium",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-02-13",
+          "title": "Project Vault and FORGE: The Administration's Latest Moves to Secure Critical Minerals",
+          "url": "https://bipartisanpolicy.org/article/project-vault-and-forge-the-administrations-latest-moves-to-secure-critical-minerals",
+          "source": "bipartisanpolicy.org",
+          "summary": "On Feb. 2 the US announced Project Vault, a civilian critical minerals stockpile backed by a $10B EXIM loan and about $2B private capital.",
+          "minerals": [],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-02-25",
+          "title": "Congo's cobalt curbs expose China's critical metals weak spot",
+          "url": "https://www.reuters.com/markets/commodities/congos-cobalt-curbs-expose-chinas-critical-metals-weak-spot-2026-02-25",
+          "source": "reuters.com",
+          "summary": "Reuters commentary argues China's dominance of critical mineral supply chains is not as absolute as it appears.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        }
+      ]
+    },
+    "2026Q3": {
+      "window": [
+        "2026-04-02",
+        "2026-06-30"
+      ],
+      "queries": [
+        "China export controls rare earth gallium germanium",
+        "cobalt DRC export quota",
+        "antimony graphite critical minerals stockpile"
+      ],
+      "items": [
+        {
+          "date": "2026-04-09",
+          "title": "DRC quota extension eases cobalt supply concerns, but market reaction muted",
+          "url": "https://www.fastmarkets.com/insights/drc-quota-extension-eases-cobalt-supply-concerns-but-market-reaction-muted",
+          "source": "fastmarkets.com",
+          "summary": "The DRC added 30 days to its export window for rolled-over quotas; cobalt hydroxide was up more than 350% from before the ban.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-04-30",
+          "title": "Glencore expects DRC cobalt exports to normalise in line with 2026 quotas",
+          "url": "https://www.reuters.com/world/africa/glencore-expects-drc-cobalt-exports-normalise-line-with-2026-quotas-2026-04-30",
+          "source": "reuters.com",
+          "summary": "Glencore's 2026 quota plus carried-over 2025 allocation is 22,800 tons.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2026-05-11",
+          "title": "The U.S.-China Trade Truce Has Not Solved the Gallium Problem",
+          "url": "https://www.csis.org/analysis/us-china-trade-truce-has-not-solved-gallium-problem",
+          "source": "csis.org",
+          "summary": "CSIS says the Busan truce paused restrictions on rare earths, gallium, germanium and antimony, but the gallium problem persists.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "antimony",
+            "graphite",
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-05-11",
+          "title": "Trump, Xi meeting could shape rare earths deal",
+          "url": "https://www.eenews.net/articles/trump-xi-meeting-could-shape-rare-earths-deal",
+          "source": "eenews.net",
+          "summary": "A US official said the one-year trade agreement freeing rare earth exports is still in effect and could be extended; the deal expires in early November.",
+          "minerals": [
+            "dysprosium",
+            "gallium",
+            "germanium",
+            "antimony",
+            "graphite"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-06-20",
+          "title": "China resumes gallium exports to Japan after 4-month pause as rare earth magnet sales surge",
+          "url": "https://www.scmp.com/economy/china-economy/article/3357776/china-resumes-gallium-exports-japan-after-4-month-pause-rare-earth-magnet-sales-surge",
+          "source": "scmp.com",
+          "summary": "China exported 6,000 kg of gallium to Japan in May, while germanium exports to Japan remained on hold.",
+          "minerals": [
+            "gallium",
+            "germanium",
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    },
+    "2026Q4": {
+      "window": [
+        "2026-07-03",
+        "2026-09-30"
+      ],
+      "queries": [
+        "China rare earth export controls suspension November expiry",
+        "cobalt DRC export quota prices",
+        "gallium germanium antimony graphite exports China"
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "China's Rare Earth Endgame: What Happens After November 10?",
+          "url": "https://investornews.com/critical-minerals-rare-earths/chinas-rare-earth-endgame-what-happens-after-november-10",
+          "source": "investornews.com",
+          "summary": "November 10, 2026 is when China's suspension of the October 2025 controls expires unless Beijing extends or modifies it.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "DRC may reduce cobalt quota if market needs rebalancing, ARECOMS exclusive",
+          "url": "https://www.fastmarkets.com/insights/drc-may-reduce-cobalt-quota-if-market-needs-rebalancing-arecoms-says-exclusive",
+          "source": "fastmarkets.com",
+          "summary": "ARECOMS said it does not intend to modify quotas for now; cobalt hydroxide was $22-23/lb, down from $26 in April.",
+          "minerals": [
+            "cobalt"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "Is China Preparing to Let Its Rare Earth Truce With Washington Expire?",
+          "url": "https://moderndiplomacy.eu/2026/08/21/is-china-preparing-to-let-its-rare-earth-truce-with-washington-expire",
+          "source": "moderndiplomacy.eu",
+          "summary": "Notes the October 2025 measures were only suspended to Nov. 10, 2026, and Beijing could restore, extend or narrow them.",
+          "minerals": [
+            "dysprosium"
+          ],
+          "date_basis": "date in URL"
+        },
+        {
+          "date": "2026-09-06",
+          "title": "China's November Critical Minerals Decision: A Reprieve for Both Economies, or a Catalyst for Separation?",
+          "url": "https://investornews.com/market-opinion/chinas-november-critical-minerals-decision-a-reprieve-for-both-economies-or-a-catalyst-for-separation",
+          "source": "investornews.com",
+          "summary": "Identifies two deadlines: Nov. 10 for the October 2025 rare earth/graphite measures and Nov. 27 for the US-specific gallium, germanium and antimony suspension.",
+          "minerals": [
+            "dysprosium",
+            "graphite",
+            "gallium",
+            "germanium",
+            "antimony"
+          ],
+          "date_basis": "tavily published_date"
+        },
+        {
+          "date": "2026-09-21",
+          "title": "Dismantling China's Supply-Chain Weapon",
+          "url": "https://www.cfr.org/reports/dismantling-chinas-supply-chain-weapon",
+          "source": "cfr.org",
+          "summary": "CFR notes China never reversed its April 2025 rare earth controls or older gallium and germanium controls despite the truce.",
+          "minerals": [
+            "dysprosium",
+            "gallium",
+            "germanium",
+            "antimony"
+          ],
+          "date_basis": "tavily published_date"
+        }
+      ]
+    }
+  }
+}

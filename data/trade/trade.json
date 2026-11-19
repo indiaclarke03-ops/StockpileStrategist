@@ -1,0 +1,1971 @@
+{
+ "fetched": "2026-11-19",
+ "sources": {
+  "comtrade": "Tradeverifyd tia_trade_flow(hs_code, reporter=USA, years=3) -> UN Comtrade (tv-data-comtrade); import-direction rows only",
+  "sayari": "Sayari search_trade_facets, scope suppliers"
+ },
+ "coverageNote": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD).",
+ "minerals": {
+  "gallium": {
+   "hs": [
+    "811292"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 811292",
+    "years": {
+     "2023": {
+      "total": 58873426,
+      "china": 32791847,
+      "chinaShare": 0.557
+     },
+     "2024": {
+      "total": 83967294,
+      "china": 53325054,
+      "chinaShare": 0.6351
+     },
+     "2025": {
+      "total": 49235243,
+      "china": 15776202,
+      "chinaShare": 0.3204
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 32791847,
+     "2024": 53325054,
+     "2025": 15776202
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.3204,
+    "topPartners": [
+     {
+      "country": "Rep. of Korea",
+      "value": 18513415,
+      "share": 0.376
+     },
+     {
+      "country": "China",
+      "value": 15776202,
+      "share": 0.3204
+     },
+     {
+      "country": "Japan",
+      "value": 14945626,
+      "share": 0.3036
+     }
+    ],
+    "importsByHsYearPartner": {
+     "811292": {
+      "2023": {
+       "China": 32791847,
+       "Japan": 15910850,
+       "Rep. of Korea": 10170729
+      },
+      "2024": {
+       "China": 53325054,
+       "Japan": 18303634,
+       "Rep. of Korea": 12336171,
+       "Mexico": 2435
+      },
+      "2025": {
+       "China": 15776202,
+       "Japan": 14945626,
+       "Rep. of Korea": 18513415
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [811292] 22 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=811292, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "811292",
+    "totalSuppliers": 110,
+    "countryBuckets": [
+     {
+      "country": "USA",
+      "count": 68
+     },
+     {
+      "country": "DEU",
+      "count": 58
+     },
+     {
+      "country": "CHN",
+      "count": 53
+     },
+     {
+      "country": "NLD",
+      "count": 45
+     },
+     {
+      "country": "BEL",
+      "count": 42
+     },
+     {
+      "country": "GBR",
+      "count": 38
+     },
+     {
+      "country": "JPN",
+      "count": 37
+     },
+     {
+      "country": "FRA",
+      "count": 37
+     },
+     {
+      "country": "KOR",
+      "count": 35
+     },
+     {
+      "country": "ESP",
+      "count": 31
+     },
+     {
+      "country": "ITA",
+      "count": 28
+     },
+     {
+      "country": "POL",
+      "count": 23
+     },
+     {
+      "country": "GRC",
+      "count": 13
+     },
+     {
+      "country": "CAN",
+      "count": 12
+     },
+     {
+      "country": "AUS",
+      "count": 12
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.0996,
+    "hhi": 803,
+    "hhiExUSA": 841,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 8
+     },
+     {
+      "label": "political_exposure",
+      "count": 11
+     },
+     {
+      "label": "forced_labor",
+      "count": 20
+     },
+     {
+      "label": "adverse_media",
+      "count": 3
+     },
+     {
+      "label": "regulatory_action",
+      "count": 9
+     },
+     {
+      "label": "sanctions",
+      "count": 3
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 1
+     },
+     {
+      "label": "environmental_risk",
+      "count": 7
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 3
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "soe_adjacent",
+      "count": 20
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 15
+     },
+     {
+      "label": "chinese_soe_adjacent",
+      "count": 12
+     },
+     {
+      "label": "export_controls_adjacent",
+      "count": 11
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 9
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 9
+     },
+     {
+      "label": "psa_forced_labor_xinjiang_origin_subtier",
+      "count": 9
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier_product_blueprint",
+      "count": 8
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 8
+     },
+     {
+      "label": "psa_forced_labor_aspi_origin_subtier",
+      "count": 7
+     },
+     {
+      "label": "psa_owned_by_regulatory_action_entity",
+      "count": 7
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "psa_forced_labor_uflpa_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "owned_by_soe",
+      "count": 6
+     }
+    ]
+   },
+   "chinaShareUsed": 0.3204,
+   "chinaShareSource": "comtrade",
+   "notes": "811292 is a basket code (Ga, Ge, In, Nb, V) shared with germanium; values are a proxy and identical to the germanium entry. tia_trade_flow 811292 returned data so 811299 was not queried. chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  },
+  "germanium": {
+   "hs": [
+    "811292"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 811292",
+    "years": {
+     "2023": {
+      "total": 58873426,
+      "china": 32791847,
+      "chinaShare": 0.557
+     },
+     "2024": {
+      "total": 83967294,
+      "china": 53325054,
+      "chinaShare": 0.6351
+     },
+     "2025": {
+      "total": 49235243,
+      "china": 15776202,
+      "chinaShare": 0.3204
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 32791847,
+     "2024": 53325054,
+     "2025": 15776202
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.3204,
+    "topPartners": [
+     {
+      "country": "Rep. of Korea",
+      "value": 18513415,
+      "share": 0.376
+     },
+     {
+      "country": "China",
+      "value": 15776202,
+      "share": 0.3204
+     },
+     {
+      "country": "Japan",
+      "value": 14945626,
+      "share": 0.3036
+     }
+    ],
+    "importsByHsYearPartner": {
+     "811292": {
+      "2023": {
+       "China": 32791847,
+       "Japan": 15910850,
+       "Rep. of Korea": 10170729
+      },
+      "2024": {
+       "China": 53325054,
+       "Japan": 18303634,
+       "Rep. of Korea": 12336171,
+       "Mexico": 2435
+      },
+      "2025": {
+       "China": 15776202,
+       "Japan": 14945626,
+       "Rep. of Korea": 18513415
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [811292] 22 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=811292, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "811292",
+    "totalSuppliers": 110,
+    "countryBuckets": [
+     {
+      "country": "USA",
+      "count": 68
+     },
+     {
+      "country": "DEU",
+      "count": 58
+     },
+     {
+      "country": "CHN",
+      "count": 53
+     },
+     {
+      "country": "NLD",
+      "count": 45
+     },
+     {
+      "country": "BEL",
+      "count": 42
+     },
+     {
+      "country": "GBR",
+      "count": 38
+     },
+     {
+      "country": "JPN",
+      "count": 37
+     },
+     {
+      "country": "FRA",
+      "count": 37
+     },
+     {
+      "country": "KOR",
+      "count": 35
+     },
+     {
+      "country": "ESP",
+      "count": 31
+     },
+     {
+      "country": "ITA",
+      "count": 28
+     },
+     {
+      "country": "POL",
+      "count": 23
+     },
+     {
+      "country": "GRC",
+      "count": 13
+     },
+     {
+      "country": "CAN",
+      "count": 12
+     },
+     {
+      "country": "AUS",
+      "count": 12
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.0996,
+    "hhi": 803,
+    "hhiExUSA": 841,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 8
+     },
+     {
+      "label": "political_exposure",
+      "count": 11
+     },
+     {
+      "label": "forced_labor",
+      "count": 20
+     },
+     {
+      "label": "adverse_media",
+      "count": 3
+     },
+     {
+      "label": "regulatory_action",
+      "count": 9
+     },
+     {
+      "label": "sanctions",
+      "count": 3
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 1
+     },
+     {
+      "label": "environmental_risk",
+      "count": 7
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 3
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "soe_adjacent",
+      "count": 20
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 15
+     },
+     {
+      "label": "chinese_soe_adjacent",
+      "count": 12
+     },
+     {
+      "label": "export_controls_adjacent",
+      "count": 11
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 9
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 9
+     },
+     {
+      "label": "psa_forced_labor_xinjiang_origin_subtier",
+      "count": 9
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier_product_blueprint",
+      "count": 8
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 8
+     },
+     {
+      "label": "psa_forced_labor_aspi_origin_subtier",
+      "count": 7
+     },
+     {
+      "label": "psa_owned_by_regulatory_action_entity",
+      "count": 7
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "psa_forced_labor_uflpa_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "owned_by_soe",
+      "count": 6
+     }
+    ]
+   },
+   "chinaShareUsed": 0.3204,
+   "chinaShareSource": "comtrade",
+   "notes": "811292 is a basket code (Ga, Ge, In, Nb, V) shared with gallium; values are a proxy and identical to the gallium entry. chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  },
+  "antimony": {
+   "hs": [
+    "811010"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 811010",
+    "years": {
+     "2023": {
+      "total": 9839093,
+      "china": 9115172,
+      "chinaShare": 0.9264
+     },
+     "2024": {
+      "total": 11591737,
+      "china": 10393429,
+      "chinaShare": 0.8966
+     },
+     "2025": {
+      "total": 7416222,
+      "china": 3203030,
+      "chinaShare": 0.4319
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 9115172,
+     "2024": 10393429,
+     "2025": 3203030
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.4319,
+    "topPartners": [
+     {
+      "country": "Rep. of Korea",
+      "value": 3260337,
+      "share": 0.4396
+     },
+     {
+      "country": "China",
+      "value": 3203030,
+      "share": 0.4319
+     },
+     {
+      "country": "Japan",
+      "value": 663354,
+      "share": 0.0894
+     },
+     {
+      "country": "Mexico",
+      "value": 289501,
+      "share": 0.039
+     }
+    ],
+    "importsByHsYearPartner": {
+     "811010": {
+      "2023": {
+       "China": 9115172,
+       "Japan": 378723,
+       "Mexico": 345198
+      },
+      "2024": {
+       "China": 10393429,
+       "Japan": 888623,
+       "Rep. of Korea": 207866,
+       "Mexico": 101819
+      },
+      "2025": {
+       "China": 3203030,
+       "Rep. of Korea": 3260337,
+       "Japan": 663354,
+       "Mexico": 289501
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [811010] 13 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=811010, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "811010",
+    "totalSuppliers": 135,
+    "countryBuckets": [
+     {
+      "country": "CHN",
+      "count": 69
+     },
+     {
+      "country": "USA",
+      "count": 67
+     },
+     {
+      "country": "KOR",
+      "count": 39
+     },
+     {
+      "country": "DEU",
+      "count": 38
+     },
+     {
+      "country": "NLD",
+      "count": 37
+     },
+     {
+      "country": "ESP",
+      "count": 31
+     },
+     {
+      "country": "HKG",
+      "count": 30
+     },
+     {
+      "country": "FRA",
+      "count": 29
+     },
+     {
+      "country": "GBR",
+      "count": 29
+     },
+     {
+      "country": "THA",
+      "count": 26
+     },
+     {
+      "country": "ITA",
+      "count": 25
+     },
+     {
+      "country": "JPN",
+      "count": 24
+     },
+     {
+      "country": "ROU",
+      "count": 11
+     },
+     {
+      "country": "IND",
+      "count": 9
+     },
+     {
+      "country": "SGP",
+      "count": 9
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.1459,
+    "hhi": 862,
+    "hhiExUSA": 898,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 1
+     },
+     {
+      "label": "political_exposure",
+      "count": 6
+     },
+     {
+      "label": "forced_labor",
+      "count": 12
+     },
+     {
+      "label": "adverse_media",
+      "count": 1
+     },
+     {
+      "label": "regulatory_action",
+      "count": 5
+     },
+     {
+      "label": "sanctions",
+      "count": 1
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 0
+     },
+     {
+      "label": "environmental_risk",
+      "count": 5
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 4
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "soe_adjacent",
+      "count": 9
+     },
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 9
+     },
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 8
+     },
+     {
+      "label": "chinese_soe_adjacent",
+      "count": 8
+     },
+     {
+      "label": "psa_owned_by_regulatory_action_entity",
+      "count": 4
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 3
+     },
+     {
+      "label": "controlled_by_mass_business_registration",
+      "count": 3
+     },
+     {
+      "label": "export_to_soe",
+      "count": 2
+     },
+     {
+      "label": "psa_export_to_soe",
+      "count": 2
+     },
+     {
+      "label": "owned_by_regulatory_action_entity",
+      "count": 2
+     },
+     {
+      "label": "psa_owned_by_soe",
+      "count": 2
+     },
+     {
+      "label": "esg_score_medium",
+      "count": 1
+     },
+     {
+      "label": "regulatory_action",
+      "count": 1
+     },
+     {
+      "label": "reputational_risk_financial_crime",
+      "count": 1
+     },
+     {
+      "label": "reputational_risk_financial_crime_historic",
+      "count": 1
+     }
+    ]
+   },
+   "chinaShareUsed": 0.4319,
+   "chinaShareSource": "comtrade",
+   "notes": "In 2025 Rep. of Korea (3,260,337) slightly exceeded China (3,203,030) among covered partners; China fell from 10.4M (2024) to 3.2M (2025). chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  },
+  "graphite": {
+   "hs": [
+    "250410",
+    "380110"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 250410, 380110",
+    "years": {
+     "2023": {
+      "total": 465853331,
+      "china": 409483881,
+      "chinaShare": 0.879
+     },
+     "2024": {
+      "total": 468398798,
+      "china": 377130468,
+      "chinaShare": 0.8051
+     },
+     "2025": {
+      "total": 273396944,
+      "china": 189229898,
+      "chinaShare": 0.6921
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 409483881,
+     "2024": 377130468,
+     "2025": 189229898
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.6921,
+    "topPartners": [
+     {
+      "country": "China",
+      "value": 189229898,
+      "share": 0.6921
+     },
+     {
+      "country": "Rep. of Korea",
+      "value": 47503981,
+      "share": 0.1738
+     },
+     {
+      "country": "Mexico",
+      "value": 24418724,
+      "share": 0.0893
+     },
+     {
+      "country": "Japan",
+      "value": 12244341,
+      "share": 0.0448
+     }
+    ],
+    "importsByHsYearPartner": {
+     "250410": {
+      "2023": {
+       "China": 111664882,
+       "Mexico": 4815553,
+       "Rep. of Korea": 1199511,
+       "Japan": 926549
+      },
+      "2024": {
+       "China": 94199288,
+       "Mexico": 5689235,
+       "Rep. of Korea": 4561587,
+       "Japan": 959112
+      },
+      "2025": {
+       "China": 42349123,
+       "Mexico": 5757299,
+       "Rep. of Korea": 98684,
+       "Japan": 275812
+      }
+     },
+     "380110": {
+      "2023": {
+       "China": 297818999,
+       "Rep. of Korea": 23611406,
+       "Japan": 18138045,
+       "Mexico": 7678386
+      },
+      "2024": {
+       "China": 282931180,
+       "Rep. of Korea": 33729487,
+       "Mexico": 25810994,
+       "Japan": 20517915
+      },
+      "2025": {
+       "China": 146880775,
+       "Rep. of Korea": 47405297,
+       "Mexico": 18661425,
+       "Japan": 11968529
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [250410] 20 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [380110] 23 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=250410, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "250410",
+    "totalSuppliers": 379,
+    "countryBuckets": [
+     {
+      "country": "CHN",
+      "count": 213
+     },
+     {
+      "country": "USA",
+      "count": 184
+     },
+     {
+      "country": "DEU",
+      "count": 131
+     },
+     {
+      "country": "NLD",
+      "count": 104
+     },
+     {
+      "country": "KOR",
+      "count": 99
+     },
+     {
+      "country": "BEL",
+      "count": 90
+     },
+     {
+      "country": "GBR",
+      "count": 88
+     },
+     {
+      "country": "FRA",
+      "count": 86
+     },
+     {
+      "country": "ITA",
+      "count": 81
+     },
+     {
+      "country": "ESP",
+      "count": 77
+     },
+     {
+      "country": "JPN",
+      "count": 54
+     },
+     {
+      "country": "MEX",
+      "count": 51
+     },
+     {
+      "country": "BRA",
+      "count": 36
+     },
+     {
+      "country": "IDN",
+      "count": 32
+     },
+     {
+      "country": "CAN",
+      "count": 28
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.1573,
+    "hhi": 880,
+    "hhiExUSA": 931,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 4
+     },
+     {
+      "label": "political_exposure",
+      "count": 17
+     },
+     {
+      "label": "forced_labor",
+      "count": 61
+     },
+     {
+      "label": "adverse_media",
+      "count": 6
+     },
+     {
+      "label": "regulatory_action",
+      "count": 32
+     },
+     {
+      "label": "sanctions",
+      "count": 1
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 0
+     },
+     {
+      "label": "environmental_risk",
+      "count": 17
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 17
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "soe_adjacent",
+      "count": 48
+     },
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 40
+     },
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 40
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 36
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 36
+     },
+     {
+      "label": "chinese_soe_adjacent",
+      "count": 24
+     },
+     {
+      "label": "psa_owned_by_regulatory_action_entity",
+      "count": 23
+     },
+     {
+      "label": "psa_forced_labor_sheffield_hallam_university_reports_origin_subtier",
+      "count": 16
+     },
+     {
+      "label": "forced_labor_sheffield_hallam_university_reports_origin_subtier",
+      "count": 15
+     },
+     {
+      "label": "owned_by_regulatory_action_entity",
+      "count": 13
+     },
+     {
+      "label": "forced_labor_sheffield_hallam_university_reports_origin_subtier_product_blueprint",
+      "count": 9
+     },
+     {
+      "label": "psa_owned_by_chinese_soe",
+      "count": 3
+     },
+     {
+      "label": "owner_of_forced_labor_xinjiang_entity",
+      "count": 2
+     },
+     {
+      "label": "psa_owner_of_forced_labor_xinjiang_entity",
+      "count": 2
+     },
+     {
+      "label": "owned_by_chinese_soe",
+      "count": 2
+     }
+    ]
+   },
+   "chinaShareUsed": 0.6921,
+   "chinaShareSource": "comtrade",
+   "notes": "Aggregates natural 250410 + artificial 380110. Sayari facets pulled for 250410 only. chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  },
+  "dysprosium": {
+   "hs": [
+    "280530",
+    "284690",
+    "850511"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 280530, 284690, 850511",
+    "years": {
+     "2023": {
+      "total": 624571913,
+      "china": 575676146,
+      "chinaShare": 0.9217
+     },
+     "2024": {
+      "total": 518106975,
+      "china": 476047558,
+      "chinaShare": 0.9188
+     },
+     "2025": {
+      "total": 457506160,
+      "china": 408806053,
+      "chinaShare": 0.8936
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 575676146,
+     "2024": 476047558,
+     "2025": 408806053
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.8936,
+    "topPartners": [
+     {
+      "country": "China",
+      "value": 408806053,
+      "share": 0.8936
+     },
+     {
+      "country": "Japan",
+      "value": 36063377,
+      "share": 0.0788
+     },
+     {
+      "country": "Rep. of Korea",
+      "value": 8597659,
+      "share": 0.0188
+     },
+     {
+      "country": "Mexico",
+      "value": 4039071,
+      "share": 0.0088
+     }
+    ],
+    "importsByHsYearPartner": {
+     "280530": {
+      "2023": {
+       "China": 21816502,
+       "Japan": 29348
+      },
+      "2024": {
+       "China": 3672400,
+       "Japan": 78328,
+       "Rep. of Korea": 27406
+      },
+      "2025": {
+       "China": 6752296,
+       "Rep. of Korea": 756501,
+       "Japan": 43584
+      }
+     },
+     "284690": {
+      "2023": {
+       "China": 108374428,
+       "Japan": 8580343,
+       "Rep. of Korea": 2382352
+      },
+      "2024": {
+       "China": 112584043,
+       "Japan": 6819406,
+       "Rep. of Korea": 1798396
+      },
+      "2025": {
+       "China": 105505469,
+       "Japan": 11253089,
+       "Rep. of Korea": 3923806
+      }
+     },
+     "850511": {
+      "2023": {
+       "China": 445485216,
+       "Japan": 28039279,
+       "Mexico": 5021583,
+       "Rep. of Korea": 4842862
+      },
+      "2024": {
+       "China": 359791115,
+       "Japan": 20545084,
+       "Rep. of Korea": 10257638,
+       "Mexico": 2533159
+      },
+      "2025": {
+       "China": 296548288,
+       "Japan": 24766704,
+       "Mexico": 4039071,
+       "Rep. of Korea": 3917352
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [280530] 20 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [284690] 24 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [850511] 24 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=280530, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "280530",
+    "totalSuppliers": 79,
+    "countryBuckets": [
+     {
+      "country": "CHN",
+      "count": 65
+     },
+     {
+      "country": "USA",
+      "count": 36
+     },
+     {
+      "country": "KOR",
+      "count": 26
+     },
+     {
+      "country": "JPN",
+      "count": 17
+     },
+     {
+      "country": "DEU",
+      "count": 16
+     },
+     {
+      "country": "ESP",
+      "count": 13
+     },
+     {
+      "country": "ITA",
+      "count": 12
+     },
+     {
+      "country": "VNM",
+      "count": 11
+     },
+     {
+      "country": "HKG",
+      "count": 11
+     },
+     {
+      "country": "CAN",
+      "count": 10
+     },
+     {
+      "country": "IND",
+      "count": 8
+     },
+     {
+      "country": "TUR",
+      "count": 6
+     },
+     {
+      "country": "AUT",
+      "count": 3
+     },
+     {
+      "country": "ECU",
+      "count": 3
+     },
+     {
+      "country": "CYP",
+      "count": 2
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.272,
+    "hhi": 1316,
+    "hhiExUSA": 1510,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 8
+     },
+     {
+      "label": "political_exposure",
+      "count": 4
+     },
+     {
+      "label": "forced_labor",
+      "count": 25
+     },
+     {
+      "label": "adverse_media",
+      "count": 5
+     },
+     {
+      "label": "regulatory_action",
+      "count": 8
+     },
+     {
+      "label": "sanctions",
+      "count": 2
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 1
+     },
+     {
+      "label": "environmental_risk",
+      "count": 11
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 3
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 18
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 18
+     },
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 18
+     },
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 18
+     },
+     {
+      "label": "psa_forced_labor_xinjiang_origin_subtier",
+      "count": 6
+     },
+     {
+      "label": "psa_owned_by_regulatory_action_entity",
+      "count": 6
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 5
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier_product_blueprint",
+      "count": 5
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier",
+      "count": 5
+     },
+     {
+      "label": "psa_forced_labor_uflpa_origin_subtier",
+      "count": 5
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier",
+      "count": 4
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier_product_blueprint",
+      "count": 4
+     },
+     {
+      "label": "psa_forced_labor_aspi_origin_subtier",
+      "count": 4
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier_product_blueprint",
+      "count": 3
+     },
+     {
+      "label": "forced_labor_sheffield_hallam_university_reports_origin_subtier_product_blueprint",
+      "count": 2
+     }
+    ]
+   },
+   "sayariExtra": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=850511, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "850511",
+    "totalSuppliers": 2732,
+    "countryBuckets": [
+     {
+      "country": "CHN",
+      "count": 1563
+     },
+     {
+      "country": "USA",
+      "count": 1251
+     },
+     {
+      "country": "MEX",
+      "count": 843
+     },
+     {
+      "country": "KOR",
+      "count": 540
+     },
+     {
+      "country": "DEU",
+      "count": 520
+     },
+     {
+      "country": "GBR",
+      "count": 412
+     },
+     {
+      "country": "JPN",
+      "count": 404
+     },
+     {
+      "country": "NLD",
+      "count": 353
+     },
+     {
+      "country": "ITA",
+      "count": 320
+     },
+     {
+      "country": "FRA",
+      "count": 311
+     },
+     {
+      "country": "ESP",
+      "count": 306
+     },
+     {
+      "country": "HKG",
+      "count": 306
+     },
+     {
+      "country": "IND",
+      "count": 228
+     },
+     {
+      "country": "TWN",
+      "count": 227
+     },
+     {
+      "country": "VNM",
+      "count": 206
+     },
+     {
+      "country": "SGP",
+      "count": 189
+     },
+     {
+      "country": "CAN",
+      "count": 181
+     },
+     {
+      "country": "TUR",
+      "count": 127
+     },
+     {
+      "country": "MYS",
+      "count": 127
+     },
+     {
+      "country": "MLT",
+      "count": 48
+     }
+    ],
+    "bucketsReturned": 20,
+    "chinaBucketShare": 0.1847,
+    "hhi": 890,
+    "hhiExUSA": 925,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 198
+     },
+     {
+      "label": "political_exposure",
+      "count": 116
+     },
+     {
+      "label": "forced_labor",
+      "count": 1366
+     },
+     {
+      "label": "adverse_media",
+      "count": 41
+     },
+     {
+      "label": "regulatory_action",
+      "count": 302
+     },
+     {
+      "label": "sanctions",
+      "count": 23
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 7
+     },
+     {
+      "label": "environmental_risk",
+      "count": 473
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 116
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 1083
+     },
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 1036
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 885
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 848
+     },
+     {
+      "label": "psa_forced_labor_xinjiang_origin_subtier",
+      "count": 511
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 460
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier_product_blueprint",
+      "count": 434
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier_product_blueprint",
+      "count": 422
+     },
+     {
+      "label": "psa_forced_labor_aspi_origin_subtier",
+      "count": 406
+     },
+     {
+      "label": "psa_forced_labor_uflpa_origin_subtier",
+      "count": 406
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier_product_blueprint",
+      "count": 391
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier",
+      "count": 383
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier",
+      "count": 380
+     },
+     {
+      "label": "psa_exports_eudr_shipment_wood",
+      "count": 359
+     },
+     {
+      "label": "psa_forced_labor_sheffield_hallam_university_reports_origin_subtier",
+      "count": 355
+     },
+     {
+      "label": "exports_eudr_shipment_wood",
+      "count": 333
+     },
+     {
+      "label": "forced_labor_sheffield_hallam_university_reports_origin_subtier_product_blueprint",
+      "count": 330
+     },
+     {
+      "label": "forced_labor_sheffield_hallam_university_reports_origin_subtier",
+      "count": 317
+     },
+     {
+      "label": "soe_adjacent",
+      "count": 204
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 170
+     }
+    ]
+   },
+   "chinaShareUsed": 0.8936,
+   "chinaShareSource": "comtrade",
+   "notes": "HS proxies are broad rare-earth codes (280530 RE metals, 284690 RE compounds, 850511 permanent magnets), not Dy-specific; 850511 dominates by value. Sayari facets pulled for both 280530 (primary) and 850511 (extra, in sayariExtra). chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  },
+  "cobalt": {
+   "hs": [
+    "260500",
+    "810520",
+    "282200"
+   ],
+   "comtrade": {
+    "source": "Tradeverifyd tia_trade_flow reporter=USA years=3, one call per HS code: 260500, 810520, 282200",
+    "years": {
+     "2023": {
+      "total": 64473816,
+      "china": 2236174,
+      "chinaShare": 0.0347
+     },
+     "2024": {
+      "total": 55340292,
+      "china": 3067247,
+      "chinaShare": 0.0554
+     },
+     "2025": {
+      "total": 62771332,
+      "china": 2569175,
+      "chinaShare": 0.0409
+     }
+    },
+    "chinaValueByYear": {
+     "2023": 2236174,
+     "2024": 3067247,
+     "2025": 2569175
+    },
+    "latestYear": 2025,
+    "chinaShare": 0.0409,
+    "topPartners": [
+     {
+      "country": "Japan",
+      "value": 60197057,
+      "share": 0.959
+     },
+     {
+      "country": "China",
+      "value": 2569175,
+      "share": 0.0409
+     },
+     {
+      "country": "Rep. of Korea",
+      "value": 5100,
+      "share": 0.0001
+     }
+    ],
+    "importsByHsYearPartner": {
+     "260500": {
+      "2023": {
+       "China": 157028
+      },
+      "2024": {
+       "China": 78700
+      },
+      "2025": {}
+     },
+     "810520": {
+      "2023": {
+       "Japan": 60955091,
+       "Mexico": 1029280,
+       "China": 964994,
+       "Rep. of Korea": 2700
+      },
+      "2024": {
+       "Japan": 52167693,
+       "China": 2060847,
+       "Rep. of Korea": 4651
+      },
+      "2025": {
+       "Japan": 60197057,
+       "China": 1791553
+      }
+     },
+     "282200": {
+      "2023": {
+       "China": 1114152,
+       "Japan": 185790,
+       "Mexico": 64781
+      },
+      "2024": {
+       "China": 927700,
+       "Rep. of Korea": 100701
+      },
+      "2025": {
+       "China": 777622,
+       "Rep. of Korea": 5100
+      }
+     }
+    },
+    "limitations": "Coverage is partial: tia_trade_flow holds UN Comtrade data only for fixed corridors USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM (plus European reporters' every-partner sweeps). For reporter USA the only partners returned are China, Japan, Rep. of Korea and Mexico, so every share here is a share of US imports FROM THOSE FOUR PARTNERS, not of total US imports. Quantities are null (value only, USD). Tool limitations text: [260500] No rows for HS 260500 in 2025; UN Comtrade omits zero-trade lines, so these years count as zero. | 2 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [810520] 18 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [282200] 19 records in the requested years do not state an import or export direction; they are aggregated under the unknown direction and are in no import or export total. || [810520 partner=COD] (tia_trade_flow hs=810520 reporter=USA partner=COD) UN Comtrade data is held for these fixed corridors: USA->CHN, CHN->USA, DEU->CHN, CHN->DEU, USA->MEX, USA->JPN, USA->KOR, CHN->VNM, and for the European reporters whose every-partner sweep has loaded. The dataset holds no rows for USA->COD; the sweep loads over several nightly runs, so coverage depends on what has been loaded so far. | No comtrade rows matched HS 810520 for the requested corridor."
+   },
+   "sayari": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=260500, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "260500",
+    "totalSuppliers": 19,
+    "countryBuckets": [
+     {
+      "country": "ZMB",
+      "count": 9
+     },
+     {
+      "country": "COD",
+      "count": 6
+     },
+     {
+      "country": "DEU",
+      "count": 5
+     },
+     {
+      "country": "CHN",
+      "count": 4
+     },
+     {
+      "country": "GBR",
+      "count": 3
+     },
+     {
+      "country": "KOR",
+      "count": 3
+     },
+     {
+      "country": "USA",
+      "count": 3
+     },
+     {
+      "country": "CHE",
+      "count": 2
+     },
+     {
+      "country": "TZA",
+      "count": 2
+     },
+     {
+      "country": "AUS",
+      "count": 2
+     },
+     {
+      "country": "BEL",
+      "count": 2
+     },
+     {
+      "country": "CAN",
+      "count": 2
+     },
+     {
+      "country": "FRA",
+      "count": 2
+     },
+     {
+      "country": "JPN",
+      "count": 2
+     },
+     {
+      "country": "TUR",
+      "count": 2
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.0816,
+    "hhi": 904,
+    "hhiExUSA": 983,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 3
+     },
+     {
+      "label": "political_exposure",
+      "count": 1
+     },
+     {
+      "label": "forced_labor",
+      "count": 3
+     },
+     {
+      "label": "adverse_media",
+      "count": 0
+     },
+     {
+      "label": "regulatory_action",
+      "count": 0
+     },
+     {
+      "label": "sanctions",
+      "count": 0
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 0
+     },
+     {
+      "label": "environmental_risk",
+      "count": 2
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 1
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 3
+     },
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 3
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 2
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 2
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 2
+     },
+     {
+      "label": "soe_adjacent",
+      "count": 2
+     },
+     {
+      "label": "psa_imports_from_usa_bis_entity",
+      "count": 1
+     },
+     {
+      "label": "psa_state_owned",
+      "count": 1
+     },
+     {
+      "label": "exports_bis_high_priority_items_direct",
+      "count": 1
+     },
+     {
+      "label": "exports_bis_high_priority_items_indirect",
+      "count": 1
+     },
+     {
+      "label": "exports_eudr_shipment_rubber",
+      "count": 1
+     },
+     {
+      "label": "exports_eudr_shipment_wood",
+      "count": 1
+     },
+     {
+      "label": "forced_labor_aspi_origin_subtier_product_blueprint",
+      "count": 1
+     },
+     {
+      "label": "forced_labor_uflpa_origin_subtier",
+      "count": 1
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 1
+     }
+    ]
+   },
+   "sayariExtra": {
+    "source": "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=810520, arrival_country=USA, date_from=2025-01-01)",
+    "hs": "810520",
+    "totalSuppliers": 175,
+    "countryBuckets": [
+     {
+      "country": "USA",
+      "count": 106
+     },
+     {
+      "country": "CHN",
+      "count": 102
+     },
+     {
+      "country": "DEU",
+      "count": 78
+     },
+     {
+      "country": "NLD",
+      "count": 72
+     },
+     {
+      "country": "BEL",
+      "count": 69
+     },
+     {
+      "country": "GBR",
+      "count": 68
+     },
+     {
+      "country": "ITA",
+      "count": 57
+     },
+     {
+      "country": "ESP",
+      "count": 55
+     },
+     {
+      "country": "FRA",
+      "count": 53
+     },
+     {
+      "country": "KOR",
+      "count": 49
+     },
+     {
+      "country": "POL",
+      "count": 40
+     },
+     {
+      "country": "JPN",
+      "count": 36
+     },
+     {
+      "country": "SWE",
+      "count": 31
+     },
+     {
+      "country": "IND",
+      "count": 25
+     },
+     {
+      "country": "IRL",
+      "count": 23
+     }
+    ],
+    "bucketsReturned": 15,
+    "chinaBucketShare": 0.1181,
+    "hhi": 788,
+    "hhiExUSA": 828,
+    "hhiMethod": "HHI (0-10000) over shares of the returned supplier_country bucket counts (top buckets only; counts are supplier-entity country tags, overlap, and sum to more than totalSuppliers). hhiExUSA drops the USA bucket.",
+    "riskCategories": [
+     {
+      "label": "export_controls",
+      "count": 6
+     },
+     {
+      "label": "political_exposure",
+      "count": 16
+     },
+     {
+      "label": "forced_labor",
+      "count": 38
+     },
+     {
+      "label": "adverse_media",
+      "count": 5
+     },
+     {
+      "label": "regulatory_action",
+      "count": 20
+     },
+     {
+      "label": "sanctions",
+      "count": 1
+     },
+     {
+      "label": "sanctions_and_export_control_lists",
+      "count": 0
+     },
+     {
+      "label": "environmental_risk",
+      "count": 15
+     },
+     {
+      "label": "shell_company_risk",
+      "count": 16
+     }
+    ],
+    "riskFlags": [
+     {
+      "label": "soe_adjacent",
+      "count": 46
+     },
+     {
+      "label": "sanctioned_adjacent",
+      "count": 24
+     },
+     {
+      "label": "psa_exports_ilab_child_labor",
+      "count": 23
+     },
+     {
+      "label": "exports_ilab_child_labor",
+      "count": 22
+     },
+     {
+      "label": "psa_forced_labor_xinjiang_origin_subtier",
+      "count": 22
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier",
+      "count": 19
+     },
+     {
+      "label": "chinese_soe_adjacent",
+      "count": 18
+     },
+     {
+      "label": "exports_ilab_forced_labor",
+      "count": 16
+     },
+     {
+      "label": "psa_exports_ilab_forced_labor",
+      "count": 16
+     },
+     {
+      "label": "psa_exports_eudr_shipment_wood",
+      "count": 14
+     },
+     {
+      "label": "psa_export_to_soe",
+      "count": 13
+     },
+     {
+      "label": "exports_eudr_shipment_wood",
+      "count": 13
+     },
+     {
+      "label": "forced_labor_xinjiang_origin_subtier_product_blueprint",
+      "count": 13
+     },
+     {
+      "label": "export_to_soe",
+      "count": 12
+     },
+     {
+      "label": "psa_forced_labor_uflpa_origin_subtier",
+      "count": 11
+     }
+    ]
+   },
+   "drcShare": {
+    "comtrade": null,
+    "comtradeNote": "USA->COD corridor not loaded in tia_trade_flow",
+    "sayari260500EntityBucketShare": 0.1224,
+    "sayari260500": "COD bucket 6 of 19 supplier entities (entity count, not value)"
+   },
+   "chinaShareUsed": 0.0409,
+   "chinaShareSource": "comtrade",
+   "notes": "Aggregates 260500 + 810520 + 282200; 810520 (Japan-dominated) dominates by value, so China share is low among covered partners. DRC share NOT visible in Comtrade: USA->COD corridor not loaded (see limitations). Sayari 260500 supplier facets show COD as 6 of 19 supplier entities (ZMB 9) - entity counts, not value. Sayari facets also pulled for 810520 (in sayariExtra). chinaShareUsed = China share of 2025 US import value from covered partners (CHN/JPN/KOR/MEX) only."
+  }
+ }
+}
