@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stockpile Strategist — Find the Fault Lines</title>
+  <meta name="description" content="Run America's $12B critical-minerals reserve. Find the suppliers that fail together, defend the line, then face real history and 1,000 futures." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="v4.css" />
+</head>
+<body>
+  <div id="stage" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header id="hud" class="hud hidden" aria-label="Status">
+    <div class="hud-mission" id="hud-mission"></div>
+    <div class="hud-item"><span class="hud-k">Budget</span><span class="hud-v num" id="hud-budget">$12.00B</span></div>
+    <div class="hud-item hud-gauge" title="How long your factory keeps running if supply falls by your threshold"><span class="hud-k">Factory keeps running</span>
+      <span class="hud-v num" id="hud-runtime">0 days</span><span class="gauge"><i id="hud-runtime-bar"></i></span></div>
+    <div class="hud-item"><span class="hud-k">China's pause expires</span><span class="hud-v num" id="hud-countdown">—</span></div>
+    <div class="hud-actions">
+      <button class="icon-btn" id="btn-about" aria-label="About the data and method">ⓘ</button>
+    </div>
+  </header>
+
+  <main id="acts">
+    <!-- Act 0: cold open -->
+    <section class="act" data-act="0" aria-labelledby="a0-title">
+      <div class="cold">
+        <div class="eyebrow">Stockpile Strategist</div>
+        <h1 id="a0-title" class="display"><span class="num" id="a0-days">52</span> days until China's rare-earth pause expires.<br /><span class="soft">You run America's $12B mineral reserve.</span></h1>
+        <div class="cold-actions">
+          <button class="primary big" id="btn-take" data-primary>Take office</button>
+          <button class="textlink" id="btn-how">How this works (30 sec)</button>
+        </div>
+        <div class="globe-caption" id="globe-caption"></div>
+      </div>
+      <div class="ticker" id="ticker" aria-live="polite"></div>
+    </section>
+
+    <!-- Act 1: mission -->
+    <section class="act" data-act="1" aria-labelledby="a1-title">
+      <div class="act-inner">
+        <div class="eyebrow">Act 1 · Choose your mission</div>
+        <h2 id="a1-title" class="display-2">What must not stop?</h2>
+        <div class="missions" id="missions" role="list"></div>
+        <div class="threshold hidden" id="threshold">
+          <div class="threshold-row">
+            <div>
+              <p class="lede">The line stops if supply falls by more than <b class="num" id="thr-v">25%</b> for a quarter.</p>
+              <input type="range" id="thr" min="10" max="40" step="1" value="25" aria-label="Loss threshold" />
+              <div class="faint">Default 25%, the Resilience Atlas's worked threshold. Lower means a more fragile line.</div>
+            </div>
+            <div class="factory" id="factory" aria-label="Factory status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="dock"><button class="primary big" id="btn-a1" data-primary disabled>Pick a mission</button></div>
+    </section>
+
+    <!-- Act 2: network → fault lines -->
+    <section class="act" data-act="2" aria-labelledby="a2-title">
+      <div class="act-split">
+        <div class="act-copy">
+          <div class="eyebrow">Act 2 · Find the fault lines</div>
+          <h2 id="a2-title" class="display-2" aria-live="polite"></h2>
+          <p class="lede" id="a2-lede"></p>
+          <div class="reveal-stats hidden" id="a2-stats"></div>
+          <div class="chips" id="a2-tools"></div>
+          <p class="fineprint" id="a2-fine"></p>
+        </div>
+        <div class="net-wrap"><div class="badge-illus hidden" id="a2-badge">Illustrative network — not measured</div><div id="net" class="net"></div></div>
+      </div>
+      <div class="dock"><button class="primary big" id="btn-a2" data-primary disabled>Tap 2 suppliers</button></div>
+    </section>
+
+    <!-- Act 3: defences -->
+    <section class="act" data-act="3" aria-labelledby="a3-title">
+      <div class="act-split">
+        <div class="act-copy">
+          <div class="eyebrow">Act 3 · Build your defences · July 2023</div>
+          <h2 id="a3-title" class="display-2">Push the line away from disaster.</h2>
+          <div class="distance" id="distance"></div>
+          <div class="levers">
+            <div class="lever" id="lever-stock"></div>
+            <div class="lever" id="lever-offtake"></div>
+          </div>
+        </div>
+        <div class="net-wrap"><div class="badge-illus hidden" id="a3-badge">Illustrative network — not measured</div><div id="net3" class="net"></div></div>
+      </div>
+      <div class="dock"><button class="primary big" id="btn-a3" data-primary>Start the clock: July 2023 →</button></div>
+    </section>
+
+    <!-- Act 4: history -->
+    <section class="act" data-act="4" aria-labelledby="a4-title">
+      <div class="replay">
+        <div class="replay-top">
+          <div>
+            <div class="eyebrow">Act 4 · History strikes</div>
+            <h2 id="a4-title" class="display-2 small" aria-live="polite">Jul 2023</h2>
+          </div>
+          <div class="replay-controls"><button class="ghost" id="btn-speed">2× speed</button><button class="ghost" id="btn-skip">Skip to end</button></div>
+        </div>
+        <div class="replay-grid">
+          <div class="news" id="news" aria-live="polite"></div>
+          <div class="timeline-wrap"><div id="net4" class="net net4"></div><svg id="timeline" class="timeline" role="img" aria-label="Reserve and factory status over time"></svg><div class="validation hidden" id="validation"></div></div>
+        </div>
+        <div class="pause hidden" id="pause" role="dialog" aria-modal="false"></div>
+      </div>
+      <div class="dock"><button class="primary big hidden" id="btn-a4" data-primary>Face the cliff: 10 Jan 2027 →</button></div>
+    </section>
+
+    <!-- Act 5: the cliff -->
+    <section class="act" data-act="5" aria-labelledby="a5-title">
+      <div class="cliff">
+        <div class="eyebrow">Act 5 · The cliff · 10 January 2027</div>
+        <h2 id="a5-title" class="display-2" aria-live="polite">1,000 futures</h2>
+        <div class="fan-wrap"><canvas id="fan" aria-label="1,000 simulated futures of your reserve"></canvas><div class="fan-labels" id="fan-labels"></div></div>
+        <div class="report hidden" id="report"></div>
+      </div>
+      <div class="dock" id="a5-dock"></div>
+    </section>
+  </main>
+
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Evidence">
+    <button class="icon-btn drawer-close" id="drawer-close" aria-label="Close evidence">✕</button>
+    <div id="drawer-body"></div>
+  </aside>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <script src="../data.js"></script>
+  <script src="../data_cache.js"></script>
+  <script src="../integrate.js"></script>
+  <script src="../sim.js"></script>
+  <script src="../montecarlo.js"></script>
+  <script src="rst.js"></script>
+  <script src="missions.js"></script>
+  <script src="globe.js"></script>
+  <script src="network.js"></script>
+  <script src="replay.js"></script>
+  <script src="futures.js"></script>
+  <script src="share.js"></script>
+  <script src="acts.js"></script>
+</body>
+</html>

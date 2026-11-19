@@ -40,6 +40,10 @@
     const docPaths = {}; for (const k of keys) docPaths[k] = [];
     const downtime = new Float64Array(N);
     const cliffCount = { extend: 0, lapse: 0, deal: 0 };
+    // Optional (v4): keep per-path detail for one mineral — trajectory, cliff branch, first quarter
+    // where the unmet shortfall exceeds `failAt` (fraction of demand).
+    const track = opts.track, failAt = opts.failAt != null ? opts.failAt : 0.25;
+    const tracked = track ? [] : null;
 
     for (let i = 0; i < N; i++) {
       const ms = {};
@@ -49,14 +53,14 @@
       }
       const offs = state.offtakes.filter((o) => o.status !== "blocked").map((o) => ({ ...o, cp: COUNTERPARTIES.find((c) => c.id === o.id) }));
       const traj = {}; for (const k of keys) traj[k] = [ms[k].doc];
-      let dt = 0;
+      let dt = 0, branchOf = null, failQ = -1;
 
       for (let t = 0; t < nQ; t++) {
         const qi = state.qi + t;
         // Scheduled cliff: 10 Jan 2027 expiry of the suspension
         if (t === 0) {
           const x = r(); const branch = x < cw.extend ? "extend" : x < cw.extend + cw.lapse ? "lapse" : "deal";
-          cliffCount[branch]++;
+          cliffCount[branch]++; branchOf = branch;
           if (branch === "lapse") {
             ms.dysprosium.cut = clamp(ms.dysprosium.cut + uni(r, [0.05, 0.2]), 0, 1);
             for (const k of ["gallium", "germanium", "antimony"]) { ms[k].cut = clamp(ms[k].cut * 2, 0, 1); ms[k].q = 0; }
@@ -94,11 +98,13 @@
           const drawn = Math.min(m.doc, short / U);
           m.doc -= drawn; short -= drawn * U;
           dt += Math.max(0, short) * p.criticality * 0.9;
+          if (k === track && failQ < 0 && short > failAt * 100 + 1e-9) failQ = t;
           m.q++;
           if (traj[k]) traj[k].push(m.doc);
         }
       }
       for (const k of keys) docPaths[k].push(traj[k]);
+      if (tracked) tracked.push({ doc: traj[track] || [], branch: branchOf, failQ });
       downtime[i] = dt;
     }
 
@@ -122,6 +128,7 @@
     const sorted = [...downtime].sort((a, b) => a - b);
     out.expectedDowntime = downtime.reduce((a, b) => a + b, 0) / N;
     out.downtimeP90 = sorted[Math.floor(0.9 * N)];
+    if (tracked) out.paths = tracked;
     return out;
   }
 

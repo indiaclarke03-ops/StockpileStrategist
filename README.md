@@ -1,56 +1,69 @@
-# Stockpile Strategist
+# Stockpile Strategist — Find the Fault Lines
 
 *A critical-minerals reserve game played on real events, real trade data and live intelligence.*
 
-You run America's critical-minerals reserve with $12B, the size of Project Vault. You play 14 quarters of real history (Q3 2023 → Q4 2026): export bans, quotas, price shocks and a truce. Then 1,000 Monte Carlo futures test your reserve against the real 10 January 2027 cliff, when China's suspension of its expanded rare-earth controls expires.
+You run America's $12B critical-minerals reserve, the size of Project Vault. You pick one mineral your factory can't do without, and the game teaches one idea:
+
+> **Your biggest supplier is not your biggest risk. The suppliers that fail together are.**
 
 ### ▶ [Play it live: indiaclarke03-ops.github.io/StockpileStrategist](https://indiaclarke03-ops.github.io/StockpileStrategist/)
 
-To play locally, open `site/index.html` in a browser. There's no build step, server or API keys.
+To play locally, open `site/v4/index.html` in a browser. There's no build step, server or API keys.
 
-**Demo shortcuts:** [`#ff=2024Q4`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/index.html#ff=2024Q4) jumps to the December 2024 ban, [`#ff=2026Q2`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/index.html#ff=2026Q2) jumps to the "Prepare for 2027" turns, and [`#ff=END`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/index.html#ff=END) jumps to the end screen and forward mode. Press Enter to commit a quarter or continue.
+## The five acts
 
-**Late-game features:**
-- **Prepare for 2027.** From Q2 2026, the orders panel runs the forward-mode Monte Carlo on your projected reserve. It shows the days of cover each mineral needs to stay ≥ 60 days in 90% of 2027 futures, with one-click top-ups.
-- **Dysprosium price gap.** From Q3 2025, the Dy card shows the reported ex-China vs China price gap: SMM's widening report, then Fastmarkets (~4.9×, Aug 2026) and Benchmark (~16.3×, end-Q3 2026).
+| Act | What happens | Under the hood |
+|---|---|---|
+| **0 · Cold open** | A globe with real US import arcs, and a live countdown to 10 Jan 2027, when China's rare-earth pause expires | globe.gl · Tradeverifyd Comtrade flows · Tavily headline ticker |
+| **1 · Mission** | Pick a mineral: Dy (magnets), Sb (shells), Ga (radar) or Co (batteries). Then set the shortfall that stops your line | — |
+| **2 · Fault lines** | Guess the two suppliers behind a loss. Node sizes then **morph** from share of supply to share of the inferred loss. "Follow it upstream" finds the hidden single point of failure | Reverse stress test `a = L·Σ1/(1ᵀΣ1)` in `site/v4/rst.js` |
+| **3 · Defences** | Stockpile, pull Sayari ownership files and sign real offtakes. Watch your **distance to disaster** (σ) move. China-linked "alternatives" snap to the China cluster | `sim.js` cost model · Sayari / Tradeverifyd vetting |
+| **4 · History strikes** | The real 2023–26 events replay against your defences, with a do-nothing ghost and four decision pauses. A validation card reports Match / Partial / Miss honestly | Unchanged `sim.js` engine · cited events · Tavily intel |
+| **5 · The cliff** | 1,000 simulated futures draw in, split by cliff branch. Then a report card, benchmarks and a shareable PNG | Unchanged `montecarlo.js` · Tavily news signal |
 
-See `concept.md` and `specification.md` for the design.
+**Analyst mode:** the full six-mineral v3 dashboard lives on at [`site/classic/`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/). Its shortcuts still work, for example [`#ff=2024Q4`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=2024Q4) and [`#ff=END`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=END).
+
+**v4 shortcuts:** [`#act=2&m=antimony`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#act=2&m=antimony) jumps to the antimony fault-line reveal. [`#act=3&m=dysprosium`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/v4/#act=3&m=dysprosium) jumps to the dysprosium defences. Press Enter for the primary action, ←/→ to move between choices, and Esc to close drawers.
+
+## The networks: what's measured, what's illustrative
+
+| Mission | Network | Badge |
+|---|---|---|
+| **Antimony** | **Measured.** Sayari bills of lading, HS 811010, monthly kg from 2023-01 to 2026-10, aggregated to quarters. Σ comes from 15 quarters, detrended, with shrinkage λ = 0.3. It has 7 suppliers, 10 feed sources and 7 evidenced structural links | none |
+| **Dysprosium** | **Real structure, illustrative variance.** Seven suppliers. Shares come from the BIS Section 232 report and Comtrade, with Sayari company IDs and evidenced links. Sayari's shipment search ignored date filters, so no dated series could be built, and σ is assumed | "Illustrative network — not measured" |
+| **Gallium, Cobalt** | **Teaching networks.** Real 2023 Comtrade shares; variance, correlation and upstream structure are assumed | "Illustrative network — not measured" |
+
+Honesty note: the antimony Σ is estimated from 2023–26 shipments, so its Act 4 history check is **in-sample**. The validation card says so.
 
 ## How the tools power it
 
 | Tool | What's cached in `/data` | Where it shows up |
 |---|---|---|
-| **Tavily** | 60 dated news items, 3–5 per quarter, each from the 90 days *before* the quarter starts (`intel/quarters.json`). A forward-mode news signal from the past week's headlines, scored with a published keyword lexicon (`signals.json`). | Intel briefing panel. Forward-mode signal slider and its "why" table. |
-| **Tradeverifyd** | UN Comtrade US import flows per HS code (`trade/trade.json`), copper benchmark, disruption checks for producing regions (`live.json`), entity scores for counterparties. | China's 2023 share sets each mineral's exposure in the model. China-share trend on each card, supply map, header copper price, forward-mode disruption toggles, offtake scores. |
-| **Sayari** | Supplier-country concentration and supplier risk-flag counts per HS code (`trade/trade.json`). Beneficial owners, watchlist and risk factors for 13 real producers (`counterparties.json`). | Map caption (HHI, risk flags). Offtake modal: ownership, flags and block risk. The cheapest "alternatives" are real traps. Two cobalt producers (Indonesia, DRC) and Vietnam Rare Earth (VREX) have China-based owners in Sayari. A Vietnamese magnet plant runs on Chinese feedstock and carries sub-tier forced-labour flags. |
+| **Tavily** | 60 dated news items from the 90 days before each quarter (`intel/quarters.json`), plus a forward news signal from a published lexicon (`signals.json`) | Cold-open ticker, Act 4 decision intel, Act 5 cliff branch weights and "why" drawer |
+| **Tradeverifyd** | UN Comtrade US import flows (`trade/trade.json`), copper price, disruption checks (`live.json`), entity scores | Globe arcs, teaching-network shares, offtake scores |
+| **Sayari** | Antimony bills of lading and dysprosium supplier structure (`network/*.json`); ownership, watchlist and risk flags for 15 real producers (`counterparties.json`) | Act 2 networks and links, Act 3 investigate and trap mechanics |
 
-Tool calls run ahead of time and are cached, so no keys reach the browser (spec §1.3). `scripts/build_data.py` bundles `/data/*.json` into `site/data_cache.js`, so the site also works from `file://`. `scripts/fetch_intel.py` and `scripts/live_signals.py` re-fetch the Tavily data through its REST API (`TAVILY_API_KEY`). The Sayari and Tradeverifyd caches were produced through their MCP tools, and each JSON records the calls in its `method` and `source` fields.
+`scripts/build_data.py` bundles `/data` (including `network/*.json`) into `site/data_cache.js`. `scripts/fetch_intel.py` and `scripts/live_signals.py` refresh the Tavily data (`TAVILY_API_KEY`). The Sayari and Tradeverifyd caches came from their MCP tools, and each file lists its calls in `method` / `source`.
 
 ```
-python3 scripts/fetch_intel.py     # optional refresh (needs TAVILY_API_KEY)
-python3 scripts/live_signals.py    # optional refresh
-python3 scripts/build_data.py      # always run after changing /data
+python3 scripts/build_data.py   # after any change in /data
+node tests/rst.test.js          # reverse-stress engine: atlas example, sum-to-L, clipping, d monotonicity, back-prop
 ```
 
 ## Honesty rules
 
-- **No foresight.** Intel items are dated before their quarter starts, which is checked at build and again at load. Trade figures only show calendar years that had finished before the current quarter.
-- **Reported vs assumed.** Event effect sizes are tagged `reported` or `assumed`. Modelled price points are drawn hollow and dashed. Every tunable number lives in `site/data.js`.
-- **Real companies, proportionate mechanics.**
-  - Flags are Sayari findings, not allegations.
-  - A trade link to a sanctioned party counts as adjacency (low risk), not a listing.
-  - A sub-tier forced-labour flag carries a UFLPA detention risk, not Chinese-control exposure.
-  - A China-linked minority holder with no stake size is disclosed but isn't treated as control.
-  - Deal terms (upfront cost, volume, lag) are game calibrations.
-- **Known data limits** are listed in the in-game "About the data" page. For example, Comtrade US imports cover only China, Japan, Korea and Mexico, gallium and germanium share basket code 811292, and there are no minor-metal price feeds.
+- **No foresight.** Intel is dated before its quarter. Trade years only show once they're complete. Act 4 pauses use only headlines that were already published.
+- **Reverse stress results are conditional, not forecasts.** σ-distances aren't probabilities. Act 5 reports counts of *simulated* futures.
+- **Reported vs assumed** is labelled everywhere, and illustrative networks carry a badge.
+- **Real companies, proportionate mechanics.** Sayari flags are findings, not allegations. Trade-link adjacency counts as low risk. Sub-tier labour flags are a detention risk. China-linked minority holders aren't treated as control. Deal terms are game calibrations.
+- Reverse-stress logic is adapted from the [Ethical Tech CoLab Resilience Atlas](https://ethical-tech-colab.github.io/reverse-stress/) (teaching material, not a validated product).
 
 ## Files
 
-| File | What it holds |
+| Path | What it holds |
 |---|---|
-| `site/data.js` | Minerals, the cited 2023–26 event timeline, fallback counterparties, forward-mode base rates, config |
-| `site/integrate.js` | Merges cached tool data into the game and maps Sayari flags to game effects |
-| `site/sim.js` | Quarter engine (spec §4), scoring, benchmark strategies |
-| `site/montecarlo.js` | Forward mode (spec §7): 1,000 futures, the cliff branch, bisection recommendations |
-| `site/map.js` | Supply map (D3 + world-atlas from a CDN; falls back to a list offline) |
-| `site/app.js`, `site/styles.css` | Dashboard UI (spec §8) |
+| `site/v4/` | Story mode: `acts.js` (router, HUD, Acts 0–3), `rst.js` (reverse-stress engine), `missions.js` (missions + network models), `network.js` (graph and morph), `globe.js`, `replay.js` (Act 4), `futures.js` (Act 5), `share.js`, `v4.css` |
+| `site/classic/` | Analyst mode: the v3 dashboard |
+| `site/data.js`, `integrate.js`, `sim.js`, `montecarlo.js`, `data_cache.js` | Shared data and engines. `montecarlo.js` gained an optional per-path `track` output; its maths is unchanged |
+| `data/` | Cached tool results; `data/network/` holds the v4 supply networks |
+| `tests/rst.test.js` | Node tests for the reverse-stress engine |

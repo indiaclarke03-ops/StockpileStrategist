@@ -1,0 +1,459 @@
+{
+ "mineral": "dysprosium",
+ "hs": [
+  "850511",
+  "280530",
+  "284690"
+ ],
+ "fetched": "2026-11-19",
+ "granularity": null,
+ "measure": "value_usd",
+ "synthetic": true,
+ "badge": "Illustrative network - not measured",
+ "demandMonthly": 100,
+ "units": "normalised (100 = average total monthly US imports); only meanVolume = 100 x meanShare is given, no time series",
+ "periods": [],
+ "syntheticReason": "Sayari search_shipments and search_trade_facets ignored date_from/date_to (identical totals for 2023-01-01 onward, a single month 2024-03, and 2026-10; rows returned outside the window), and query-string date syntax returned 0 rows. Rows come newest-first with weight in full mode only, so a monthly series would mean paging ~26k rows (10k cap). Tradeverifyd tia_hs_trends returned no scan. No monthly or quarterly series could be built, so volumes are left empty.",
+ "tier1": [
+  {
+   "id": "cn-magnets",
+   "label": "Chinese magnet exporters",
+   "country": "CHN",
+   "volumes": {},
+   "meanShare": 0.75,
+   "meanVolume": 75.0,
+   "shareEvidence": "reported (BIS Section 232 report: China 75% of 2021 US sintered NdFeB import value, HTS 8505.11.0070); trade.json Comtrade 2025 gives China 90.1% of the four covered partners",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 4988,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume",
+    "comtradeUSD_850511": {
+     "2023": 445485216,
+     "2024": 359791115,
+     "2025": 296548288
+    }
+   },
+   "companies": [
+    {
+     "name": "Ningbo Yunsheng Magnet Devices Tech",
+     "sayariId": "-orWB7Sb3UoiHG7Sdp9E_g"
+    },
+    {
+     "name": "Hangzhou Sens Magnetics Co Ltd",
+     "sayariId": "Oa1FiL24kfX6TDWPvdDl1Q"
+    },
+    {
+     "name": "Sanhuan Magsound Co Ltd",
+     "sayariId": "SNjOoI9wTwLbfyGmdHpeoQ"
+    },
+    {
+     "name": "CEIEC Ningbo Magsound Electronics",
+     "sayariId": "xy2g20Aj5nhCzi_fPU9Qfg"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Sayari: Ningbo Yunsheng carries forced_labor_aspi_origin_subtier_product_blueprint; Hangzhou Sens carries soe_adjacent",
+    "China export-control licensing on Dy/Tb and magnets since Apr 2025 (Tavily: Reuters via finance.yahoo.com)"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket; Sayari search_suppliers(query='magnet', hs_code=850511, arrival_country=USA, departure_country=CHN, limit=5, compact) (total_available 1067)"
+  },
+  {
+   "id": "jp-magnets",
+   "label": "Japanese magnet makers",
+   "country": "JPN",
+   "volumes": {},
+   "meanShare": 0.09,
+   "meanVolume": 9.0,
+   "shareEvidence": "reported (BIS 2021: Japan 9%); Comtrade 2025 Japan 7.5% of covered partners",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 923,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume",
+    "comtradeUSD_850511": {
+     "2023": 28039279,
+     "2024": 20545084,
+     "2025": 24766704
+    }
+   },
+   "companies": [
+    {
+     "name": "Shin-Etsu Chemical Co., Ltd",
+     "sayariId": "P-ddqvqiP9sm0ISKcc847A"
+    }
+   ],
+   "owners": [
+    "Shin-Etsu Chemical (Japan) - group parent, general knowledge"
+   ],
+   "flags": [
+    "Assumed: Dy/Tb feed largely Chinese-separated"
+   ],
+   "chinaLinked": false,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket; Sayari search_shipments(hs_code=850511, arrival_country=USA, departure_country=JPN, response_mode=export, limit=5)"
+  },
+  {
+   "id": "ph-magnets",
+   "label": "Philippines magnet plants (Japanese-owned)",
+   "country": "PHL",
+   "volumes": {},
+   "meanShare": 0.05,
+   "meanVolume": 5.0,
+   "shareEvidence": "reported (BIS 2021: Philippines 5%, 'reflects activity by Japanese firms'); not covered by trade.json",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 231,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume"
+   },
+   "companies": [
+    {
+     "name": "Shin Etsu Magnetic Philippines Inc",
+     "sayariId": "Hr1BJcthy5-6FPSAMtswOA"
+    },
+    {
+     "name": "San Technology Inc.",
+     "sayariId": "R5iqsxb-YE4pAE8lSg6AEA"
+    }
+   ],
+   "owners": [
+    "Shin-Etsu Chemical (Japan) - inferred from name and BIS note; no Sayari ownership call made"
+   ],
+   "flags": [
+    "Sayari: Shin Etsu Magnetic Philippines carries forced_labor_uflpa/xinjiang/aspi origin sub-tier flags"
+   ],
+   "chinaLinked": false,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket; Sayari search_suppliers(query='magnet', hs_code=850511, arrival_country=USA, departure_country=PHL, limit=3, compact) (total_available 8)"
+  },
+  {
+   "id": "de-magnets",
+   "label": "Germany/EU magnet makers",
+   "country": "DEU",
+   "volumes": {},
+   "meanShare": 0.04,
+   "meanVolume": 4.0,
+   "shareEvidence": "reported (BIS 2021: Germany 4%); not covered by trade.json",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 589,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume"
+   },
+   "companies": [
+    {
+     "name": "MS-Schramberg GmbH & Co. KG",
+     "sayariId": "dyL8jQqQlfPDyGSyB622XQ"
+    },
+    {
+     "name": "Max Baermann GmbH",
+     "sayariId": "XAL6Dyr_UQZsQsZzgLHCSg"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Assumed: Dy/Tb feed largely Chinese-separated",
+    "Sayari latest_shipment_date for both top DEU suppliers is 2020-07 (stale)"
+   ],
+   "chinaLinked": false,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket; Sayari search_suppliers(query='magnet', hs_code=850511, arrival_country=USA, departure_country=DEU, limit=3, compact) (total_available 65)"
+  },
+  {
+   "id": "vn-magnets",
+   "label": "Vietnam magnet plants",
+   "country": "VNM",
+   "volumes": {},
+   "meanShare": 0.03,
+   "meanVolume": 3.0,
+   "shareEvidence": "assumed (no US-side figure retrieved; Japan's 2024 Comtrade imports show Vietnam as a major magnet exporter, WITS)",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 864,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume"
+   },
+   "companies": [
+    {
+     "name": "Hengdian Group DMEGC Magnetics (Viet Nam)",
+     "sayariId": "tAhoe2BKpsVRuanC8eD3UQ"
+    },
+    {
+     "name": "Shin-Etsu Magnetic Materials Vietnam",
+     "sayariId": "pN3edC_SRRpNtWRONtzwHg"
+    },
+    {
+     "name": "INST Magnetic New Materials Vietnam",
+     "sayariId": "cFMNG4m_y4BQHlNK6dZwWg"
+    },
+    {
+     "name": "Vietnam Rare Earth Co. (VREX) - feeder",
+     "sayariId": "UmFQVIbABuZo2THKZn0lfw"
+    }
+   ],
+   "owners": [
+    "DMEGC VN: Chinese parent Hengdian Group DMEGC inferred from name (find_beneficial_owners returned no rows)",
+    "INST VN: supplied by Baotou INST Magnetic New Materials (China) - trade link only (counterparties.json)",
+    "VREX: Shenghe Resources (Chinese SOE-linked) via MOFCOM/VREX Holdco (counterparties.json)"
+   ],
+   "flags": [
+    "Sayari: DMEGC VN forced_labor_aspi_origin_subtier; INST VN UFLPA/Xinjiang product-blueprint flags; INST VN export_controls_adjacent",
+    "Mixed node: Shin-Etsu VN is Japanese-owned with in-house separation"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket; Sayari search_suppliers(query='magnet', hs_code=850511, arrival_country=USA, departure_country=VNM, limit=5, compact) (total_available 92); get_upstream_supply_chain on tAhoe2BKpsVRuanC8eD3UQ and cFMNG4m_y4BQHlNK6dZwWg"
+  },
+  {
+   "id": "kr-magnets",
+   "label": "Korean magnet makers",
+   "country": "KOR",
+   "volumes": {},
+   "meanShare": 0.01,
+   "meanVolume": 1.0,
+   "shareEvidence": "reported-ish (trade.json Comtrade 2025: Korea 1.2% of covered partners); rounded",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": 296,
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume",
+    "comtradeUSD_850511": {
+     "2023": 4842862,
+     "2024": 10257638,
+     "2025": 3917352
+    }
+   },
+   "companies": [],
+   "owners": [],
+   "flags": [
+    "Assumed: Dy/Tb feed largely Chinese-separated"
+   ],
+   "chinaLinked": false,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket"
+  },
+  {
+   "id": "other",
+   "label": "Other (Mexico assemblies, India, Indonesia, Malaysia, Taiwan, rest)",
+   "country": "OTH",
+   "volumes": {},
+   "meanShare": 0.03,
+   "meanVolume": 3.0,
+   "shareEvidence": "assumed remainder so shares sum to 1; Mexico Comtrade 2025 = 1.2% of covered partners",
+   "raw": {
+    "measure": "see fields",
+    "sayariShipmentCount_allDates": {
+     "MEX": 11545,
+     "IND": 3908,
+     "IDN": 560,
+     "HKG": 253,
+     "MYS": 192,
+     "TWN": 146,
+     "SGP": 126,
+     "BEL": 86,
+     "GBR": 74
+    },
+    "sayariCountNote": "shipment-record count for HS 850511 arriving USA from this departure country; the date filter was not applied by the tool, so this spans all dates in Sayari (earliest 2018-02-05, latest 2026-11-03) and reflects data-source coverage, not volume",
+    "comtradeUSD_850511_Mexico": {
+     "2023": 5021583,
+     "2024": 2533159,
+     "2025": 4039071
+    }
+   },
+   "companies": [],
+   "owners": [],
+   "flags": [
+    "Mexico/India shipment counts are inflated by Mexican and Indian customs data in Sayari",
+    "Much of this is magnet assemblies or ferrite/non-REE magnets"
+   ],
+   "chinaLinked": true,
+   "evidence": "synthetic",
+   "source": "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01) departure_country bucket"
+  }
+ ],
+ "tier2": [
+  {
+   "id": "cn-sep-domestic",
+   "label": "Chinese HREE separation (domestic ionic-clay ore)",
+   "country": "CHN",
+   "feeds": [
+    "cn-magnets",
+    "jp-magnets",
+    "ph-magnets",
+    "de-magnets",
+    "vn-magnets",
+    "kr-magnets",
+    "other"
+   ],
+   "share": {
+    "cn-magnets": 0.5,
+    "jp-magnets": 0.35,
+    "ph-magnets": 0.35,
+    "de-magnets": 0.4,
+    "vn-magnets": 0.35,
+    "kr-magnets": 0.45,
+    "other": 0.5
+   },
+   "evidence": "assumed",
+   "source": "General knowledge: China separates ~90%+ of world Dy/Tb. vn-magnets supported by Sayari get_upstream_supply_chain(tAhoe2BKpsVRuanC8eD3UQ, product=[280530,284690,850511,720299,811299]) returning Sichuan Leshan Ruifeng Metallurgy (bX4IBylwniTnAAds--KHLQ, owned_by_chinese_soe) as a supplier. Shares are not tool-derived."
+  },
+  {
+   "id": "cn-sep-myanmar",
+   "label": "Myanmar ionic-clay feed, separated in China",
+   "country": "MMR",
+   "feeds": [
+    "cn-magnets",
+    "jp-magnets",
+    "ph-magnets",
+    "de-magnets",
+    "vn-magnets",
+    "kr-magnets",
+    "other"
+   ],
+   "share": {
+    "cn-magnets": 0.5,
+    "jp-magnets": 0.35,
+    "ph-magnets": 0.35,
+    "de-magnets": 0.4,
+    "vn-magnets": 0.35,
+    "kr-magnets": 0.45,
+    "other": 0.5
+   },
+   "evidence": "assumed",
+   "source": "General knowledge: Myanmar (Kachin) supplied roughly half of China's heavy-REE feed in 2023-25. No tool call."
+  },
+  {
+   "id": "lynas-my",
+   "label": "Lynas Malaysia Dy/Tb separation",
+   "country": "MYS",
+   "feeds": [
+    "jp-magnets",
+    "ph-magnets",
+    "kr-magnets"
+   ],
+   "share": {
+    "jp-magnets": 0.1,
+    "ph-magnets": 0.1,
+    "kr-magnets": 0.1
+   },
+   "evidence": "assumed",
+   "source": "counterparties.json cp-dysprosium-lynas (Sayari _VakZUDye4u06kwWbJzxtw); HREE separation at Kuantan from 2025 (general knowledge). Shares assumed."
+  },
+  {
+   "id": "vn-vrex",
+   "label": "Vietnam Rare Earth Co. (VREX) metal/alloy - Shenghe-owned",
+   "country": "VNM",
+   "feeds": [
+    "vn-magnets"
+   ],
+   "share": {
+    "vn-magnets": 0.1
+   },
+   "evidence": "assumed",
+   "source": "counterparties.json cp-dysprosium-vrex (Sayari UmFQVIbABuZo2THKZn0lfw; owner chain to Shenghe Resources uGhovMdFUclDpiw8tpVylw). Share assumed. Treat as China-controlled."
+  },
+  {
+   "id": "non-cn-sep",
+   "label": "Non-China separation (Shin-Etsu in-house, Neo Silmet Estonia, others)",
+   "country": "OTH",
+   "feeds": [
+    "jp-magnets",
+    "ph-magnets",
+    "vn-magnets",
+    "de-magnets"
+   ],
+   "share": {
+    "jp-magnets": 0.2,
+    "ph-magnets": 0.2,
+    "vn-magnets": 0.2,
+    "de-magnets": 0.2
+   },
+   "evidence": "assumed",
+   "source": "Tavily: greenstocksresearch.com/rare-earth-magnet-stocks-outside-china (Shin-Etsu Vietnam combines separation, refining, recycling, sintering); counterparties.json cp-dysprosium-neo (Sayari oyGHo2rqFY3UVm-O494tEQ). Shares assumed."
+  }
+ ],
+ "links": [
+  {
+   "a": "vn-magnets",
+   "b": "cn-magnets",
+   "reason": "Chinese feedstock and Chinese parents: DMEGC VN receives from SOE-owned Sichuan Leshan Ruifeng Metallurgy; INST VN receives from Baotou INST (China); VREX feeder owned via Shenghe Resources",
+   "evidence": [
+    "Sayari get_upstream_supply_chain tAhoe2BKpsVRuanC8eD3UQ -> bX4IBylwniTnAAds--KHLQ",
+    "Sayari cFMNG4m_y4BQHlNK6dZwWg <- GfZwYj20fr3TSNl6qYRoSA (ships_to, counterparties.json)",
+    "Sayari UmFQVIbABuZo2THKZn0lfw -> uGhovMdFUclDpiw8tpVylw (counterparties.json)"
+   ],
+   "evidenceLevel": "reported (trade/ownership links); stake sizes not returned",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "jp-magnets",
+   "b": "ph-magnets",
+   "reason": "Shared Japanese owner (Shin-Etsu Chemical) - Philippine exports reflect Japanese firms",
+   "evidence": [
+    "Sayari Hr1BJcthy5-6FPSAMtswOA (Shin Etsu Magnetic Philippines)",
+    "Sayari P-ddqvqiP9sm0ISKcc847A (Shin-Etsu Chemical)",
+    "https://www.bis.gov/media/documents/section-232-ndfeb-magnets-report-appendices-combined.pdf"
+   ],
+   "evidenceLevel": "name match + BIS report; no Sayari ownership edge pulled",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "jp-magnets",
+   "b": "vn-magnets",
+   "reason": "Shared Japanese owner for part of the Vietnam node (Shin-Etsu Magnetic Materials Vietnam)",
+   "evidence": [
+    "Sayari pN3edC_SRRpNtWRONtzwHg",
+    "https://www.energy.gov/sites/default/files/2024-12/Neodymium%2520Magnets%2520Supply%2520Chain%2520Report%2520-%2520Final%5B1%5D.pdf"
+   ],
+   "evidenceLevel": "name match + DOE report",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "jp-magnets",
+   "b": "cn-magnets",
+   "reason": "Shared Chinese Dy/Tb feedstock (cn-sep-domestic / cn-sep-myanmar)",
+   "evidence": [
+    "assumed - general knowledge; see tier2 shares"
+   ],
+   "evidenceLevel": "assumed",
+   "rhoStress": 0.8
+  },
+  {
+   "a": "de-magnets",
+   "b": "cn-magnets",
+   "reason": "Shared Chinese Dy/Tb feedstock",
+   "evidence": [
+    "assumed - general knowledge"
+   ],
+   "evidenceLevel": "assumed",
+   "rhoStress": 0.8
+  }
+ ],
+ "comparison": "trade.json (Tradeverifyd/Comtrade, HS 850511, value USD, partners CHN/JPN/KOR/MEX only): totals 2023 483,388,940, 2024 393,126,996, 2025 329,271,415; China share of covered partners {'2023': 0.9216, '2024': 0.9152, '2025': 0.9006}. These partner shares overstate China because PHL, DEU and VNM are missing. The BIS Section 232 report (2021, full partner set, sintered NdFeB) gives China 75 / Japan 9 / Philippines 5 / Germany 4 %. tier1 meanShare follows BIS for CHN/JPN/PHL/DEU, trade.json for KOR, and an assumption for VNM/other. Sayari shipment counts (MEX 11545, CHN 4988, IND 3908, JPN 923, VNM 864) cannot be compared: they are not date-limited and are skewed by Mexican/Indian customs sources.",
+ "method": [
+  "Sayari search_trade_facets(scope=shipments, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01, bucket_limit=15)",
+  "Sayari search_trade_facets(scope=suppliers, query='*', hs_code=850511, arrival_country=USA, date_from=2023-01-01, bucket_limit=15)",
+  "Sayari search_trade_facets(scope=shipments, ..., date_from=2024-03-01, date_to=2024-03-31) - identical counts, date filter not applied",
+  "Sayari search_shipments(query='*', hs 850511, USA, departure VNM, date_from=2023-01-01, compact, limit 10)",
+  "Sayari search_shipments(..., departure CHN, date_from=2024-03-01, date_to=2024-03-31, full, limit 2) - weight present (kg), rows dated 2026-11-03",
+  "Sayari search_shipments(..., departure VNM, date 2026-10-01..2026-10-31, compact, limit 1) - total_available unchanged at 864",
+  "Sayari search_shipments(..., departure JPN, export, limit 5)",
+  "Sayari search_shipments(query='arrival_date:[2024-03-01 TO 2024-03-31]' and query='2024-03', departure VNM) - 0 rows",
+  "Sayari search_suppliers(query='magnet', hs 850511, USA, departure VNM/PHL/DEU/CHN, compact)",
+  "Sayari find_beneficial_owners(tAhoe2BKpsVRuanC8eD3UQ) - no rows",
+  "Sayari get_upstream_supply_chain(tAhoe2BKpsVRuanC8eD3UQ, depth 1) unfiltered and with product=[280530,284690,850511,720299,811299]",
+  "Sayari get_upstream_supply_chain(pN3edC_SRRpNtWRONtzwHg, depth 1) - no rows",
+  "Sayari get_upstream_supply_chain(cFMNG4m_y4BQHlNK6dZwWg, depth 1, product filter) - noisy, no REE feeder identified",
+  "Tradeverifyd tia_hs_trends(hs_codes=[850511,280530,284690]) - scan not run, no signals",
+  "Tavily search 'US imports NdFeB permanent magnets HTS 850511 by country ...' -> BIS Section 232 report, WITS Japan 2024 imports",
+  "Tavily search 'Vietnam rare earth magnet plant Chinese company feedstock exports to United States' -> DOE 2024 magnet report, greenstocksresearch.com",
+  "Reused data/trade/trade.json (dysprosium comtrade) and data/counterparties.json (cp-dysprosium-vrex, -instvn, -lynas, -neo)"
+ ],
+ "caveats": [
+  "SYNTHETIC: no time series. volumes{} empty and periods[] empty by design; the game must use an illustrative covariance and show the 'Illustrative network - not measured' badge (brief 5.4).",
+  "meanShare is a share of US import VALUE; mixes BIS 2021 (sintered NdFeB only), Comtrade 2025 (four partners only) and assumptions (VNM, other).",
+  "HS 850511 includes non-rare-earth metal magnets (e.g. fridge magnets seen in Sayari rows) and Dy content per magnet varies, so magnet value is a weak proxy for Dy.",
+  "All tier-2 shares are assumed (general knowledge), including the 1:1 contained-element ratio.",
+  "Ownership links for DMEGC VN and the Shin-Etsu units are inferred from names or trade edges; Sayari returned no beneficial-owner rows for them.",
+  "Sayari supplier rows for China/Germany show latest_shipment_date 2020, so the named companies show who has shipped, not current volume.",
+  "280530 and 284690 were not pulled from Sayari for this file; their annual Comtrade values remain in trade.json."
+ ]
+}

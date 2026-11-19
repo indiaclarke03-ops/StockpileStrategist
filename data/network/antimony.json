@@ -1,0 +1,1335 @@
+{
+ "mineral": "antimony",
+ "hs": [
+  "811010",
+  "261710",
+  "282580"
+ ],
+ "hsSeries": [
+  "811010"
+ ],
+ "fetched": "2026-11-19",
+ "granularity": "monthly",
+ "measure": "weight_kg",
+ "synthetic": false,
+ "demandMonthly": 100,
+ "units": "normalised (100 = average total monthly US imports across the window)",
+ "normalisation": {
+  "meanMonthlyTotalKg": 253648.0,
+  "factorPerKg": 0.00039424721146849687,
+  "window": "2023-01..2026-10 (46 months)"
+ },
+ "periods": [
+  "2023-01",
+  "2023-02",
+  "2023-03",
+  "2023-04",
+  "2023-05",
+  "2023-06",
+  "2023-07",
+  "2023-08",
+  "2023-09",
+  "2023-10",
+  "2023-11",
+  "2023-12",
+  "2024-01",
+  "2024-02",
+  "2024-03",
+  "2024-04",
+  "2024-05",
+  "2024-06",
+  "2024-07",
+  "2024-08",
+  "2024-09",
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2025-01",
+  "2025-02",
+  "2025-03",
+  "2025-04",
+  "2025-05",
+  "2025-06",
+  "2025-07",
+  "2025-08",
+  "2025-09",
+  "2025-10",
+  "2025-11",
+  "2025-12",
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04",
+  "2026-05",
+  "2026-06",
+  "2026-07",
+  "2026-08",
+  "2026-09",
+  "2026-10"
+ ],
+ "tier1": [
+  {
+   "id": "eu-traders",
+   "label": "European/UK metal traders (Amalgamet, Scandinavian Steel, Geodis-forwarded UK lots)",
+   "country": "GBR",
+   "volumes": {
+    "2023-01": 37.51,
+    "2023-02": 17.45,
+    "2023-03": 48.2,
+    "2023-04": 23.83,
+    "2023-05": 8.91,
+    "2023-06": 23.76,
+    "2023-07": 31.56,
+    "2023-08": 15.82,
+    "2023-09": 23.74,
+    "2023-10": 15.88,
+    "2023-11": 7.45,
+    "2023-12": 0.0,
+    "2024-01": 0.0,
+    "2024-02": 160.03,
+    "2024-03": 0.0,
+    "2024-04": 15.64,
+    "2024-05": 0.0,
+    "2024-06": 15.53,
+    "2024-07": 30.58,
+    "2024-08": 7.88,
+    "2024-09": 9.94,
+    "2024-10": 16.17,
+    "2024-11": 7.2,
+    "2024-12": 43.87,
+    "2025-01": 29.8,
+    "2025-02": 0.0,
+    "2025-03": 0.45,
+    "2025-04": 16.1,
+    "2025-05": 10.05,
+    "2025-06": 0.0,
+    "2025-07": 10.87,
+    "2025-08": 5.72,
+    "2025-09": 0.0,
+    "2025-10": 0.0,
+    "2025-11": 16.94,
+    "2025-12": 15.67,
+    "2026-01": 16.44,
+    "2026-02": 58.87,
+    "2026-03": 38.16,
+    "2026-04": 8.03,
+    "2026-05": 57.87,
+    "2026-06": 69.27,
+    "2026-07": 42.76,
+    "2026-08": 67.7,
+    "2026-09": 118.58,
+    "2026-10": 9.82
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 95152,
+     "2023-02": 44272,
+     "2023-03": 122263,
+     "2023-04": 60438,
+     "2023-05": 22589,
+     "2023-06": 60262,
+     "2023-07": 80060,
+     "2023-08": 40134,
+     "2023-09": 60222,
+     "2023-10": 40278,
+     "2023-11": 18900,
+     "2023-12": 0,
+     "2024-01": 0,
+     "2024-02": 405913,
+     "2024-03": 0,
+     "2024-04": 39658,
+     "2024-05": 0,
+     "2024-06": 39390,
+     "2024-07": 77554,
+     "2024-08": 19988,
+     "2024-09": 25219,
+     "2024-10": 41009,
+     "2024-11": 18267,
+     "2024-12": 111275,
+     "2025-01": 75582,
+     "2025-02": 0,
+     "2025-03": 1137,
+     "2025-04": 40837,
+     "2025-05": 25485,
+     "2025-06": 0,
+     "2025-07": 27564,
+     "2025-08": 14510,
+     "2025-09": 0,
+     "2025-10": 0,
+     "2025-11": 42971,
+     "2025-12": 39740,
+     "2026-01": 41699,
+     "2026-02": 149318,
+     "2026-03": 96804,
+     "2026-04": 20357,
+     "2026-05": 146792,
+     "2026-06": 175694,
+     "2026-07": 108455,
+     "2026-08": 171719,
+     "2026-09": 300786,
+     "2026-10": 24908
+    },
+    "annualKt": {
+     "2023": 644.6,
+     "2024": 778.3,
+     "2025": 267.8,
+     "2026": 1236.5
+    },
+    "monthsWithShipments": 38
+   },
+   "companies": [
+    {
+     "name": "AMALGAMET LIMITED",
+     "sayariId": "SKQPUlWHM2-wmHmeWRp-dw"
+    },
+    {
+     "name": "GEODIS FF UNITED KINGDOM LTD (forwarder)",
+     "sayariId": "ZF6LOJC1LmC6sFGD6A3PyA"
+    },
+    {
+     "name": "SCANDINAVIAN STEEL AB",
+     "sayariId": "WTvk1rhBSDJ43s2_d-hoIw"
+    },
+    {
+     "name": "GRONDMET GMBH & CO KG",
+     "sayariId": "RlQIA19AP35KzdvVPrd6GQ"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Trader/forwarder node: metal origin not stated on bills of lading",
+    "Includes 11 Japan-export-source rows (Amalgamet/Scandinavian Steel shipments routed via Japan to Baltimore)",
+    "Grondmet also ships to US from CHN and THA (Sayari supplier overlap)"
+   ],
+   "chinaLinked": false,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = eu-traders; 69 shipments used; kg source counts {'weight': 60, 'desc': 8, 'value/price': 1}"
+  },
+  {
+   "id": "in-chemico",
+   "label": "India - Chemico Synthetics (smelter, imported ore)",
+   "country": "IND",
+   "volumes": {
+    "2023-01": 47.94,
+    "2023-02": 70.15,
+    "2023-03": 38.82,
+    "2023-04": 60.18,
+    "2023-05": 37.53,
+    "2023-06": 19.71,
+    "2023-07": 73.29,
+    "2023-08": 25.69,
+    "2023-09": 19.96,
+    "2023-10": 89.03,
+    "2023-11": 69.35,
+    "2023-12": 10.05,
+    "2024-01": 9.86,
+    "2024-02": 0.0,
+    "2024-03": 7.88,
+    "2024-04": 9.86,
+    "2024-05": 13.48,
+    "2024-06": 19.36,
+    "2024-07": 29.86,
+    "2024-08": 16.14,
+    "2024-09": 58.83,
+    "2024-10": 29.13,
+    "2024-11": 39.19,
+    "2024-12": 0.0,
+    "2025-01": 21.86,
+    "2025-02": 48.1,
+    "2025-03": 54.74,
+    "2025-04": 9.93,
+    "2025-05": 58.27,
+    "2025-06": 30.29,
+    "2025-07": 43.5,
+    "2025-08": 30.03,
+    "2025-09": 0.0,
+    "2025-10": 0.0,
+    "2025-11": 0.0,
+    "2025-12": 8.87,
+    "2026-01": 0.0,
+    "2026-02": 0.15,
+    "2026-03": 0.0,
+    "2026-04": 0.0,
+    "2026-05": 0.0,
+    "2026-06": 0.0,
+    "2026-07": 0.0,
+    "2026-08": 0.0,
+    "2026-09": 0.0,
+    "2026-10": 0.0
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 121610,
+     "2023-02": 177936,
+     "2023-03": 98465,
+     "2023-04": 152650,
+     "2023-05": 95195,
+     "2023-06": 50000,
+     "2023-07": 185910,
+     "2023-08": 65150,
+     "2023-09": 50632,
+     "2023-10": 225815,
+     "2023-11": 175900,
+     "2023-12": 25500,
+     "2024-01": 25000,
+     "2024-02": 0,
+     "2024-03": 20000,
+     "2024-04": 25000,
+     "2024-05": 34200,
+     "2024-06": 49100,
+     "2024-07": 75743,
+     "2024-08": 40932,
+     "2024-09": 149210,
+     "2024-10": 73900,
+     "2024-11": 99408,
+     "2024-12": 0,
+     "2025-01": 55446,
+     "2025-02": 122000,
+     "2025-03": 138841,
+     "2025-04": 25181,
+     "2025-05": 147812,
+     "2025-06": 76828,
+     "2025-07": 110338,
+     "2025-08": 76176,
+     "2025-09": 0,
+     "2025-10": 0,
+     "2025-11": 0,
+     "2025-12": 22509,
+     "2026-01": 0,
+     "2026-02": 375,
+     "2026-03": 0,
+     "2026-04": 0,
+     "2026-05": 0,
+     "2026-06": 0,
+     "2026-07": 0,
+     "2026-08": 0,
+     "2026-09": 0,
+     "2026-10": 0
+    },
+    "annualKt": {
+     "2023": 1424.8,
+     "2024": 592.5,
+     "2025": 775.1,
+     "2026": 0.4
+    },
+    "monthsWithShipments": 32
+   },
+   "companies": [
+    {
+     "name": "CHEMICO SYNTHETICS LTD",
+     "sayariId": "c9ilBjq4_FHo2NZk7I_Tbw"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Largest single US-bound shipper in Sayari HS 811010 (187 facet rows)",
+    "Sayari get_upstream_supply_chain lists Chinese suppliers incl. Minmetals Non-Ferrous (Shanghai) [owned_by_chinese_soe] Bbxv-qCJ4cdC_B-T9Pfm3A, Hsikwangshan Twinkling Star z1eZ-o8wbMU54_hrgp5i1A, Guizhou Provincial Metals q3y_ct8AQn1wUS-AO-ehHQ",
+    "Also lists Turkish miners (Arinhan, Hakas, Valsen), Bolivian (Carbominerales QMi58Zq3S6GFaHvEsaOg_A, Wogen), Oman SPMP, Thai Southeast Antimony",
+    "2026 near-zero is likely India-source data lag (see caveats)"
+   ],
+   "chinaLinked": false,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = in-chemico; 132 shipments used; kg source counts {'weight': 132}"
+  },
+  {
+   "id": "sea-transit",
+   "label": "SE/East Asia transit (Taiwan, Singapore, Vietnam, Malaysia)",
+   "country": "VNM",
+   "volumes": {
+    "2023-01": 49.44,
+    "2023-02": 9.97,
+    "2023-03": 9.81,
+    "2023-04": 7.99,
+    "2023-05": 19.57,
+    "2023-06": 0.0,
+    "2023-07": 0.0,
+    "2023-08": 10.0,
+    "2023-09": 45.75,
+    "2023-10": 0.0,
+    "2023-11": 29.97,
+    "2023-12": 8.03,
+    "2024-01": 48.99,
+    "2024-02": 20.02,
+    "2024-03": 0.0,
+    "2024-04": 0.0,
+    "2024-05": 10.85,
+    "2024-06": 0.0,
+    "2024-07": 47.07,
+    "2024-08": 41.61,
+    "2024-09": 28.51,
+    "2024-10": 61.68,
+    "2024-11": 29.47,
+    "2024-12": 0.0,
+    "2025-01": 8.69,
+    "2025-02": 31.02,
+    "2025-03": 0.0,
+    "2025-04": 9.27,
+    "2025-05": 10.46,
+    "2025-06": 0.0,
+    "2025-07": 8.34,
+    "2025-08": 0.0,
+    "2025-09": 0.0,
+    "2025-10": 0.0,
+    "2025-11": 0.0,
+    "2025-12": 0.0,
+    "2026-01": 0.0,
+    "2026-02": 0.0,
+    "2026-03": 0.0,
+    "2026-04": 0.0,
+    "2026-05": 21.21,
+    "2026-06": 26.03,
+    "2026-07": 11.01,
+    "2026-08": 0.0,
+    "2026-09": 10.87,
+    "2026-10": 10.82
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 125416,
+     "2023-02": 25296,
+     "2023-03": 24873,
+     "2023-04": 20255,
+     "2023-05": 49629,
+     "2023-06": 0,
+     "2023-07": 0,
+     "2023-08": 25361,
+     "2023-09": 116034,
+     "2023-10": 0,
+     "2023-11": 76018,
+     "2023-12": 20378,
+     "2024-01": 124255,
+     "2024-02": 50780,
+     "2024-03": 0,
+     "2024-04": 0,
+     "2024-05": 27518,
+     "2024-06": 0,
+     "2024-07": 119387,
+     "2024-08": 105541,
+     "2024-09": 72326,
+     "2024-10": 156450,
+     "2024-11": 74745,
+     "2024-12": 0,
+     "2025-01": 22053,
+     "2025-02": 78684,
+     "2025-03": 0,
+     "2025-04": 23511,
+     "2025-05": 26525,
+     "2025-06": 0,
+     "2025-07": 21142,
+     "2025-08": 0,
+     "2025-09": 0,
+     "2025-10": 0,
+     "2025-11": 0,
+     "2025-12": 0,
+     "2026-01": 0,
+     "2026-02": 0,
+     "2026-03": 0,
+     "2026-04": 0,
+     "2026-05": 53806,
+     "2026-06": 66029,
+     "2026-07": 27914,
+     "2026-08": 0,
+     "2026-09": 27560,
+     "2026-10": 27438
+    },
+    "annualKt": {
+     "2023": 483.3,
+     "2024": 731.0,
+     "2025": 171.9,
+     "2026": 202.7
+    },
+    "monthsWithShipments": 27
+   },
+   "companies": [
+    {
+     "name": "MASTER INTERNATIONNAL LOGISTICS (CHINA) CO., LTD.",
+     "sayariId": "6y_ANdVloodeNY4B2MCmWg"
+    },
+    {
+     "name": "WHITEHALL TRADING LLC",
+     "sayariId": "cDIJON9JIXiMrQCfzjV70Q"
+    },
+    {
+     "name": "THAI UNIPET INDUSTRIES CO LTD",
+     "sayariId": "nSI4VHN3ZU1V_uHEi03i8Q"
+    },
+    {
+     "name": "XCE LOGISTICS CO., LTD",
+     "sayariId": "lKwKBT4DMAR4LQRhyxAgGA"
+    },
+    {
+     "name": "VICTORY INTERNATIONAL JSC",
+     "sayariId": "gWsiWtUdgzKhjPDOJJjQog"
+    },
+    {
+     "name": "MINMETALS, INC.",
+     "sayariId": "NJgmxgkzmLr73KVPyQykzw"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Dominated by China-based forwarders and Chinese-owned Thai Unipet (Reuters, via Tavily)",
+    "Shares shippers with th and cn nodes (Southeast Antimony Industrial, Thai Unipet, XCE Logistics, Honour Lane)"
+   ],
+   "chinaLinked": true,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = sea-transit; 57 shipments used; kg source counts {'weight': 57}"
+  },
+  {
+   "id": "cn",
+   "label": "China & Hong Kong direct",
+   "country": "CHN",
+   "volumes": {
+    "2023-01": 79.76,
+    "2023-02": 0.0,
+    "2023-03": 9.99,
+    "2023-04": 39.26,
+    "2023-05": 12.87,
+    "2023-06": 0.0,
+    "2023-07": 0.0,
+    "2023-08": 24.58,
+    "2023-09": 25.96,
+    "2023-10": 48.06,
+    "2023-11": 15.5,
+    "2023-12": 9.69,
+    "2024-01": 9.96,
+    "2024-02": 0.0,
+    "2024-03": 0.0,
+    "2024-04": 39.3,
+    "2024-05": 0.0,
+    "2024-06": 0.0,
+    "2024-07": 0.0,
+    "2024-08": 8.38,
+    "2024-09": 0.0,
+    "2024-10": 34.07,
+    "2024-11": 71.45,
+    "2024-12": 29.03,
+    "2025-01": 0.0,
+    "2025-02": 9.63,
+    "2025-03": 8.74,
+    "2025-04": 8.82,
+    "2025-05": 28.78,
+    "2025-06": 0.0,
+    "2025-07": 0.0,
+    "2025-08": 0.0,
+    "2025-09": 0.0,
+    "2025-10": 0.0,
+    "2025-11": 0.0,
+    "2025-12": 0.0,
+    "2026-01": 0.0,
+    "2026-02": 59.46,
+    "2026-03": 0.0,
+    "2026-04": 0.0,
+    "2026-05": 0.0,
+    "2026-06": 9.94,
+    "2026-07": 0.0,
+    "2026-08": 0.0,
+    "2026-09": 0.0,
+    "2026-10": 0.0
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 202312,
+     "2023-02": 0,
+     "2023-03": 25338,
+     "2023-04": 99590,
+     "2023-05": 32634,
+     "2023-06": 0,
+     "2023-07": 0,
+     "2023-08": 62335,
+     "2023-09": 65846,
+     "2023-10": 121911,
+     "2023-11": 39325,
+     "2023-12": 24580,
+     "2024-01": 25253,
+     "2024-02": 0,
+     "2024-03": 0,
+     "2024-04": 99685,
+     "2024-05": 0,
+     "2024-06": 0,
+     "2024-07": 0,
+     "2024-08": 21267,
+     "2024-09": 0,
+     "2024-10": 86416,
+     "2024-11": 181233,
+     "2024-12": 73640,
+     "2025-01": 0,
+     "2025-02": 24436,
+     "2025-03": 22169,
+     "2025-04": 22360,
+     "2025-05": 72990,
+     "2025-06": 0,
+     "2025-07": 0,
+     "2025-08": 0,
+     "2025-09": 0,
+     "2025-10": 0,
+     "2025-11": 0,
+     "2025-12": 0,
+     "2026-01": 0,
+     "2026-02": 150812,
+     "2026-03": 0,
+     "2026-04": 0,
+     "2026-05": 0,
+     "2026-06": 25212,
+     "2026-07": 0,
+     "2026-08": 0,
+     "2026-09": 0,
+     "2026-10": 0
+    },
+    "annualKt": {
+     "2023": 673.9,
+     "2024": 487.5,
+     "2025": 142.0,
+     "2026": 176.0
+    },
+    "monthsWithShipments": 21
+   },
+   "companies": [
+    {
+     "name": "CASA CHINA LIMITED SHENZHEN",
+     "sayariId": "u1N4KBuSnwQwbIaa68jIig"
+    },
+    {
+     "name": "INTER FOREST (HK) LIMITED",
+     "sayariId": "Bvj2giKoSCmH8CRNmmeA3Q"
+    },
+    {
+     "name": "SOUTHEAST ANTIMONY INDUSTRIAL",
+     "sayariId": "m5fjigBnckvTrpJRJzEK1A"
+    },
+    {
+     "name": "EASTRONG INTERNATIONAL LOGISTICS CO",
+     "sayariId": "CXnsof9Lkut92WUyi9yH8w"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "China banned antimony exports to the US on 2024-12-03 (suspended Nov 2025 per Reuters via Tavily)",
+    "Direct series collapses after 2024; residual 2025-26 lots via HK/forwarders"
+   ],
+   "chinaLinked": true,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = cn; 43 shipments used; kg source counts {'weight': 43}"
+  },
+  {
+   "id": "th",
+   "label": "Thailand smelters/exporters (Thai Unipet, Southeast Antimony)",
+   "country": "THA",
+   "volumes": {
+    "2023-01": 0.0,
+    "2023-02": 0.0,
+    "2023-03": 9.93,
+    "2023-04": 29.43,
+    "2023-05": 9.97,
+    "2023-06": 17.63,
+    "2023-07": 7.78,
+    "2023-08": 39.31,
+    "2023-09": 10.73,
+    "2023-10": 0.0,
+    "2023-11": 21.41,
+    "2023-12": 0.0,
+    "2024-01": 0.0,
+    "2024-02": 0.0,
+    "2024-03": 0.0,
+    "2024-04": 28.87,
+    "2024-05": 47.45,
+    "2024-06": 25.66,
+    "2024-07": 0.0,
+    "2024-08": 16.83,
+    "2024-09": 19.15,
+    "2024-10": 48.33,
+    "2024-11": 0.0,
+    "2024-12": 19.93,
+    "2025-01": 9.95,
+    "2025-02": 9.95,
+    "2025-03": 7.57,
+    "2025-04": 19.88,
+    "2025-05": 8.7,
+    "2025-06": 20.78,
+    "2025-07": 19.27,
+    "2025-08": 16.77,
+    "2025-09": 0.0,
+    "2025-10": 7.93,
+    "2025-11": 0.0,
+    "2025-12": 0.0,
+    "2026-01": 0.0,
+    "2026-02": 0.0,
+    "2026-03": 0.0,
+    "2026-04": 0.0,
+    "2026-05": 10.03,
+    "2026-06": 0.0,
+    "2026-07": 0.0,
+    "2026-08": 0.0,
+    "2026-09": 0.0,
+    "2026-10": 9.91
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 0,
+     "2023-02": 0,
+     "2023-03": 25175,
+     "2023-04": 74651,
+     "2023-05": 25288,
+     "2023-06": 44722,
+     "2023-07": 19734,
+     "2023-08": 99721,
+     "2023-09": 27217,
+     "2023-10": 0,
+     "2023-11": 54317,
+     "2023-12": 0,
+     "2024-01": 0,
+     "2024-02": 0,
+     "2024-03": 0,
+     "2024-04": 73223,
+     "2024-05": 120352,
+     "2024-06": 65092,
+     "2024-07": 0,
+     "2024-08": 42693,
+     "2024-09": 48586,
+     "2024-10": 122589,
+     "2024-11": 0,
+     "2024-12": 50540,
+     "2025-01": 25226,
+     "2025-02": 25246,
+     "2025-03": 19194,
+     "2025-04": 50413,
+     "2025-05": 22076,
+     "2025-06": 52708,
+     "2025-07": 48870,
+     "2025-08": 42536,
+     "2025-09": 0,
+     "2025-10": 20119,
+     "2025-11": 0,
+     "2025-12": 0,
+     "2026-01": 0,
+     "2026-02": 0,
+     "2026-03": 0,
+     "2026-04": 0,
+     "2026-05": 25438,
+     "2026-06": 0,
+     "2026-07": 0,
+     "2026-08": 0,
+     "2026-09": 0,
+     "2026-10": 25144
+    },
+    "annualKt": {
+     "2023": 370.8,
+     "2024": 523.1,
+     "2025": 306.4,
+     "2026": 50.6
+    },
+    "monthsWithShipments": 26
+   },
+   "companies": [
+    {
+     "name": "THAI UNIPET INDUSTRIES CO LTD",
+     "sayariId": "nSI4VHN3ZU1V_uHEi03i8Q"
+    },
+    {
+     "name": "SOUTHEAST ANTIMONY INDUSTRIAL",
+     "sayariId": "m5fjigBnckvTrpJRJzEK1A"
+    },
+    {
+     "name": "CONSOL LINK CO.,LTD.",
+     "sayariId": "PadLRV0tP6HXmoNtNhZh0Q"
+    },
+    {
+     "name": "GRONDMET GMBH AND CO. KG",
+     "sayariId": "SHGXskGK4HgdJ_zi5NYVEw"
+    }
+   ],
+   "owners": [
+    "Thai Unipet described as Chinese-owned (Reuters 2025, via Tavily); Sayari find_beneficial_owners returned no owners for Southeast Antimony Industrial (Gnq9orXH22OQxaLQGAtzyw)"
+   ],
+   "flags": [
+    "Reuters: Thai Unipet US shipments ~27x y/y after China's Dec-2024 ban; suspected transshipment",
+    "Sayari THA 261710 imports are small (21 rows: Pakistan 14, Cameroon/Chad 3, Mexico 3, Peru 1)"
+   ],
+   "chinaLinked": true,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = th; 47 shipments used; kg source counts {'weight': 47}"
+  },
+  {
+   "id": "kr",
+   "label": "South Korea - Korea Zinc (Onsan by-product antimony)",
+   "country": "KOR",
+   "volumes": {
+    "2023-01": 0.0,
+    "2023-02": 0.0,
+    "2023-03": 0.0,
+    "2023-04": 0.0,
+    "2023-05": 0.0,
+    "2023-06": 0.0,
+    "2023-07": 0.0,
+    "2023-08": 0.0,
+    "2023-09": 0.0,
+    "2023-10": 0.0,
+    "2023-11": 0.0,
+    "2023-12": 0.0,
+    "2024-01": 0.0,
+    "2024-02": 0.0,
+    "2024-03": 0.0,
+    "2024-04": 0.0,
+    "2024-05": 0.0,
+    "2024-06": 0.0,
+    "2024-07": 0.0,
+    "2024-08": 0.0,
+    "2024-09": 0.0,
+    "2024-10": 0.0,
+    "2024-11": 0.0,
+    "2024-12": 0.0,
+    "2025-01": 0.0,
+    "2025-02": 0.0,
+    "2025-03": 0.0,
+    "2025-04": 0.04,
+    "2025-05": 0.0,
+    "2025-06": 0.0,
+    "2025-07": 8.24,
+    "2025-08": 0.0,
+    "2025-09": 7.71,
+    "2025-10": 0.0,
+    "2025-11": 0.0,
+    "2025-12": 8.12,
+    "2026-01": 7.71,
+    "2026-02": 0.0,
+    "2026-03": 46.75,
+    "2026-04": 31.14,
+    "2026-05": 0.0,
+    "2026-06": 15.48,
+    "2026-07": 15.46,
+    "2026-08": 53.79,
+    "2026-09": 4.06,
+    "2026-10": 36.35
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 0,
+     "2023-02": 0,
+     "2023-03": 0,
+     "2023-04": 0,
+     "2023-05": 0,
+     "2023-06": 0,
+     "2023-07": 0,
+     "2023-08": 0,
+     "2023-09": 0,
+     "2023-10": 0,
+     "2023-11": 0,
+     "2023-12": 0,
+     "2024-01": 0,
+     "2024-02": 0,
+     "2024-03": 0,
+     "2024-04": 0,
+     "2024-05": 0,
+     "2024-06": 0,
+     "2024-07": 0,
+     "2024-08": 0,
+     "2024-09": 0,
+     "2024-10": 0,
+     "2024-11": 0,
+     "2024-12": 0,
+     "2025-01": 0,
+     "2025-02": 0,
+     "2025-03": 0,
+     "2025-04": 112,
+     "2025-05": 0,
+     "2025-06": 0,
+     "2025-07": 20901,
+     "2025-08": 0,
+     "2025-09": 19553,
+     "2025-10": 0,
+     "2025-11": 0,
+     "2025-12": 20585,
+     "2026-01": 19567,
+     "2026-02": 0,
+     "2026-03": 118592,
+     "2026-04": 78977,
+     "2026-05": 0,
+     "2026-06": 39264,
+     "2026-07": 39205,
+     "2026-08": 136449,
+     "2026-09": 10289,
+     "2026-10": 92200
+    },
+    "annualKt": {
+     "2023": 0.0,
+     "2024": 0.0,
+     "2025": 61.2,
+     "2026": 534.5
+    },
+    "monthsWithShipments": 12
+   },
+   "companies": [
+    {
+     "name": "KOREA ZINC COMPANY LTD",
+     "sayariId": "fN8L_yT2Qh5_sHX3052Vfg"
+    },
+    {
+     "name": "KOREA Z INC COMPANY LIMITED (Korean export records alias)",
+     "sayariId": "S_1rRTPfxwgRsbG4P4uvVw"
+    }
+   ],
+   "owners": [
+    "Korean individual shareholders (Choi family etc.) per data/counterparties.json cp-antimony-koreazinc; ownerChina false"
+   ],
+   "flags": [
+    "Series starts 2025-07 (rerouting toward non-Chinese supply)",
+    "Sayari: receives Russian lead and zinc concentrates from Dalpolimetall (UKR NSDC-listed) 2023-2024",
+    "Sayari: only direct antimony-ore purchase found = Palisade Commodities (Oman) 2023-10; no Chinese antimony feed found",
+    "12 Korean-export rows have value only; kg imputed as value / median row value (USD 397,480) x median Korea Zinc US-BOL container (19,677 kg)"
+   ],
+   "chinaLinked": false,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = kr; 27 shipments used; kg source counts {'weight': 15, 'value/container': 12}"
+  },
+  {
+   "id": "other",
+   "label": "Other (Mexico, Oman SPMP, Dominican Rep., Bahamas/Panama transhipment, Canada, unknown origin)",
+   "country": "OTH",
+   "volumes": {
+    "2023-01": 22.71,
+    "2023-02": 17.94,
+    "2023-03": 25.65,
+    "2023-04": 20.1,
+    "2023-05": 0.0,
+    "2023-06": 0.0,
+    "2023-07": 19.81,
+    "2023-08": 20.02,
+    "2023-09": 7.8,
+    "2023-10": 39.29,
+    "2023-11": 0.0,
+    "2023-12": 1.63,
+    "2024-01": 20.21,
+    "2024-02": 22.35,
+    "2024-03": 36.13,
+    "2024-04": 11.41,
+    "2024-05": 21.55,
+    "2024-06": 0.0,
+    "2024-07": 0.0,
+    "2024-08": 0.0,
+    "2024-09": 7.96,
+    "2024-10": 16.82,
+    "2024-11": 3.75,
+    "2024-12": 8.13,
+    "2025-01": 0.0,
+    "2025-02": 21.7,
+    "2025-03": 0.0,
+    "2025-04": 0.55,
+    "2025-05": 0.76,
+    "2025-06": 10.65,
+    "2025-07": 0.0,
+    "2025-08": 0.0,
+    "2025-09": 0.0,
+    "2025-10": 0.0,
+    "2025-11": 0.0,
+    "2025-12": 0.0,
+    "2026-01": 0.0,
+    "2026-02": 0.0,
+    "2026-03": 0.09,
+    "2026-04": 0.0,
+    "2026-05": 19.97,
+    "2026-06": 20.68,
+    "2026-07": 0.0,
+    "2026-08": 9.58,
+    "2026-09": 0.0,
+    "2026-10": 0.0
+   },
+   "raw": {
+    "measure": "weight_kg",
+    "unit": "kg",
+    "byMonth": {
+     "2023-01": 57613,
+     "2023-02": 45506,
+     "2023-03": 65073,
+     "2023-04": 50977,
+     "2023-05": 0,
+     "2023-06": 0,
+     "2023-07": 50257,
+     "2023-08": 50768,
+     "2023-09": 19797,
+     "2023-10": 99646,
+     "2023-11": 0,
+     "2023-12": 4127,
+     "2024-01": 51262,
+     "2024-02": 56692,
+     "2024-03": 91636,
+     "2024-04": 28932,
+     "2024-05": 54666,
+     "2024-06": 0,
+     "2024-07": 0,
+     "2024-08": 0,
+     "2024-09": 20199,
+     "2024-10": 42674,
+     "2024-11": 9520,
+     "2024-12": 20623,
+     "2025-01": 0,
+     "2025-02": 55049,
+     "2025-03": 0,
+     "2025-04": 1398,
+     "2025-05": 1927,
+     "2025-06": 27015,
+     "2025-07": 0,
+     "2025-08": 0,
+     "2025-09": 0,
+     "2025-10": 0,
+     "2025-11": 0,
+     "2025-12": 0,
+     "2026-01": 0,
+     "2026-02": 0,
+     "2026-03": 230,
+     "2026-04": 0,
+     "2026-05": 50654,
+     "2026-06": 52461,
+     "2026-07": 0,
+     "2026-08": 24311,
+     "2026-09": 0,
+     "2026-10": 0
+    },
+    "annualKt": {
+     "2023": 443.8,
+     "2024": 376.2,
+     "2025": 85.4,
+     "2026": 127.7
+    },
+    "monthsWithShipments": 26
+   },
+   "companies": [
+    {
+     "name": "STRATEGIC AND PRECIOUS METALS PROCESSING LLC (Oman)",
+     "sayariId": "aBrOCJ9p4LrZ9csGE3Chng"
+    },
+    {
+     "name": "ARAGON CHEMICAL S DE RL DE CV",
+     "sayariId": "foC6mjLU9-1MK6La22D_0g"
+    },
+    {
+     "name": "MICROTEK DOMINICANA S.A",
+     "sayariId": "P-fsPz0HTQbvbzf9G7rnyA"
+    }
+   ],
+   "owners": [],
+   "flags": [
+    "Remainder bucket; ~0.48 kt of its weight has no named shipper",
+    "Reuters: Mexico also used for post-ban transshipment (mainly oxides, HS 282580, not in this series)"
+   ],
+   "chinaLinked": false,
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='*', arrival_country='USA', hs_code='811010', date_from='2023-01-01', response_mode='full', limit=100) + 6 page_token continuations (offsets 100-600), 691 rows; filtered to months 2023-01..2026-10, deduplicated, aggregated by node; node = other; 52 shipments used; kg source counts {'weight': 48, 'desc': 4}"
+  }
+ ],
+ "tier2": [
+  {
+   "id": "cn-smelters",
+   "label": "Chinese antimony smelters & crude-metal traders (Hunan/Guizhou: Xikuangshan, Minmetals)",
+   "country": "CHN",
+   "feeds": [
+    "cn",
+    "th",
+    "sea-transit",
+    "eu-traders"
+   ],
+   "share": {
+    "cn": 0.95,
+    "th": 0.5,
+    "sea-transit": 0.5,
+    "eu-traders": 0.25
+   },
+   "shareEvidence": {
+    "cn": "assumed",
+    "th": "assumed",
+    "sea-transit": "assumed",
+    "eu-traders": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "Assumed from general knowledge + Reuters transshipment reporting (Tavily). Sayari shows supplier overlap (Southeast Antimony Industrial m5fjigBnckvTrpJRJzEK1A ships to US from CHN, THA and SEA; Grondmet from CHN and THA) but not the origin share. Chemico's Sayari upstream also names Chinese suppliers (Minmetals Shanghai, Hsikwangshan Twinkling Star) - share not measurable, so not allocated."
+  },
+  {
+   "id": "it-traded-ore",
+   "label": "Ore shipped from Italy to India (traders; mine origin undisclosed)",
+   "country": "ITA",
+   "feeds": [
+    "in-chemico"
+   ],
+   "share": {
+    "in-chemico": 0.44
+   },
+   "shareEvidence": {
+    "in-chemico": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets(scope=shipments, arrival_country=IND, hs_code=261710, date_from=2022-01-01): departure ITA 123 of 279 counted rows. Share = shipment-count share of ALL Indian antimony-ore imports (Chemico is 57 of 291 buyer rows; receiver filter not honoured), used as proxy for Chemico."
+  },
+  {
+   "id": "bo-ore",
+   "label": "Bolivian antimony ore/concentrate",
+   "country": "BOL",
+   "feeds": [
+    "in-chemico",
+    "sea-transit"
+   ],
+   "share": {
+    "in-chemico": 0.17,
+    "sea-transit": 0.11
+   },
+   "shareEvidence": {
+    "in-chemico": "reported",
+    "sea-transit": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets hs 261710: India imports dep BOL 47/279; Vietnam imports dep BOL 48/445 (top-8 buckets). Chemico upstream includes Carbominerales SAC (QMi58Zq3S6GFaHvEsaOg_A). Shipment-count shares, country-level proxies."
+  },
+  {
+   "id": "tj-ore",
+   "label": "Tajik antimony concentrate (Anzob/Talco)",
+   "country": "TJK",
+   "feeds": [
+    "in-chemico",
+    "eu-traders"
+   ],
+   "share": {
+    "in-chemico": 0.13,
+    "eu-traders": 0.3
+   },
+   "shareEvidence": {
+    "in-chemico": "reported",
+    "eu-traders": "assumed"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets(arrival IND, hs 261710): dep TJK 37/279 (reported, India-level). eu-traders 0.3 assumed (European traders commonly handle Tajik metal; not shown in Sayari)."
+  },
+  {
+   "id": "tr-ore",
+   "label": "Turkish antimony ore (Arinhan, Hakas, Valsen)",
+   "country": "TUR",
+   "feeds": [
+    "in-chemico"
+   ],
+   "share": {
+    "in-chemico": 0.1
+   },
+   "shareEvidence": {
+    "in-chemico": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets(arrival IND, hs 261710): dep TUR 29/279; Chemico upstream (get_upstream_supply_chain c9ilBjq4_FHo2NZk7I_Tbw) lists GDE66KRD6S8cGBynVAoxaA, 42w3DXtMq9zntpDGB4IaIA, cgYYsceMUuh3ndFujdL4dQ."
+  },
+  {
+   "id": "ru-conc",
+   "label": "Russian concentrates (Dalpolimetall Pb/Zn; Sarylakh-Surma Sb)",
+   "country": "RUS",
+   "feeds": [
+    "kr",
+    "sea-transit"
+   ],
+   "share": {
+    "kr": 0.15,
+    "sea-transit": 0.21
+   },
+   "shareEvidence": {
+    "kr": "assumed",
+    "sea-transit": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_shipments(query='Dalpolimetall', departure RUS, arrival KOR): 14 rows of lead (2607) and zinc (2608) concentrate to KOREA ZINC (fN8L_yT2Qh5_sHX3052Vfg) 2023-08..2024-05 from ZeF8POI7340L7r_yxXLPEg. Antimony is a by-product of lead refining, so kr share 0.15 is ASSUMED. Vietnam ore imports dep RUS 92/445 (Sayari facets, reported)."
+  },
+  {
+   "id": "mm-ore",
+   "label": "Myanmar antimony ore",
+   "country": "MMR",
+   "feeds": [
+    "sea-transit"
+   ],
+   "share": {
+    "sea-transit": 0.18
+   },
+   "shareEvidence": {
+    "sea-transit": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets(arrival VNM, hs 261710, date_from 2022-01-01): dep MMR 82/445 (product_origin MMR 148)."
+  },
+  {
+   "id": "pk-af-ore",
+   "label": "Pakistan / Central-African (Chad via Cameroon) ore to Thailand",
+   "country": "PAK",
+   "feeds": [
+    "th"
+   ],
+   "share": {
+    "th": 0.4
+   },
+   "shareEvidence": {
+    "th": "reported"
+   },
+   "evidence": "reported",
+   "source": "Sayari search_trade_facets(arrival THA, hs 261710): 21 rows: PAK 14, CMR 3 (origin TCD), MEX 3, PER 1; THA 811010 imports: CMR/TCD 15, RUS 2. The non-China half of th (0.5) is split by these counts: PAK+CMR ~0.40 (reported proportions, small n)."
+  },
+  {
+   "id": "global-pbzn",
+   "label": "Global lead/zinc/copper concentrates & residues (Australia, Peru, etc.) for Onsan by-product recovery",
+   "country": "AUS",
+   "feeds": [
+    "kr"
+   ],
+   "share": {
+    "kr": 0.75
+   },
+   "shareEvidence": {
+    "kr": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "Assumed from general knowledge + Korea Zinc statements (Tavily: biggo.com, koreazinc.co.kr) that Onsan antimony is recovered from zinc/lead/copper smelting by-products."
+  },
+  {
+   "id": "om-spmp",
+   "label": "Oman SPMP smelter (Sohar) and Omani antimony feed",
+   "country": "OMN",
+   "feeds": [
+    "kr",
+    "in-chemico"
+   ],
+   "share": {
+    "kr": 0.05,
+    "in-chemico": 0.03
+   },
+   "shareEvidence": {
+    "kr": "assumed",
+    "in-chemico": "assumed"
+   },
+   "evidence": "assumed",
+   "source": "Link reported, share assumed: Sayari get_upstream_supply_chain(KOREA ZINC, product 2617/8110) -> PALISADE COMMODITIES LLC (2-CfZqTgaqiAuyEZxhkOtA), OMN->KOR 261710 shipment 2023-10-19; Chemico upstream -> SPMP (FZC) 6dd6SdtplD5wxMOiNSZhlQ (OMN->IND). SPMP's own upstream (aBrOCJ9p4LrZ9csGE3Chng) shows Pakistani ore traders."
+  }
+ ],
+ "links": [
+  {
+   "a": "cn",
+   "b": "th",
+   "reason": "Transshipment of Chinese material: same shippers (Southeast Antimony Industrial, Grondmet, Grandlink Logistics) send US-bound antimony from both China and Thailand; Reuters reports Chinese-owned Thai Unipet US shipments up ~27x after the Dec-2024 ban",
+   "evidence": [
+    "Sayari m5fjigBnckvTrpJRJzEK1A",
+    "Sayari SHGXskGK4HgdJ_zi5NYVEw",
+    "Sayari q-ERPIxf1DMH5lp_GTQTkA",
+    "Sayari nSI4VHN3ZU1V_uHEi03i8Q",
+    "https://www.tbsnews.net/worldbiz/usa/how-us-buyers-critical-minerals-bypass-chinas-export-ban-1183996",
+    "https://ca.finance.yahoo.com/news/exclusive-us-buyers-critical-minerals-020437994.html"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "cn",
+   "b": "sea-transit",
+   "reason": "Chinese forwarders (Master International Logistics (China), XCE/Pudong Prime, U&I Logistics) and Southeast Antimony Industrial ship from Taiwan/Vietnam/Singapore as well as China; shared Chinese feedstock assumed",
+   "evidence": [
+    "Sayari 6y_ANdVloodeNY4B2MCmWg",
+    "Sayari lKwKBT4DMAR4LQRhyxAgGA",
+    "Sayari 0024HAR-lR3hbvyP0-XSyg",
+    "Sayari m5fjigBnckvTrpJRJzEK1A",
+    "https://www.asiafinancial.com/china-stops-most-antimony-exports-but-rare-earth-sales-to-us-soar"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "th",
+   "b": "sea-transit",
+   "reason": "Shared shippers: Thai Unipet, XCE Logistics, Honour Lane and Southeast Antimony Industrial appear in both nodes",
+   "evidence": [
+    "Sayari nSI4VHN3ZU1V_uHEi03i8Q",
+    "Sayari lKwKBT4DMAR4LQRhyxAgGA",
+    "Sayari JmvbQNpMuHa9Z1f7AYme2Q",
+    "Sayari m5fjigBnckvTrpJRJzEK1A"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "in-chemico",
+   "b": "cn",
+   "reason": "Shared Chinese feedstock: Chemico Synthetics upstream (Sayari) includes Chinese SOE Minmetals Non-Ferrous (Shanghai), Hsikwangshan Twinkling Star and Guizhou Provincial Metals",
+   "evidence": [
+    "Sayari get_upstream_supply_chain c9ilBjq4_FHo2NZk7I_Tbw",
+    "Sayari Bbxv-qCJ4cdC_B-T9Pfm3A",
+    "Sayari z1eZ-o8wbMU54_hrgp5i1A",
+    "Sayari q3y_ct8AQn1wUS-AO-ehHQ"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "in-chemico",
+   "b": "th",
+   "reason": "Shared feed: Chemico upstream includes Thai Southeast Antimony Industrial and Yan Metaltech (THA->IND)",
+   "evidence": [
+    "Sayari Gnq9orXH22OQxaLQGAtzyw",
+    "Sayari fB5irDg23O0hrlUqav9SjQ"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "eu-traders",
+   "b": "th",
+   "reason": "Trader overlap: Grondmet (two Sayari entities) ships US-bound antimony from Thailand, China, Vietnam/Taiwan and Europe",
+   "evidence": [
+    "Sayari SHGXskGK4HgdJ_zi5NYVEw",
+    "Sayari RlQIA19AP35KzdvVPrd6GQ"
+   ],
+   "rhoStress": 0.8
+  },
+  {
+   "a": "kr",
+   "b": "in-chemico",
+   "reason": "Weak: both draw Omani feed (Palisade Commodities OMN->Korea Zinc; SPMP OMN->Chemico); single shipments, so weak structural link",
+   "evidence": [
+    "Sayari 2-CfZqTgaqiAuyEZxhkOtA",
+    "Sayari 6dd6SdtplD5wxMOiNSZhlQ"
+   ],
+   "rhoStress": 0.8
+  }
+ ],
+ "comparison": "Sayari weight totals (kt, all nodes): 2023 4041.2, 2024 3488.6, 2025 1809.8, 2026 Jan-Oct 2328.4. China+HK node: 673.9/487.5/142.0 kt (share of Sayari total 0.167/0.14/0.078). Korea node: 0.0/0.0/61.2 kt, then 534.5 kt in Jan-Oct 2026. trade.json Comtrade (USD, only CHN/JPN/KOR/MEX partners): China 9115172/10393429/3203030, China share 0.9264/0.8966/0.4319; Korea 0/207866/3260337. Direction agrees: China collapses in 2025 and Korea appears in 2025 (Sayari shows first Korea Zinc US lot 2025-07). Levels differ: Comtrade China share (~90% in 2023-24) is a share of only four partners, while Sayari counts India, UK/EU traders and Thailand as separate supply, so Sayari's China share is much lower. Sayari bills of lading are partial coverage; absolute tonnes are not a full US import total.",
+ "method": [
+  "Read STOCKPILE_V4_BRIEF.md sections 4.1 and 5; data/trade/trade.json; data/counterparties.json",
+  "Sayari search_trade_facets(scope=shipments, query='*', arrival_country=USA, hs_code=811010, date_from=2023-01-01, bucket_limit=20) -> 691 shipments; departure buckets IND 143, CHN 94, THA 77, TWN 29, GBR 28, JPN 24, SGP 22, KOR 20 ...",
+  "Sayari search_trade_facets(scope=shipments, arrival_country=USA, hs_code=282580, date_from=2023-01-01) -> 1,471 oxide shipments (CHN 492, BEL 246, IND 141, MEX 68, THA 67, BOL 36); NOT pulled into series",
+  "Sayari search_shipments(arrival_country=USA, hs_code=811010, departure_country=CHN, response_mode=export, limit=100) (format probe; export mode lacks weights)",
+  "Sayari search_shipments(arrival_country=USA, hs_code=811010, departure_country=KOR, response_mode=full, limit=3) (format probe)",
+  "Sayari search_shipments(query='*', arrival_country=USA, hs_code=811010, date_from=2023-01-01, response_mode=full, limit=250 -> 100/page) + page_token continuations offsets 100,200,300,400,500,600: 691 unique shipment rows",
+  "Processing (local Python): month = arrival date else departure date; kept 2023-01..2026-10 (Nov-2026 partial excluded); dropped 4 mis-coded rows (electrical apparatus / aluminium bags); kg = weight field (lb converted) else NET WEIGHT parsed from description (12 rows) else value-imputed (13 rows, see caveats); 4 rows with no weight or value contribute 0",
+  "Dedup: (a) non-US-source rows (India/Korea/Japan/Mexico/France/NLD/Malaysia export records) dropped when a US-import BOL row exists for same node, month +-1 and kg within 15% (29 dropped); (b) US BOL house/master duplicates (same month, identical kg, different shipper) dropped (16)",
+  "Normalised: factor = 100 / mean monthly total kg across 46 months; same factor for all nodes",
+  "Sayari get_upstream_supply_chain(fN8L_yT2Qh5_sHX3052Vfg Korea Zinc, product=[2617,8110], max_depth=2, min_date=2022-01-01) -> Palisade Commodities (OMN)",
+  "Sayari get_upstream_supply_chain(fN8L_yT2Qh5_sHX3052Vfg, countries=[RUS,CHN,TJK,KGZ], max_depth=1) -> non-antimony suppliers (Hindalco, Sen Yan Dalian, Teck etc.); country filter not honoured",
+  "Sayari get_upstream_supply_chain(c9ilBjq4_FHo2NZk7I_Tbw Chemico, max_depth=2, min_date=2022-01-01) -> Turkish, Bolivian, Chinese (Minmetals Shanghai SOE, Hsikwangshan, Guizhou), Oman SPMP, Thai suppliers; product=261710 retries errored",
+  "Sayari get_upstream_supply_chain(nSI4VHN3ZU1V_uHEi03i8Q Thai Unipet) -> Nippon Seiko (JPN); (aBrOCJ9p4LrZ9csGE3Chng SPMP Oman) -> Pakistani traders; (Gnq9orXH22OQxaLQGAtzyw Southeast Antimony) -> none",
+  "Sayari find_beneficial_owners(Gnq9orXH22OQxaLQGAtzyw) and (aBrOCJ9p4LrZ9csGE3Chng) -> no owners returned",
+  "Sayari search_trade_facets(scope=shipments, arrival_country=KOR, hs_code=261710, date_from=2022-01-01) + search_shipments(same, response_mode=export) -> 17 rows; Korea Zinc buyer only for Palisade OMN 2023-10; Russia ore -> Hyosung; Peru (MCC NFT) buyer unnamed",
+  "Sayari search_shipments(query='antimony', receiver_name='KOREA ZINC', date_from=2022-01-01, compact) -> receiver filter not honoured (discarded)",
+  "Sayari search_shipments(query='Dalpolimetall', departure_country=RUS, arrival_country=KOR, export) -> 14 Pb/Zn concentrate rows to Korea Zinc 2023-2024 (96 total incl. Young Poong)",
+  "Sayari search_trade_facets(scope=shipments, arrival_country=THA, hs_code=261710) and (arrival THA, hs 811010) and (arrival IND, hs 261710) and (arrival IND, hs 261710, receiver_name='CHEMICO SYNTHETICS' - filter not honoured) and (arrival VNM, hs 261710), all date_from=2022-01-01",
+  "Tavily tavily_search('China antimony export ban transshipment Thailand Mexico rerouted to United States')",
+  "Tavily tavily_search('Korea Zinc antimony exports United States Onsan by-product supply')"
+ ],
+ "caveats": [
+  "Measure is shipment weight in kg (gross weight on most US bills of lading, not contained Sb); 402 of 431 used rows carry a weight field.",
+  "13 rows are value-imputed: 12 Korea Zinc Korean-export rows (kg = value / USD 397,480 x 19,677 kg) and one Amalgamet Japan-source row (USD 6.06M / 2024 median USD 19.89/kg = ~305 t, a large single-month spike in eu-traders 2024-02).",
+  "Coverage is partial: Sayari holds US import bills of lading (mostly ocean freight) plus some partner-country export records. It is not a full US import total; Comtrade/USGS levels are higher.",
+  "Many nodes are lumpy: months with shipments per node (of 46) are in raw.monthsWithShipments; zeros are 'no recorded shipment', not measured zero imports.",
+  "in-chemico falls to ~0 in 2026: Sayari's India export source thins after 2025-12, and a Chemico lot shipped via Spain (arrived 2026-10-27, seen in a separate Sayari query) is not in the pulled HS-811010 set. Treat 2026 Chemico zeros as a likely data lag, not a confirmed stop.",
+  "Korea Zinc only appears from 2025-07, so its series is mostly zeros; covariance with other nodes will be driven by the regime change.",
+  "Node assignment uses departure country (or shipper address); traders/forwarders hide true origin, so China-linked volume is likely understated in eu-traders, sea-transit and other.",
+  "Dedup across sources is heuristic (month +-1, kg within 15%); some double counts or wrongly dropped lots may remain.",
+  "Sayari date_from filter was loose (rows from 2020-2022 returned); those were dropped locally.",
+  "Oxides (HS 282580, 1,471 shipments, the main post-ban transshipment product per Reuters) and ore (261710) are NOT in the volume series.",
+  "Tier-2 'reported' shares are shipment-count shares of a country's antimony-ore imports (Sayari facets), used as proxies for the tier-1 node; not tonnage and not company-specific (receiver filters were not honoured).",
+  "Thai Unipet's Chinese ownership comes from Reuters reporting via Tavily, not from Sayari ownership records.",
+  "No covariance computed (game computes it)."
+ ]
+}
