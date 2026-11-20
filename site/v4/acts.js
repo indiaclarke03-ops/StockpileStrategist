@@ -481,7 +481,7 @@
     <p>You run America's emergency mineral stockpile with $12B, the size of the real "Project Vault" (2026). The lesson: <b>your biggest supplier isn't always your biggest risk. Suppliers that fail at the same time are.</b></p>
     <h4>Real data</h4><ul><li><b>Tavily</b>: news before each quarter, real prices, what governments actually did.</li><li><b>Tradeverifyd</b>: US import figures (UN trade data).</li><li><b>Sayari</b>: shipping records, company owners and risk records (findings, not accusations).</li></ul>
     <p class="faint">Adapted from the Ethical Tech CoLab Resilience Atlas (teaching material, not a validated product).</p>
-    <p><a href="../classic/">Analyst mode</a>: manage all six minerals, quarter by quarter.</p>`;
+    <p><a href="../methods.html">Methods &amp; sources</a> · <a href="../classic/">Analyst casebook</a>: 11 real decisions, compared with what actually happened.</p>`;
   $("btn-about").onclick = () => drawer(aboutHTML());
   $("btn-showme").onclick = () => Tour.replay();
   $("btn-globe").onclick = () => globeIntro(5000);

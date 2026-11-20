@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Methods &amp; sources · Stockpile Strategist</title>
+  <meta name="description" content="How Stockpile Strategist works: reverse stress testing, the simulation engine, every data source and its limits." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg: #0B0F17; --panel: #121a29; --line: rgba(148,163,184,.18); --ink: #EEF1F6; --ink-2: #AEB6C4; --ink-3: #7D8698; --ore: #E08A52; --info: #8cc0ff; --ok: #5fc08f; --warn: #f4b24a;
+      --display: "Space Grotesk", Inter, sans-serif; --sans: Inter, system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--sans); }
+    a { color: var(--info); }
+    header { position: sticky; top: 0; z-index: 5; display: flex; gap: 16px; align-items: center; justify-content: space-between; padding: 12px 24px; background: rgba(11,15,23,.95); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+    header .brand { color: var(--ink); text-decoration: none; font: 700 16px var(--display); } header .brand span { color: var(--ore); margin-right: 8px; }
+    header nav { display: flex; gap: 8px; flex-wrap: wrap; } header nav a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+    .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; max-width: 1180px; margin: 0 auto; padding: 28px 24px 80px; }
+    .toc { position: sticky; top: 76px; align-self: start; font-size: 13.5px; } .toc a { display: block; color: var(--ink-2); text-decoration: none; padding: 4px 0; } .toc a:hover { color: var(--ink); }
+    @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } .toc { position: static; } }
+    h1 { font: 700 clamp(28px, 3.6vw, 42px)/1.1 var(--display); margin: 0 0 10px; }
+    h2 { font: 700 22px var(--display); margin: 40px 0 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+    h3 { font: 600 15px var(--sans); margin: 20px 0 6px; }
+    p, li { color: var(--ink-2); } b, strong { color: var(--ink); }
+    .lead { font-size: 17px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin: 12px 0; }
+    pre { font: 13px var(--mono); background: rgba(148,163,184,.08); border-radius: 8px; padding: 10px 12px; overflow-x: auto; color: var(--ink); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0; }
+    th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+    td { color: var(--ink-2); }
+    .pill { font: 600 10.5px var(--mono); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+    .pill.r { background: rgba(57,135,229,.16); color: var(--info); } .pill.a { background: rgba(148,163,184,.16); color: var(--ink-2); } .pill.e { background: rgba(244,178,74,.14); color: var(--warn); }
+    .src { font-size: 13px; columns: 2; column-gap: 28px; } .src li { break-inside: avoid; margin-bottom: 4px; }
+    @media (max-width: 700px) { .src { columns: 1; } }
+    .faint { color: var(--ink-3); font-size: 13px; }
+    details summary { cursor: pointer; color: var(--info); margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="v4/"><span>◆</span>Stockpile Strategist · Methods &amp; sources</a>
+    <nav><a href="v4/">Story mode</a><a href="classic/">Analyst casebook</a></nav>
+  </header>
+  <div class="wrap">
+    <aside class="toc" aria-label="Contents">
+      <a href="#summary">Summary</a><a href="#rst">Reverse stress testing</a><a href="#engine">The simulation</a><a href="#futures">2027 futures</a><a href="#casebook">Analyst casebook</a>
+      <a href="#data">Data sources</a><a href="#assumptions">Assumptions</a><a href="#limits">Known limits</a><a href="#honesty">Honesty rules</a><a href="#refs">All references</a>
+    </aside>
+    <main>
+      <section id="summary">
+        <h1>Methods &amp; sources</h1>
+        <p class="lead">Stockpile Strategist simulates how a US critical-minerals stockpile would have performed through the real export restrictions of 2023–2026, and how it might fare after China's pause ends on 10 January 2027. It combines a <b>reverse stress test</b> (where is the supply chain weakest?), a <b>quarter-by-quarter shortage engine</b> driven by real events and real prices, and <b>1,000 simulated futures</b>.</p>
+        <div class="card"><b>What this is, and isn't.</b> It's a teaching and exploration tool built on real data and transparent assumptions. It isn't a validated forecasting model. Every estimate is labelled, and every result is conditional on the assumptions below.</div>
+        <p class="faint" id="stamp"></p>
+      </section>
+
+      <section id="rst">
+        <h2>Reverse stress testing</h2>
+        <p>A normal stress test asks "what happens if X?". A <b>reverse</b> stress test starts from the outcome you can't afford (here, a shortage that stops the factory) and works backward to the most likely way it happens. The method is adapted from the <a href="https://ethical-tech-colab.github.io/reverse-stress/" target="_blank" rel="noopener">Ethical Tech CoLab Resilience Atlas</a> (teaching material, not a validated product).</p>
+        <h3>1. Supply network</h3>
+        <p>For each mineral, US supply is split into supplier nodes (countries or companies) with their share of supply, plus the upstream sources they buy raw material from. Where shipment records allow, each supplier's quarterly volumes give a covariance matrix Σ: how much each supplier swings, and how much they swing together.</p>
+        <h3>2. Most likely way a loss happens</h3>
+        <p>Assuming supplier losses follow a zero-mean multivariate normal distribution, the most likely combination that adds up to a loss <i>L</i> is:</p>
+        <pre>a = L · Σ1 / (1ᵀ Σ 1)</pre>
+        <p>Suppliers that move together get more of the blame than their size suggests. These are the <b>weak spots</b>. The engine reproduces the Atlas worked example exactly: <code>a = [2.20, 10.00, 7.80]</code>, where two suppliers carry 89% of the loss from 40% of supply (see <code>tests/rst.test.js</code>).</p>
+        <h3>3. Crisis mode</h3>
+        <p>Export controls are regime shifts, not normal noise, so calm-year correlations understate how suppliers fail together. Crisis mode sets structurally linked suppliers (shared owner or shared feedstock, with evidence) to ρ = 0.8, and multiplies China-linked volatility by 1.5. <span class="pill a">assumed</span></p>
+        <h3>4. Following the risk upstream</h3>
+        <p>Each supplier's share of the loss is pushed to its own raw-material sources in proportion to its input shares (assuming a 1:1 contained element). Where paths converge, the largest upstream node is the <b>hidden weak point</b>.</p>
+        <h3>5. Safety margin</h3>
+        <pre>safety margin d = (L + S) / √(1ᵀ Σ 1)</pre>
+        <p><i>S</i> is the shortfall the stockpile can absorb. It reads as "how many typical bad quarters the factory could absorb". Zones: Danger &lt; 1.5×, At risk 1.5–2.5×, Safe 2.5–3.5×, Very safe &gt; 3.5×. <b>It is not a probability.</b></p>
+        <h3>6. Uncertainty</h3>
+        <p>"How certain is this?" draws 1,000 samples from the conditional distribution <code>x | 1ᵀx = L ~ N(a, Σ − Σ11ᵀΣ / s)</code>, clipped to [0, mean flow] and renormalised to <i>L</i> <span class="pill e">game adjustment</span>. The paper clusters q = 0.5 alternatives instead; sampling is a simplification.</p>
+        <h3>7. Link to the simulation</h3>
+        <p>The same networks drive the history replay. Each mineral's exposure to a restriction is the China-linked share of its network (direct, or via ownership or feedstock). For cobalt it's the DRC-fed share.</p>
+        <div id="networks"></div>
+      </section>
+
+      <section id="engine">
+        <h2>The simulation</h2>
+        <p>The engine (<code>site/sim.js</code>) steps through 14 quarters, July 2023 to December 2026. Demand is normalised to 100 units a quarter, and stockpiles are measured in <b>days of normal use</b>. Each quarter:</p>
+        <ol>
+          <li><b>Real events fire</b> from the cited timeline: licences (slow supply), bans (stop supply to the US), quotas, truces. Size of cut = event cut × the mineral's network exposure × a targeting factor (licensing 0.5, US-targeted ban 1.0).</li>
+          <li><b>Rerouting</b> slowly refills part of the gap: <code>cut × (1 − e^(−rate × quarters since))</code>.</li>
+          <li><b>Supply deals</b> deliver after their lag and can slip (20% chance a quarter). Deals tied to China are cut when China's controls bite. Deals in a banning country are cut by its ban. Risk flags carry a small chance of a blocked delivery.</li>
+          <li><b>Substitution</b> covers part of a remaining gap as alternatives ramp up over about two quarters.</li>
+          <li><b>The stockpile is released</b> according to your rules (at once, or only for gaps of 10% or more) and priority (defence first, evenly, or factories first).</li>
+          <li><b>Factories</b> run normally, <b>ration</b> (a gap below your threshold) or <b>stop</b> (above it). Lost output = shortfall × criticality.</li>
+          <li><b>Prices</b> follow real cited price paths, with gaps interpolated and flagged. Your own buying pushes prices up in thin markets and the effect decays over time.</li>
+          <li><b>Money</b> arrives in fiscal-year tranches ($12B total). 25% of unspent money lapses on 30 September. Storage costs 0.5% of stock value a quarter.</li>
+          <li><b>Allied buyers.</b> Real Japanese and EU purchases and deals in that quarter reduce how much you can buy.</li>
+        </ol>
+        <div id="minerals"></div>
+      </section>
+
+      <section id="futures">
+        <h2>2027: 1,000 possible futures</h2>
+        <p>The forward model (<code>site/montecarlo.js</code>) starts from your final stockpile and deals. It plays four quarters of 2027, 1,000 times:</p>
+        <ul>
+          <li><b>The 10 January 2027 deadline</b> branches into: the pause is extended, restrictions return, or a new deal. Base weights are 45/35/20 <span class="pill a">assumed</span>, shifted by this week's news signal. If restrictions return, the suspended October 2025 controls come back on top of the April 2025 heavy-rare-earth controls.</li>
+          <li><b>Base rates</b> come from how often China tightened (about 8 of 14 quarters) and eased (about 2), and how often the DRC acted (about 4) in 2023–26.</li>
+          <li><b>News signal:</b> this week's headlines scored with a published keyword list (+1 for words like "ban" or "restrict", −1 for words like "extend" or "truce"), averaged to a number between −1 and +1.</li>
+          <li><b>"To be safe, hold X days":</b> the stockpile that stays above 60 days in 9 of 10 futures, found by bisection.</li>
+        </ul>
+        <p>Results are <b>counts of simulated futures</b>, not probabilities of what will happen.</p>
+        <div id="signal"></div>
+      </section>
+
+      <section id="casebook">
+        <h2>Analyst casebook</h2>
+        <p>Eleven real decision points, from August 2023 to September 2026. For each one the casebook shows what officials could know at the time: the cited situation and the news from the previous 90 days. You make a call, and the casebook then reveals what the US actually did, with sources.</p>
+        <ul>
+          <li><b>No foresight.</b> Each decision takes effect from the quarter after it was made.</li>
+          <li><b>Counterfactuals.</b> Every option is simulated from your position just before the case, through the real events to the end of 2026, with the same engine and random seed. The only difference is the choice.</li>
+          <li><b>Total cost</b> = money spent + estimated value of lost output. That value is in $M per lost factory day, by dependent industry (<span id="values"></span>) <span class="pill a">assumed, order of magnitude</span>. A slider tests how the answer changes.</li>
+          <li><b>Three paths</b> run in lockstep: you, the real US (following the real choice in each case) and no action.</li>
+          <li><b>Best in hindsight</b> picks the lowest-cost option at each case, given the choices before it. It's a benchmark to learn from, not a forecast.</li>
+          <li><b>Real choices in engine terms:</b> contract values are spread over their term (for example $245M over 5 years ≈ $49M a year). Grants that deliver nothing before 2027 count as spending only. Deal terms are game calibrations.</li>
+        </ul>
+        <div id="cases"></div>
+      </section>
+
+      <section id="data">
+        <h2>Data sources</h2>
+        <p>The tool calls were run ahead of time and cached as JSON in <code>/data</code>, then bundled by <code>scripts/build_data.py</code>. No API keys reach the browser.</p>
+        <div id="datasets"></div>
+      </section>
+
+      <section id="assumptions">
+        <h2>Assumptions</h2>
+        <p>Every tunable number lives in <code>site/data.js</code>. Effects are tagged <span class="pill r">reported</span> where a figure came from cited reporting, and <span class="pill a">assumed</span> where it's a calibration.</p>
+        <table><thead><tr><th>Assumption</th><th>Value</th><th>Why</th></tr></thead><tbody id="assume"></tbody></table>
+      </section>
+
+      <section id="limits">
+        <h2>Known limits</h2>
+        <ul>
+          <li><b>Supply networks:</b> antimony and cobalt are measured from Sayari bills of lading (46 months, aggregated to quarters). Dysprosium and gallium have real supplier structures and shares, but their variability is assumed, because dated shipment series couldn't be built. Sayari's shipment search ignored date filters, and there were only 6 gallium-metal lots in 46 months. These views carry a yellow "estimated" badge.</li>
+          <li><b>Antimony history check is in-sample:</b> its network was measured on the same years it is tested against.</li>
+          <li><b>HS codes:</b> gallium and germanium share basket code 811292 (which also covers indium and niobium), so their trade shares are proxies. HS 850511 includes non-rare-earth magnets.</li>
+          <li><b>Prices:</b> most series are Fastmarkets mid-points gathered via Tavily. Gaps are interpolated. The dysprosium ex-China series mixes several price agencies and is indicative only.</li>
+          <li><b>Ownership findings</b> are Sayari records: trade links to sanctioned parties count as adjacency, not listings, and some China ties are inferred (shown with caveats). They are findings, not allegations.</li>
+          <li><b>Tradeverifyd entity scores</b> came out 700–745 ("Low") for every company and weren't discriminating, so they aren't used as verdicts.</li>
+          <li><b>Factory value and criticality</b> are order-of-magnitude assumptions. The casebook slider shows how sensitive conclusions are to them.</li>
+        </ul>
+      </section>
+
+      <section id="honesty">
+        <h2>Honesty rules</h2>
+        <ul>
+          <li>No foresight: briefings only use news published before the quarter, and trade figures only show completed years.</li>
+          <li>Reported vs assumed is labelled everywhere, and estimated networks are badged.</li>
+          <li>Reverse-stress results are conditional ("if this loss happens…"), never forecasts.</li>
+          <li>Real companies are treated proportionately, and deal terms are game calibrations.</li>
+        </ul>
+      </section>
+
+      <section id="refs">
+        <h2>All references</h2>
+        <p class="faint">Generated from the data the tool uses. Click to open the original source.</p>
+        <div id="allrefs"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="data_cache.js"></script>
+  <script src="integrate.js"></script>
+  <script src="sim.js"></script>
+  <script src="classic/cases.js"></script>
+  <script src="classic/paths.js"></script>
+  <script>
+  (function () {
+    const D = window.GAME_DATA, EXT = D.EXT || {}, C = window.CACHE || {}, M = D.MINERALS;
+    const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const dom = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
+    const link = (u, t) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t || dom(u))}</a>`;
+    const $ = (id) => document.getElementById(id);
+    const dates = [C.intel && C.intel.fetched, C.trade && C.trade.fetched, C.comtradeAll && C.comtradeAll.fetched, C.prices && C.prices.fetched, C.responses && C.responses.fetched, C.signals && C.signals.fetched].filter(Boolean).sort();
+    $("stamp").textContent = dates.length ? `Data fetched ${dates[0]}${dates[dates.length - 1] !== dates[0] ? ` to ${dates[dates.length - 1]}` : ""}.` : "";
+
+    // Networks
+    const nets = C.network || {};
+    $("networks").innerHTML = `<table><thead><tr><th>Mineral</th><th>Network</th><th>Suppliers</th><th>Evidence</th></tr></thead><tbody>${Object.entries(nets).map(([k, n]) => `<tr><td><b>${esc(M[k] ? M[k].name : k)}</b></td><td>${n.synthetic ? `<span class="pill e">real structure, estimated variability</span>` : `<span class="pill r">measured</span> ${esc(n.granularity || "")} ${esc(n.measure || "")}`}</td><td>${(n.tier1 || []).length} suppliers · ${(n.tier2 || []).length} upstream sources · ${(n.links || []).length} links</td><td class="faint">${esc(String((Array.isArray(n.method) ? n.method.slice(0, 2).join("; ") : n.method) || "").slice(0, 220))}</td></tr>`).join("")}</tbody></table>`;
+
+    // Minerals table
+    $("minerals").innerHTML = `<h3>Per-mineral settings</h3><table><thead><tr><th>Mineral</th><th>Exposure</th><th>Rerouting</th><th>Criticality</th><th>Substitutable</th><th>Defence share</th><th>HS codes</th></tr></thead><tbody>${Object.entries(M).map(([k, m]) => `<tr><td><b>${esc(m.name)}</b></td><td>${Object.entries(m.exposure).map(([a, v]) => `${a === "drc" ? "DRC" : "China"} ${Math.round(v * 100)}%`).join(", ")}<div class="faint">${esc(m.exposureSource || "assumed")}</div></td><td>${m.rerouteRate}/qtr</td><td>${m.criticality}</td><td>${Math.round((m.subCap || 0) * 100)}%</td><td>${Math.round((m.defenceShare || 0) * 100)}%</td><td class="faint">${esc((m.hs || []).join(", "))}</td></tr>`).join("")}</tbody></table>`;
+
+    // Signal
+    const sg = C.signals;
+    if (sg) $("signal").innerHTML = `<details><summary>This week's news signal: ${sg.signal >= 0 ? "+" : ""}${Number(sg.signal).toFixed(2)} from ${(sg.items || []).length} headlines (${esc(sg.fetched)})</summary><ul>${(sg.items || []).map((i) => `<li>${link(i.url, i.title)} <span class="faint">${esc(i.source || "")} · ${esc(i.date || "")} · score ${i.score > 0 ? "+1" : i.score < 0 ? "−1" : "0"}</span></li>`).join("")}</ul></details>`;
+
+    // Casebook
+    $("values").textContent = Object.entries(Paths.VALUE).map(([k, v]) => `${M[k].symbol} $${v}M`).join(", ");
+    $("cases").innerHTML = `<details><summary>The 11 cases and their real-world sources</summary><table><thead><tr><th>Decision</th><th>What the US actually did</th><th>Sources</th></tr></thead><tbody>${CASEBOOK.CASES.map((c) => `<tr><td><b>${esc(c.when)}</b><br>${esc(c.title)}</td><td>${esc(c.realText)}</td><td>${(EXT.responses || []).filter((r) => c.refs.includes(r.date)).map((r) => link(r.source, `${r.actor}, ${r.date}`)).join("<br>")}</td></tr>`).join("")}</tbody></table></details>`;
+
+    // Datasets
+    const nIntel = C.intel ? Object.values(C.intel.quarters || {}).reduce((a, q) => a + (q.items || []).length, 0) : 0;
+    const nPrice = C.prices ? Object.values(C.prices.minerals || {}).reduce((a, m) => a + (m.points || []).length, 0) : 0;
+    const rows = [
+      ["Tavily", "News briefings", `${nIntel} dated items, 3–5 per quarter, each from the 90 days before the quarter starts`, C.intel && C.intel.method, "data/intel/quarters.json"],
+      ["Tavily", "Real price points", `${nPrice} cited points (Fastmarkets, Argus, Benchmark) for six minerals, 2023–26`, C.prices && C.prices.method, "data/prices/anchors.json"],
+      ["Tavily", "Government and industry actions", `${(C.responses && C.responses.items || []).length} dated actions: US DoD/DLA/DOE/EXIM, JOGMEC, EU, companies`, C.responses && C.responses.method, "data/responses.json"],
+      ["Tavily", "Forward news signal", `${sg ? (sg.items || []).length : 0} headlines from the past week, scored with a keyword list`, sg && sg.method, "data/signals.json"],
+      ["UN Comtrade (public API)", "US imports, all partners", "Annual import values by partner country, 2023–25, for each mineral's HS codes", C.comtradeAll && C.comtradeAll.source, "data/trade/comtrade_all.json"],
+      ["Tradeverifyd", "Trade corridors, copper, disruptions", "Comtrade corridor flows (China/Japan/Korea/Mexico), copper benchmark, natural-hazard disruption checks, entity scores", C.trade && C.trade.coverageNote, "data/trade/trade.json, data/live.json"],
+      ["Sayari", "Supply networks", "Bills of lading (antimony, cobalt), supplier structure (dysprosium, gallium), upstream sources, ownership and feedstock links", "search_shipments, search_trade_facets, find_beneficial_owners, get_upstream_supply_chain", "data/network/*.json"],
+      ["Sayari", "Producer vetting", `${(C.counterparties && C.counterparties.counterparties || []).length} real producers: beneficial owners, watchlist hits, risk factors`, C.counterparties && C.counterparties.method, "data/counterparties.json"],
+      ["Cited reporting", "Event timeline", `${D.EVENTS.length} export controls, bans, quotas and truces, each with sources`, "Hand-curated from Reuters, S&P Global, Fastmarkets, Benchmark and others", "site/data.js"],
+    ];
+    $("datasets").innerHTML = `<table><thead><tr><th>Source</th><th>Dataset</th><th>What it contains</th><th>File</th></tr></thead><tbody>${rows.map((r) => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}${r[3] ? `<div class="faint">${esc(String(r[3]).slice(0, 200))}</div>` : ""}</td><td class="faint"><code>${esc(r[4])}</code></td></tr>`).join("")}</tbody></table>`;
+
+    // Assumptions
+    const CF = D.CONFIG, A = [
+      ["Budget", "$12B in fiscal-year tranches", "Size of the real Project Vault (Feb 2026)"],
+      ["Unspent money lapsing", `${Math.round((CF.lapseRate || 0) * 100)}% on 30 September`, "Mimics annual appropriations"],
+      ["Purchase cap", `${CF.maxBuyPerQ} days per quarter × imports arriving`, "Thin markets; you can't buy what isn't shipping"],
+      ["Storage cost", `${CF.storageRate * 100}% of stock value per quarter`, "Typical warehousing and financing"],
+      ["Deal slip", `${Math.round(CF.slipP * 100)}% chance per quarter`, "Mine and refinery projects routinely run late"],
+      ["Allied competition", `−${Math.round((CF.alliedCut || 0) * 100)}% buying capacity per allied action (max 45%)`, "2010–11 Japanese panic buying"],
+      ["Crisis correlation", "ρ = 0.8 for linked suppliers; China-linked volatility ×1.5", "Controls are regime shifts"],
+      ["Release threshold option", "10% gap", "Ration small gaps, release for big ones"],
+      ["Defence shortfall trust cost", "2× commercial", "Political weight of military supply"],
+      ["2027 branches", "extend 45% · return 35% · new deal 20%, shifted by news", "Expert judgement"],
+    ];
+    $("assume").innerHTML = A.map((r) => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+
+    // All references
+    const seen = new Set(), groups = { "Event timeline": [], "Government & industry actions": [], "News briefings": [], "Prices": [] };
+    const add = (g, u, t) => { if (!u || seen.has(u)) return; seen.add(u); groups[g].push(`<li>${link(u, t)}</li>`); };
+    for (const e of D.EVENTS) for (const s of e.sources) add("Event timeline", s, `${e.date} · ${e.headline.slice(0, 90)}`);
+    for (const r of (C.responses && C.responses.items) || []) add("Government & industry actions", r.source, `${r.date} · ${r.actor}`);
+    for (const [q, b] of Object.entries((C.intel && C.intel.quarters) || {})) for (const i of b.items || []) add("News briefings", i.url, `${i.date} · ${i.title.slice(0, 90)}`);
+    for (const [k, m] of Object.entries((C.prices && C.prices.minerals) || {})) for (const p of m.points || []) add("Prices", p.source, `${M[k] ? M[k].name : k} · ${p.quarter} · ${p.series ? String(p.series).slice(0, 50) : ""}`);
+    $("allrefs").innerHTML = Object.entries(groups).map(([g, l]) => `<h3>${esc(g)} (${l.length})</h3><ul class="src">${l.join("")}</ul>`).join("");
+  })();
+  </script>
+</body>
+</html>

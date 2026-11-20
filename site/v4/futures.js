@@ -99,7 +99,7 @@
       <table class="bench"><thead><tr><th>Strategy</th><th>Output days lost</th><th>Spent</th><th>2027 futures OK</th></tr></thead><tbody>
         <tr class="you"><td>You</td><td>${Math.round(h.yours)}</td><td>${U.fmt$(h.state.spent)}</td><td>${Math.round(f.survived / 10)}%</td></tr>
         ${benches.map((b) => `<tr><td>${U.esc(b.label)}</td><td>${Math.round(b.down)}</td><td>${U.fmt$(b.spent)}</td><td>${Math.round(b.surv * 100)}%</td></tr>`).join("")}</tbody></table>
-      <div class="front-actions" style="margin-top:18px"><button class="primary" id="btn-brief">Open policy briefing (print / PDF)</button><button class="ghost" id="btn-share">Save as image</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Analyst mode: all six minerals</a></div>`;
+      <div class="front-actions" style="margin-top:18px"><button class="primary" id="btn-brief">Open policy briefing (print / PDF)</button><button class="ghost" id="btn-share">Save as image</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Analyst casebook: real decisions</a></div>`;
     U.$("btn-share").onclick = () => Share.card(G);
     U.$("btn-brief").onclick = () => Share.brief(G);
   }

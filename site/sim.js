@@ -135,6 +135,8 @@
       let factor = 1;
       if (cp.ownerChina) factor = 1 - clamp(m.cutNet / (MINERALS[o.mineral].exposure.china || 1), 0, 1);
       if (cp.upstreamChina) factor *= 1 - cp.upstreamChina * clamp(m.cutNet / (MINERALS[o.mineral].exposure.china || 1), 0, 1);
+      // A producer inside the country imposing the ban can't export either (e.g. a DRC processor during the DRC's cobalt ban).
+      if (/congo|drc/i.test(cp.country || "") && MINERALS[o.mineral].exposure.drc) factor *= 1 - clamp(m.cutNet / MINERALS[o.mineral].exposure.drc, 0, 1);
       const u = cp.docPerQ * UNITS_PER_DOC * factor;
       offUnits[o.mineral] += u; o.delivered += u / UNITS_PER_DOC;
       if (factor < 0.99) report.offtakeNotes.push(`${cp.name} delivered only ${Math.round(factor * 100)}% — Chinese controls reach it.`);

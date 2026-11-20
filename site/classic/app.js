@@ -1,530 +1,243 @@
-/* Stockpile Strategist — Analyst mode controller.
- * All six minerals, quarter by quarter, with a coach bar, live impact previews, real prices,
- * real-world counterparts and a decision ledger. Engines: ../sim.js, ../montecarlo.js, ../v4/rst.js. */
+/* Stockpile Strategist — Analyst casebook.
+ * Eleven real decisions (cases.js). For each: what was known, the choice, then what the US actually
+ * did and what EVERY option would have led to through 2026 (paths.js on the sim.js engine).
+ * Three paths run in lockstep: You, the real US, and No action. The end screen derives the best
+ * path in hindsight, a playbook, and tests all paths against 1,000 futures for 2027. */
 (function () {
-  const D = window.GAME_DATA, { QUARTERS, MINERALS, EVENTS, BACKGROUND, FORWARD, CONFIG } = D;
-  const COUNTERPARTIES = D.COUNTERPARTIES, EXT = D.EXT || {};
+  const D = window.GAME_DATA, EXT = D.EXT || {}, { QUARTERS, MINERALS, EVENTS } = D;
+  const { CASES, LESSONS } = window.CASEBOOK;
   const KEYS = Sim.KEYS;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const fmt$ = (m) => (Math.abs(m) >= 1000 ? `$${(m / 1000).toFixed(2)}B` : `$${Math.round(m)}M`);
+  const fmt$ = (m) => (Math.abs(m) >= 1000 ? `$${(m / 1000).toFixed(1)}B` : `$${Math.round(m)}M`);
   const pct = (x) => `${Math.round(x * 100)}%`;
   const domain = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
-  const qLabel = (q) => `Q${q.slice(5)} ${q.slice(0, 4)}`;
-  const qStart = (q) => new Date(Date.UTC(+q.slice(0, 4), (+q.slice(5) - 1) * 3, 1));
+  const months = (q) => ["Jan–Mar", "Apr–Jun", "Jul–Sep", "Oct–Dec"][+q.slice(5) - 1] + " " + q.slice(0, 4);
   const TILE = { gallium: "#3987e5", germanium: "#0ca30c", antimony: "#199e70", graphite: "#c98500", dysprosium: "#9085e9", cobalt: "#d55181" };
-  const THR = 0.25; // analyst mode: line stops at a 25% shortfall (distance-to-disaster readout)
+  const COL = { you: "#E08A52", real: "#8cc0ff", idle: "#7D8698", best: "#5fc08f" };
+  const THR = 0.25;
+  const why = (h, k) => Tour.why(h, k);
 
-  let state, orders, lastReport, reports, shadowReps, sel, mapMineral, models, ledger, intelTab, coachDone, intelMore = false;
+  let P, ci, phase, cmp, choice, lastRep, history;
+  const models = {};
 
   // ---------- setup ----------
   function reset(intro = true) {
-    state = Sim.newState();
-    orders = { buy: {}, release: {}, offtakes: [] };
-    lastReport = null; reports = []; ledger = []; coachDone = new Set();
-    sel = sel || "dysprosium"; mapMineral = sel; intelTab = "news";
-    // "If you'd done nothing" yardstick, quarter by quarter (same engine, same history).
-    const s = Sim.newState(); shadowReps = [];
-    while (!s.done) { Sim.applyOrders(s, {}); shadowReps.push(Sim.resolveQuarter(s)); }
-    models = {}; for (const k of KEYS) models[k] = Missions.buildModel(k);
-    $("game").classList.remove("hidden"); $("endscreen").classList.add("hidden");
+    P = { you: Paths.newPath("You"), real: Paths.newPath("Real US"), idle: Paths.newPath("No action") };
+    ci = 0; phase = "decide"; cmp = null; choice = null; lastRep = null; history = [];
+    for (const k of KEYS) models[k] = models[k] || Missions.buildModel(k);
+    advanceAll(QUARTERS.indexOf(CASES[0].q));
+    $("game").classList.remove("hidden"); $("end").classList.add("hidden");
     render();
     if (intro) showIntro();
   }
-
-  // ---------- derived numbers ----------
-  const projected = (k) => state.minerals[k].reserveDoC + (orders.buy[k] || 0) - (orders.release[k] || 0);
-  const distOf = (k, days) => RST.distance(models[k].stressS, THR * 100, Missions.bufferFromDays(days));
-  const orderCost = () => KEYS.reduce((c, k) => c + Sim.quoteBuy(state, k, orders.buy[k] || 0), 0) + orders.offtakes.reduce((c, id) => c + COUNTERPARTIES.find((x) => x.id === id).upfront, 0);
-  const knownYears = (k) => { const t = EXT.trade && EXT.trade[k]; if (!t) return []; const y = state.done ? 9999 : +state.quarter.slice(0, 4); return t.chinaByYear.filter((r) => +r.year < y); };
-  const chips = (cs) => `<span class="impacts">${cs.filter(Boolean).map((c) => {
-    const d = c.delta != null ? c.delta : c.to - c.from, good = c.goodIfDown ? d < 0 : d > 0, f = c.fmt || ((v) => (Math.abs(v) >= 10 ? Math.round(v) : v.toFixed(1)));
-    const txt = c.from != null ? `${f(c.from)}${c.unit || ""} → ${f(c.to)}${c.unit || ""}` : `${d >= 0 ? "+" : "−"}${f(Math.abs(d))}${c.unit || ""}`;
-    return `<span class="impact ${Math.abs(d) < 1e-9 ? "" : good ? "up" : "down"}"><span class="ik">${esc(c.k)}</span> ${esc(txt)}</span>`;
-  }).join("")}</span>`;
-  const tile = (k, small) => `<span class="tile" style="--tile:${TILE[k]}${small ? ";width:30px;height:30px;font-size:12px" : ""}">${small ? "" : `<small>${MINERALS[k].symbol === "C" ? 6 : ""}</small>`}${MINERALS[k].symbol}</span>`;
-
-  const why = (html, kind) => (window.Tour ? Tour.why(html, kind) : null);
+  function advanceAll(qi) {
+    const r = Paths.advanceTo(P.you, qi); Paths.advanceTo(P.real, qi); Paths.advanceTo(P.idle, qi);
+    if (r.length) lastRep = r[r.length - 1];
+  }
+  const cum = (p) => p.down.reduce((a, d) => a + KEYS.reduce((b, k) => b + d[k], 0), 0);
+  const realRefs = (c) => (EXT.responses || []).filter((r) => c.refs.includes(r.date));
 
   // ---------- render ----------
-  function render() { renderStats(); renderCoach(); renderStrip(); renderIntel(); renderTable(); renderDetail(); renderOrders(); renderMap(); }
+  function render() { renderProgress(); renderScore(); renderCase(); renderChart(); renderStocks(); renderChain(); }
 
-  function renderStats() {
-    const days = Math.max(0, Math.ceil((Date.UTC(2027, 0, 10) - Date.now()) / 864e5));
-    const idle = shadowReps.slice(0, state.qi).reduce((a, r) => a + r.downtime, 0);
-    const c = EXT.copper;
-    $("stats").innerHTML = `
-      <div class="stat"><div class="k">Quarter</div><div class="v">${state.done ? "Done" : qLabel(state.quarter)}</div><div class="s">turn ${Math.min(state.qi + 1, 14)} of 14</div></div>
-      <div class="stat" title="Money arrives each fiscal year (1 October). 25% of money left unspent on 30 September lapses."><div class="k">Money this year</div><div class="v">${fmt$(state.budget)}</div><div class="s">${fmt$(state.received || 0)} received of $12B${state.lapsed > 0.5 ? ` · ${fmt$(state.lapsed)} lapsed` : ""}</div></div>
-      <div class="stat" title="How much the public and Congress trust your handling of the reserve. Falls when factories stop or after questionable deals."><div class="k">Public trust</div><div class="v">${Math.round(state.politicalCapital)}</div><div class="pcbar"><i style="width:${state.politicalCapital}%;background:${state.politicalCapital < 40 ? "var(--danger)" : state.politicalCapital < 70 ? "var(--warn)" : "var(--ok)"}"></i></div></div>
-      <div class="stat" title="Total days US factories were stopped by shortages, across all six minerals"><div class="k">Factory days lost</div><div class="v">${Math.round(state.downtimeDays)} days</div><div class="s">${Math.round(idle)} if you'd done nothing</div></div>
-      ${c && c.value != null ? `<div class="stat" title="Tradeverifyd tia_commodity_price"><div class="k">Copper</div><div class="v" style="font-size:13px">${esc(Number(c.value).toFixed(2))} ${esc(c.unit || "")}</div><div class="s">Tradeverifyd · ${esc(c.date || "")}</div></div>` : ""}
-      <div class="stat" title="China's pause on its toughest new restrictions ends on 10 January 2027"><div class="k">China's pause ends</div><div class="v" style="font-size:13px">10 Jan 2027</div><div class="s">${days} days from today</div></div>`;
-    $("ledger-n").textContent = ledger.length;
+  function renderProgress() {
+    const done = phase === "end";
+    $("progress").innerHTML = `<div class="lab">${done ? "Review" : `Case ${ci + 1} of ${CASES.length} · <b>${esc(CASES[ci].when)}</b>`}</div>
+      <div class="bar">${CASES.map((c, i) => { const h = history[i]; return `<i class="${(i < ci || done) && h ? (h.matchBest ? "best" : "done") : i === ci && !done ? "on" : ""}" title="${esc(c.when)}: ${esc(c.title)}"></i>`; }).join("")}</div>`;
+  }
+  function renderScore() {
+    const s = (k, p) => `<div class="stat"><div class="k"><i class="dot" style="background:${COL[k]}"></i>${esc(p.name)}</div><div class="v">${Math.round(cum(p))} days</div><div class="s">output lost · ${fmt$(p.s.spent)} spent</div></div>`;
+    $("score").innerHTML = s("you", P.you) + s("real", P.real) + s("idle", P.idle) + `<div class="stat"><div class="k">Your money</div><div class="v">${fmt$(P.you.s.budget)}</div><div class="s">${months(QUARTERS[Math.min(P.you.s.qi, QUARTERS.length - 1)])}</div></div>`;
   }
 
-  function renderCoach() {
-    if (state.done) { $("coach").innerHTML = ""; return; }
-    const any = KEYS.some((k) => orders.buy[k] || orders.release[k]) || orders.offtakes.length;
-    if (any) coachDone.add("orders");
-    const steps = [
-      { id: "read", label: "Read the news", hint: "Read the briefing on the left: real news from just before this quarter. You don't know what happens next." },
-      { id: "pick", label: "Pick a mineral", hint: "Click a row in the table. Underneath, you'll see its price, its stockpile and how safe it is." },
-      { id: "orders", label: "Decide what to buy", hint: "Drag 'Buy more supply'. The box below it shows the cost and how much safer you get, before anything is final." },
-      { id: "commit", label: "Lock it in", hint: "Press 'Lock in my plan' (or Enter). The real event for this quarter happens, and you'll see what it did." },
-    ];
-    const cur = steps.find((s) => !coachDone.has(s.id)) || steps[3];
-    $("coach").innerHTML = `<div><div class="k">${qLabel(state.quarter)} · each turn: read, decide, then see what really happened</div><div class="hint"><b>What to do now:</b> ${esc(cur.hint)}</div></div>
-      <ol>${steps.map((s) => `<li class="${coachDone.has(s.id) ? "done" : s === cur ? "cur" : ""}">${coachDone.has(s.id) ? "✓ " : ""}${esc(s.label)}</li>`).join("")}</ol>`;
-  }
-  const tick = (id) => { if (!coachDone.has(id)) { coachDone.add(id); renderCoach(); } };
-
-  function renderStrip() {
-    $("tstrip").innerHTML = QUARTERS.map((q, i) => {
-      const past = i < state.qi, r = reports[i];
-      const cls = past ? `past ${r && r.downtime > 0.5 ? "hit" : "ok"}` : i === state.qi && !state.done ? "cur" : "";
-      const ev = past && EVENTS.some((e) => e.quarter === q && !e.narrativeOnly);
-      return `<button class="${cls}" data-q="${i}" ${past ? "" : "disabled"} title="${past ? `${qLabel(q)}: ${Math.round(r.downtime)} days of downtime · click to review` : qLabel(q)}">${ev ? '<span class="ev"></span>' : ""}${q.slice(2, 4)}Q${q.slice(5)}${past ? `<br>${r.downtime > 0.5 ? Math.round(r.downtime) + "d" : "✓"}` : ""}</button>`;
-    }).join("");
-    $("tstrip").querySelectorAll("button[data-q]").forEach((b) => { if (!b.disabled) b.onclick = () => showReveal(reports[+b.dataset.q]); });
-  }
-
-  function renderIntel() {
-    if (state.done) { $("intel").innerHTML = ""; return; }
-    const start = qStart(state.quarter), q = state.quarter;
-    const brief = (EXT.intel || {})[q];
-    const world = (EXT.responses || []).filter((r) => QUARTERS.indexOf(r.quarter) >= 0 && QUARTERS.indexOf(r.quarter) < state.qi).slice(-8).reverse();
-    const prior = EVENTS.filter((e) => new Date(e.date) < start).slice(-6).reverse();
-    const body = {
-      news: brief && brief.items && brief.items.length ? brief.items.slice(0, intelMore ? 9 : 3).map((i) => `<div class="intel-item news"><div class="d">${esc(i.date)} · <a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.source || domain(i.url))}</a></div>${esc(i.title)}</div>`).join("") + (brief.items.length > 3 ? `<button class="linkbtn" id="intel-more">${intelMore ? "Show fewer" : `Show ${brief.items.length - 3} more`}</button>` : "") : `<div class="faint">No news cached for this quarter.</div>`,
-      world: world.length ? world.slice(0, intelMore ? 8 : 3).map((r) => `<div class="intel-item world"><div class="d">${esc(r.date)} · ${esc(r.actor)}</div>${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("") : `<div class="faint">Nothing yet. Early on, governments mostly made rules and gave grants rather than buying minerals.</div>`,
-      timeline: (prior.length ? prior : []).map((e) => `<div class="intel-item timeline"><div class="d">${e.date} · ${esc(e.actor)}</div>${esc(e.headline)}</div>`).join("") + (prior.length < 2 ? BACKGROUND.map((b) => `<div class="intel-item"><div class="d">${b.date} · background</div>${esc(b.text)}</div>`).join("") : ""),
-    };
-    $("intel").innerHTML = `<h2>Briefing</h2><p class="qtitle">${qLabel(q)}</p>
-      <div class="faint">What you could have known on ${start.toISOString().slice(0, 10)}. Nothing from the future.</div>
-      <div class="tabs" role="tablist">${[["news", `News (${brief && brief.items ? brief.items.length : 0})`], ["world", `What governments did (${world.length})`], ["timeline", "Events so far"]].map(([id, l]) => `<button role="tab" aria-pressed="${intelTab === id}" data-tab="${id}">${l}</button>`).join("")}</div>
-
-      ${body[intelTab]}
-      <button class="ghost" style="width:100%;margin-top:8px" id="btn-read">✓ Done reading, now decide</button>
-      ${lastReport ? `<button class="ghost" style="width:100%;margin-top:6px" id="btn-lastq">What happened in ${qLabel(lastReport.quarter)}?</button>` : ""}`;
-    $("intel").querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { intelTab = b.dataset.tab; tick("read"); renderIntel(); }));
-    if ($("intel-more")) $("intel-more").onclick = () => { intelMore = !intelMore; renderIntel(); };
-    $("btn-read").onclick = () => { tick("read"); document.querySelector(".mtable tr.row") && document.querySelector(".mtable tr.row").focus(); };
-    if ($("btn-lastq")) $("btn-lastq").onclick = () => showReveal(lastReport);
-  }
-
-  let showAllCols = false, sortRisk = false;
-  function renderTable() {
-    if (state.done) { $("table").innerHTML = ""; return; }
-    const hit = new Set(lastReport ? lastReport.events.flatMap((e) => Object.keys(e.effects)) : []);
-    const keys = sortRisk ? [...KEYS].sort((a, b) => distOf(a, projected(a)) - distOf(b, projected(b))) : KEYS;
-    const extra = showAllCols;
-    $("table").innerHTML = `<div class="table-head"><h2 style="margin:0">Your six minerals · click one to manage it</h2>
-        <div class="tabs" style="margin:0"><button aria-pressed="${sortRisk}" id="t-sort">${sortRisk ? "✓ " : ""}Riskiest first</button><button aria-pressed="${extra}" id="t-cols">${extra ? "Fewer columns" : "More columns"}</button></div></div>
-      <div class="help">Aim for a <b>Safe</b> safety margin on every mineral. <button class="linkbtn" id="btn-gloss2">What do the columns mean?</button></div>
-      <table class="mtable"><thead><tr><th>Mineral</th><th>Stored</th><th title="How big a shock this mineral's supply could absorb before factories stop (25% shortage). Not a probability.">Safety margin</th>${extra ? "<th>Price</th><th>Imports</th><th>From China</th>" : ""}<th>Your plan</th></tr></thead><tbody>
-      ${keys.map((k) => {
-        const m = state.minerals[k], p = MINERALS[k], proj = projected(k), d = distOf(k, proj), d0 = distOf(k, m.reserveDoC);
-        const prev = m.hist.price[m.hist.price.length - 2], dp = prev ? m.priceIdx / prev - 1 : 0;
-        const ys = knownYears(k), cs = ys.length ? ys[ys.length - 1] : null;
-        const o = [orders.buy[k] ? `<span class="chip warn">buy ${orders.buy[k]} days</span>` : "", orders.release[k] ? `<span class="chip info">release ${orders.release[k]} days</span>` : "", ...orders.offtakes.filter((id) => COUNTERPARTIES.find((c) => c.id === id).mineral === k).map(() => `<span class="chip good">deal</span>`)].join(" ");
-        return `<tr class="row ${k === sel ? "sel" : ""} ${hit.has(k) ? "hit" : ""}" data-k="${k}" tabindex="0" aria-label="${p.name}">
-          <td><div class="mname">${tile(k)}<div><b>${p.name}</b><span>${esc(p.uses.split(",")[0])}${m.cutNet > 0.02 ? ` · <span class="up">restricted</span>` : ""}</span></div></div></td>
-          <td><div class="cell-big">${proj.toFixed(0)} days${proj !== m.reserveDoC ? ` <span class="faint">(now ${m.reserveDoC.toFixed(0)})</span>` : ""}</div><div class="docbar"><i class="${proj !== m.reserveDoC ? "proj" : ""}" style="width:${Math.min(100, (proj / 120) * 100)}%"></i><b style="left:50%" title="60 days"></b></div></td>
-          <td><span class="cell-big">${Plain.margin(d)}</span> ${Plain.zoneTag(d)}${Math.abs(d - d0) > 0.01 ? `<div class="faint">${d > d0 ? "+" : ""}${(d - d0).toFixed(1)}× from your plan</div>` : ""}</td>
-          ${extra ? `<td><span class="cell-big">${m.priceIdx.toFixed(0)}</span> <span class="${dp > 0.005 ? "up" : dp < -0.005 ? "down" : "faint"}">${dp ? (dp > 0 ? "▲" : "▼") + Math.abs(dp * 100).toFixed(0) + "%" : ""}</span></td>
-          <td class="${m.importAvail < 0.85 ? "up" : ""}"><span class="cell-big">${pct(m.importAvail)}</span></td>
-          <td>${cs ? `<span class="cell-big">${pct(cs.share)}</span><div class="faint">${cs.year}</div>` : `<span class="faint">—</span>`}</td>` : ""}
-          <td>${o || '<span class="faint">—</span>'}</td></tr>`;
-      }).join("")}</tbody></table>`;
-    $("t-sort").onclick = () => { sortRisk = !sortRisk; renderTable(); };
-    $("t-cols").onclick = () => { showAllCols = !showAllCols; renderTable(); };
-    $("table").querySelectorAll("tr.row").forEach((tr) => {
-      const go = () => { sel = tr.dataset.k; mapMineral = sel; tick("pick"); renderTable(); renderDetail(); renderMap(); const k = sel, d = distOf(k, projected(k)); why(`<span class="wk">Selected</span><b>${MINERALS[k].name}</b>: ${Math.round(projected(k))} days stored, safety ${Plain.margin(d)} (${Plain.zone(d).label}).`); };
-      tr.onclick = go; tr.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
-    });
-  }
-
-  // ---------- detail panel: charts + order controls + live preview ----------
-  function priceChart(k) {
-    const m = state.minerals[k], h = m.hist.price, src = m.hist.priceSrc;
-    const W = 560, H = 170, L = 36, R = 10, T = 14, B = 22, n = QUARTERS.length;
-    const real = ((EXT.prices || {})[k] || {}).index || [];
-    const realKnown = real.filter((p) => { const i = QUARTERS.indexOf(p.quarter); return (i >= 0 && i < state.qi) || p.quarter === "2023Q2"; });
-    const max = Math.max(160, ...h, ...realKnown.map((p) => p.value)) * 1.08;
-    const X = (i) => L + (i / n) * (W - L - R), Y = (v) => T + (1 - v / max) * (H - T - B);
-    const xr = (q) => (q === "2023Q2" ? X(0) : X(QUARTERS.indexOf(q) + 1));
-    let segs = ""; for (let i = 1; i < h.length; i++) segs += `<line x1="${X(i - 1)}" y1="${Y(h[i - 1])}" x2="${X(i)}" y2="${Y(h[i])}" stroke="#AEB6C4" stroke-width="2" ${src[i] === "reported" ? "" : 'stroke-dasharray="4 3"'}/>`;
-    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${MINERALS[k].name} price: model vs real">
-      <line x1="${L}" x2="${W - R}" y1="${Y(100)}" y2="${Y(100)}" stroke="rgba(148,163,184,.25)" stroke-dasharray="2 4"/><text x="${L - 4}" y="${Y(100) + 3}" text-anchor="end">100</text>
-      ${segs}${h.map((v, i) => (i ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3" fill="${src[i] === "reported" ? "#AEB6C4" : "#0B0F17"}" stroke="#AEB6C4" stroke-width="1.3"><title>${QUARTERS[i - 1]} model ${v.toFixed(0)} (${src[i]})</title></circle>` : "")).join("")}
-      ${realKnown.map((p) => `<circle cx="${xr(p.quarter)}" cy="${Y(p.value)}" r="5" fill="#E08A52" stroke="#0B0F17" stroke-width="1.5"><title>${p.quarter} real price index ${Math.round(p.value)}</title></circle>`).join("")}
-      <text x="${L}" y="${H - 6}">23Q2</text><text x="${W - R}" y="${H - 6}" text-anchor="end">26Q4</text></svg>
-      <div class="chart-cap"><b>Price, mid-2023 = 100.</b> Grey line: the price you pay, which follows real market prices (dashed where we filled gaps between reports) plus the push from your own buying. Orange dots: real reported prices${EXT.prices && EXT.prices[k] ? ` <span title="${esc(EXT.prices[k].series || "")}">(${esc(String(EXT.prices[k].series || "").split(" (")[0].slice(0, 70))}${String(EXT.prices[k].series || "").length > 70 ? "…" : ""}, ${esc(EXT.prices[k].unit || "")})</span>` : ""}, indexed to the first point, shown only once they'd been reported.</div>`;
-  }
-  function reserveChart(k) {
-    const m = state.minerals[k], W = 560, H = 120, L = 36, R = 10, T = 10, B = 20, n = QUARTERS.length;
-    const doc = m.hist.doc, av = m.hist.avail, proj = projected(k);
-    const max = Math.max(90, ...doc, proj) * 1.1;
-    const X = (i) => L + (i / n) * (W - L - R), Y = (v) => T + (1 - v / max) * (H - T - B), YA = (v) => T + (1 - v) * (H - T - B);
-    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Reserve and imports history">
-      <line x1="${L}" x2="${W - R}" y1="${Y(60)}" y2="${Y(60)}" stroke="rgba(148,163,184,.3)" stroke-dasharray="3 4"/><text x="${L - 4}" y="${Y(60) + 3}" text-anchor="end">60d</text>
-      <polyline points="${av.map((v, i) => `${X(i)},${YA(v)}`).join(" ")}" fill="none" stroke="#3987e5" stroke-width="1.6"/>
-      <polyline points="${doc.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="#E08A52" stroke-width="2.4"/>
-      ${proj !== m.reserveDoC ? `<line x1="${X(doc.length - 1)}" y1="${Y(m.reserveDoC)}" x2="${X(doc.length)}" y2="${Y(proj)}" stroke="#E08A52" stroke-width="2.4" stroke-dasharray="5 4"/><circle cx="${X(doc.length)}" cy="${Y(proj)}" r="4" fill="#E08A52"/>` : ""}
-    </svg><div class="chart-cap"><span style="color:#E08A52">■</span> days of supply in your stockpile (dashed = after this quarter's plan) · <span style="color:#3987e5">■</span> share of normal imports arriving (top = 100%)</div>`;
-  }
-  let detailTab = "decide";
-  function renderDetail() {
-    if (state.done) { $("detail").innerHTML = ""; return; }
-    const k = sel, m = state.minerals[k], p = MINERALS[k];
-    const ys = knownYears(k), model = models[k];
-    const tabs = [["decide", "Decide"], ["chain", "Supply chain"], ["price", "Price"], ["map", "Map"]];
-    $("detail").innerHTML = `<div class="detail-head"><div class="mname">${tile(k)}<div><h3>${p.name}</h3><span>${esc(p.uses)}</span></div></div>
-        <div class="chips">${m.cutNet > 0.02 ? `<span class="chip bad">restricted · ${pct(m.importAvail)} of imports arriving</span>` : `<span class="chip good">no restrictions</span>`}${ys.length ? `<span class="chip">from China: ${pct(ys[ys.length - 1].share)} (${ys[ys.length - 1].year})</span>` : ""}</div></div>
-      <div class="tabs" role="tablist" style="margin-top:12px">${tabs.map(([id, l]) => `<button role="tab" aria-pressed="${detailTab === id}" data-dt="${id}">${l}</button>`).join("")}</div>
-      <div id="dt-body"></div>`;
-    $("detail").querySelectorAll("[data-dt]").forEach((b) => (b.onclick = () => { detailTab = b.dataset.dt; renderDetail(); }));
-    const body = $("dt-body");
-    if (detailTab === "decide") decideTab(body, k);
-    if (detailTab === "chain") chainTab(body, k);
-    if (detailTab === "price") {
-      const spread = (D.DY_SPREAD || []).filter((x) => QUARTERS.indexOf(x.knownFrom) <= state.qi), latest = spread.filter((x) => x.ratio).pop();
-      body.innerHTML = priceChart(k) + reserveChart(k) + (k === "dysprosium" && latest ? `<div class="spread"><b>You pay about ${latest.ratio}× what Chinese factories pay</b><div class="faint">${esc(latest.label)} · <a href="${esc(latest.source)}" target="_blank" rel="noopener">${esc(latest.outlet)}</a></div></div>` : "");
+  function renderCase() {
+    const c = CASES[ci], el = $("case");
+    const news = ((EXT.intel || {})[c.q] || {}).items || [];
+    const head = `<div class="kicker">Case ${ci + 1} of ${CASES.length} · ${esc(c.when)}</div>
+      <h2 class="cb-title">${esc(c.title)}</h2>
+      <div class="role">You are: <b>${esc(c.role)}</b></div>
+      <div class="chips" style="margin:8px 0">${c.minerals.map((k) => `<span class="chip" style="border-color:${TILE[k]}">${MINERALS[k].name}</span>`).join("")}</div>`;
+    if (phase === "decide") {
+      el.innerHTML = `${head}
+        <h3 class="sub">The situation</h3><ul class="facts">${c.situation.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+        ${news.length ? `<details class="news"><summary>What the news was saying (${Math.min(3, news.length)})</summary>${news.slice(0, 3).map((n) => `<div class="n"><span class="faint">${esc(n.date)} · <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.source || domain(n.url))}</a></span><br>${esc(n.title)}</div>`).join("")}</details>` : ""}
+        <h3 class="q">${esc(c.question)}</h3>
+        <div class="opts" role="group" aria-label="Options">${c.options.map((o, i) => `<button class="opt" data-o="${i}"><b>${esc(o.label)}</b>${o.detail ? `<span>${esc(o.detail)}</span>` : ""}</button>`).join("")}</div>
+        <p class="faint" style="margin-top:12px">Pick what you would have done. Then see what the US actually did, and what every option would have led to by the end of 2026.</p>`;
+      el.querySelectorAll("[data-o]").forEach((b, i, all) => {
+        b.onclick = () => decide(+b.dataset.o);
+        b.onkeydown = (e) => { const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0; if (d) { e.preventDefault(); all[(i + d + all.length) % all.length].focus(); } };
+      });
+      return;
     }
-    if (detailTab === "map") { body.innerHTML = `<div id="mapwrap"></div>`; renderMap(); }
+    const real = c.options.find((o) => o.real), refs = realRefs(c);
+    const rows = cmp.res.map((r) => ({ ...r, you: r.o === choice, isReal: r.o === real, isBest: r.o === cmp.best.o }));
+    const mine = rows.find((r) => r.you), rr = rows.find((r) => r.isReal);
+    const maxCost = Math.max(...rows.map((r) => r.cost)) || 1;
+    const verdict = mine.isBest ? ["good", "Your call was the best option in hindsight."]
+      : mine.o === real ? ["info", "You made the same call as the US."]
+      : mine.cost < rr.cost - 1 ? ["good", `Your call beat what the US actually did by ${fmt$(rr.cost - mine.cost)} in total cost.`]
+      : ["bad", `What the US actually did came out ${fmt$(mine.cost - rr.cost)} cheaper overall than your call.`];
+    el.innerHTML = `${head}
+      <div class="real"><div class="rk">What actually happened</div><p>${esc(c.realText)}</p>
+        ${refs.length ? `<div class="faint">${refs.map((r) => `<a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(r.actor)}, ${esc(r.date)}</a>`).join(" · ")}</div>` : ""}</div>
+      <div class="verdict ${verdict[0]}">${verdict[1]}</div>
+      <h3 class="sub">What each option would have led to, through 2026</h3>
+      <table class="data cmp"><thead><tr><th>Option</th><th>Output lost</th><th>Money spent</th><th>Total cost</th></tr></thead><tbody>
+        ${rows.map((r) => `<tr class="${r.you ? "you" : ""}"><td><b>${esc(r.o.label)}</b><div class="tags">${r.you ? `<span class="tag you">You</span>` : ""}${r.isReal ? `<span class="tag real">Real US</span>` : ""}${r.isBest ? `<span class="tag best">Best</span>` : ""}</div></td>
+          <td>${Math.round(r.lost)} days<div class="faint">${c.minerals.map((k) => MINERALS[k].symbol).join("/")}</div></td><td>${fmt$(r.spent)}</td>
+          <td><div class="cbar"><i style="width:${(r.cost / maxCost) * 100}%;background:${r.isBest ? COL.best : r.you ? COL.you : "rgba(148,163,184,.5)"}"></i></div>${fmt$(r.cost)}</td></tr>`).join("")}
+      </tbody></table>
+      <p class="faint">Each row starts from your position just before this choice and runs to the end of 2026. Money spent includes topping up stock targets you set in earlier cases. Total cost = money spent + the estimated value of factory output lost across all six minerals. <button class="linkbtn" id="how">How is this worked out?</button> · <a href="../methods.html" target="_blank" rel="noopener">Methods &amp; sources</a></p>
+      <label class="scale">How much is a lost factory day worth? <b id="scale-v">×${Paths.opt.scale.toFixed(2)}</b> <input type="range" id="scale" min="0.5" max="3" step="0.25" value="${Paths.opt.scale}"> <span class="faint">Higher means stockpiles pay off more</span></label>
+      ${cmp.best.o.tag === "trap-deal" ? `<div class="banner warn">The cheap deal came out best only because ${c.minerals.includes("cobalt") ? "China never restricted cobalt" : "its China tie never bit"} in 2023–26. It is still exposed if China acts.</div>` : ""}
+      <div class="lesson"><b>Lesson:</b> ${esc(LESSONS[cmp.best.o.tag] || "")}</div>
+      <div class="cb-nav"><button class="primary" id="next">${ci + 1 < CASES.length ? `Next case: ${esc(CASES[ci + 1].when)} →` : "See the full review →"}</button></div>`;
+    $("next").onclick = next;
+    $("how").onclick = showMethod;
+    $("scale").oninput = (e) => { Paths.opt.scale = +e.target.value; rejudge(); };
   }
-  function decideTab(body, k) {
-    const m = state.minerals[k], p = MINERALS[k];
-    const buy = orders.buy[k] || 0, rel = orders.release[k] || 0, max = Sim.maxBuy(state, k);
-    const cost = Sim.quoteBuy(state, k, buy), proj = projected(k);
-    const d0 = distOf(k, m.reserveDoC), d1 = distOf(k, proj);
-    const priceImpact = ((p.eta * buy) / p.marketDepth) * 100;
-    const deals = state.offtakes.filter((o) => o.mineral === k);
-    const h = m.hist.price, trend = h.length > 2 ? h[h.length - 1] / h[h.length - 3] - 1 : 0;
-    const altN = models[k].nodes.filter((n) => !n.chinaLinked).length + state.offtakes.filter((o) => o.mineral === k && o.status === "delivering").length;
-    const allied = Sim.alliedCount(state, k);
-    body.innerHTML = `<div class="kpis3"><div class="ls"><div class="k">Imports stored</div><div class="v">${(m.reserveDoC / 30.4).toFixed(1)} months</div></div><div class="ls ${trend > 0.1 ? "bad" : ""}"><div class="k">Price, last 6 months</div><div class="v">${trend >= 0 ? "+" : ""}${Math.round(trend * 100)}%</div></div><div class="ls"><div class="k">Non-China suppliers</div><div class="v">${altN}</div></div></div>
-      ${allied ? `<div class="banner warn" style="margin:8px 0">Allies (${esc(D.ALLIED[state.quarter][k].map((r) => r.actor).slice(0, 2).join(", "))}) are buying ${p.name.toLowerCase()} too: you can buy ${Math.round(Math.min(45, allied * 15))}% less this quarter.</div>` : ""}
-      <div class="detail-grid">
-      <div>
-        <div class="ctrl"><label for="buy">Buy this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
-          <div class="presets"><button data-to="60">Up to 60 days</button><button data-to="90">Up to 90 days</button><button data-to="max">Max (${max})</button><button data-to="0">Clear</button></div></div>
-        <div class="ctrl"><label for="rel">Release to factories <b>${rel} days</b></label><input type="range" id="rel" min="0" max="${Math.floor(m.reserveDoC)}" step="1" value="${rel}" ${m.reserveDoC >= 1 ? "" : "disabled"}></div>
-        <div class="faint">Deals: ${deals.length ? deals.map((o) => `${esc(COUNTERPARTIES.find((c) => c.id === o.id).name)} (${{ pending: "not started", delivering: "delivering", blocked: "blocked" }[o.status] || o.status})`).join(", ") : "none"} · <button class="linkbtn" id="btn-off-k">Sign a deal</button></div>
-      </div>
-      <div class="preview" aria-live="polite"><div class="hud-k faint">If you lock this in</div>
-        <div class="row"><span>Cost</span><b>${fmt$(cost)}</b></div>
-        <div class="row"><span>Price impact</span><b class="${priceImpact > 0.5 ? "up" : ""}">+${priceImpact.toFixed(1)}%</b></div>
-        <div class="row"><span>Stored</span><b>${m.reserveDoC.toFixed(0)} → ${proj.toFixed(0)} days</b></div>
-        <div class="row"><span>Safety margin</span><b>${Plain.margin(d0)} → ${Plain.margin(d1)} ${Plain.zoneTag(d1)}</b></div>
-        <div class="row"><span>Money left</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
-      </div></div>`;
-    const setBuy = (v) => { orders.buy[k] = Math.max(0, Math.min(max, v)); tick("orders"); refreshLive(); const d = distOf(k, projected(k)); why(`<span class="wk">Plan</span>Buy <b>${orders.buy[k]} days</b> of ${p.name.toLowerCase()} for ${fmt$(Sim.quoteBuy(state, k, orders.buy[k]))}: safety ${Plain.margin(distOf(k, m.reserveDoC))} → <b>${Plain.margin(d)}</b>. Your buying pushes its price up ${(((p.eta * orders.buy[k]) / p.marketDepth) * 100).toFixed(0)}%.`, "ore"); };
-    $("buy").oninput = (e) => setBuy(+e.target.value);
-    $("rel").oninput = (e) => { orders.release[k] = +e.target.value; tick("orders"); refreshLive(); };
-    body.querySelectorAll("[data-to]").forEach((b) => (b.onclick = () => {
-      const t = b.dataset.to;
-      if (t === "max") setBuy(max); else if (t === "0") setBuy(0);
-      else { let d = Math.max(0, Math.ceil(+t - m.reserveDoC + (orders.release[k] || 0))); d = Math.min(d, max); while (d > 0 && Sim.quoteBuy(state, k, d) > state.budget - orderCost() + Sim.quoteBuy(state, k, orders.buy[k] || 0)) d--; setBuy(d); }
-    }));
-    $("btn-off-k").onclick = () => showOfftakes(k);
+
+  function decide(i) {
+    const c = CASES[ci];
+    choice = c.options[i];
+    const before = Paths.clonePath(P.you);
+    cmp = Paths.compare(before, c);
+    const real = c.options.find((o) => o.real);
+    history[ci] = { c, you: choice, real, best: cmp.best.o, matchBest: choice === cmp.best.o, matchReal: choice === real, before };
+    P.you.choices.push({ case: c.id, option: choice.id, tag: choice.tag }); Paths.applyEffect(P.you, choice.eff);
+    P.real.choices.push({ case: c.id, option: real.id, tag: real.tag }); Paths.applyEffect(P.real, real.eff);
+    phase = "reveal";
+    render();
+    $("next").focus({ preventScroll: true });
+    why(`<span class="wk">Decided</span>${esc(choice.label)}. ${choice === real ? "Same as the real US." : `The US chose: ${esc(real.label)}.`}`, choice === cmp.best.o ? "good" : "ore");
   }
-  /** Same live supply-chain view as story mode: current import cuts, your stockpile tank, factory state. */
-  function chainTab(body, k) {
-    const m = state.minerals[k], model = models[k], last = reports.length ? reports[reports.length - 1].minerals[k] : null;
-    body.innerHTML = `<div class="chain-status">${[["Imports arriving", pct(m.importAvail), m.importAvail < 0.85 ? "bad" : "good"], ["Stockpile", `${Math.round(projected(k))} days`, "ore"], ["Factory last quarter", last && last.downtime > 0.5 ? `Stopped ${Math.round(last.downtime)}d` : "Running", last && last.downtime > 0.5 ? "bad" : "good"]].map(([a, b, c]) => `<div class="ls ${c}"><div class="k">${a}</div><div class="v">${b}</div></div>`).join("")}</div>
-      <div id="chainGraph"></div><div class="faint">Circle size = share of supply · −x% = supply cut by restrictions · tank = your stockpile ${model.synthetic ? "· some figures estimated" : "· measured from shipping records"}</div>`;
+  /** Re-judge the same case from the same starting position with a new value of lost output. */
+  function rejudge() {
+    const h = history[ci];
+    cmp = Paths.compare(h.before, h.c);
+    h.best = cmp.best.o; h.matchBest = choice === cmp.best.o;
+    const v = $("scale").value; renderCase(); renderProgress(); $("scale").value = v; $("scale").focus();
+  }
+
+  function next() {
+    const from = P.you.down.length;
+    if (ci + 1 < CASES.length) {
+      ci++; advanceAll(QUARTERS.indexOf(CASES[ci].q)); phase = "decide";
+      const evs = EVENTS.filter((e) => { const q = QUARTERS.indexOf(e.quarter); return q >= from && q < P.you.down.length && !e.narrativeOnly; });
+      const lost = P.you.down.slice(from).reduce((a, d) => a + KEYS.reduce((b, k) => b + d[k], 0), 0);
+      why(`<span class="wk">Meanwhile</span>${evs.length ? esc(evs.map((e) => e.headline.split(";")[0]).slice(0, 2).join(" · ")) + ". " : "No new restrictions. "}Your factories lost <b>${Math.round(lost)} days</b> of output.`, lost > 5 ? "bad" : "good");
+      render(); window.scrollTo(0, 0);
+      const h = document.querySelector(".cb-title"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+    } else { advanceAll(QUARTERS.length); phase = "end"; showEnd(); }
+  }
+
+  // ---------- side panels ----------
+  function renderChart() {
+    const W = 380, H = 190, L = 34, R = 10, T = 16, B = 22, n = QUARTERS.length;
+    const series = (p) => { let a = 0; return [0, ...p.down.map((d) => (a += KEYS.reduce((b, k) => b + d[k], 0)))]; };
+    const proj = (p) => { const c = Paths.clonePath(p); Paths.advanceTo(c, n); return series(c); };
+    const S = { you: series(P.you), real: series(P.real), idle: series(P.idle) };
+    const F = phase === "end" ? null : { you: proj(P.you), real: proj(P.real) };
+    const top = Math.max(50, ...Object.values(S).flat(), ...(F ? Object.values(F).flat() : [])), max = top * 1.08;
+    const X = (i) => L + (i / n) * (W - L - R), Y = (v) => T + (1 - v / max) * (H - T - B);
+    const line = (arr, col, dash, from = 0) => `<polyline points="${arr.slice(from).map((v, i) => `${X(i + from)},${Y(v)}`).join(" ")}" fill="none" stroke="${col}" stroke-width="${dash ? 1.6 : 2.4}" ${dash ? 'stroke-dasharray="4 4" opacity=".75"' : ""}/>`;
+    const now = P.you.down.length;
+    $("chart").innerHTML = `<h2>Factory output lost, 2023–26</h2>
+      <svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Cumulative output lost for each path">
+        ${[0, 0.5, 1].map((f) => `<line x1="${L}" x2="${W - R}" y1="${Y(top * f)}" y2="${Y(top * f)}" stroke="rgba(148,163,184,.15)"/><text x="${L - 4}" y="${Y(top * f) + 3}" text-anchor="end">${Math.round(top * f)}</text>`).join("")}
+        ${F ? line(F.real, COL.real, true, now) + line(F.you, COL.you, true, now) : ""}
+        ${line(S.idle, COL.idle)}${line(S.real, COL.real)}${line(S.you, COL.you)}
+        ${F ? `<line x1="${X(now)}" x2="${X(now)}" y1="${T}" y2="${H - B}" stroke="rgba(238,241,246,.35)" stroke-dasharray="2 3"/><text x="${X(now)}" y="${T - 4}" text-anchor="middle">now</text>` : ""}
+        <text x="${L}" y="${H - 6}">mid-2023</text><text x="${W - R}" y="${H - 6}" text-anchor="end">end 2026</text></svg>
+      <div class="legend"><span><i style="background:${COL.you}"></i>You</span><span><i style="background:${COL.real}"></i>Real US</span><span><i style="background:${COL.idle}"></i>No action</span>${F ? `<span class="faint">dashed = where current plans lead</span>` : ""}</div>`;
+  }
+  function renderStocks() {
+    const s = P.you.s;
+    $("stocks").innerHTML = `<h2>Your stockpile now</h2>${KEYS.map((k) => {
+      const m = s.minerals[k], r = lastRep && lastRep.minerals[k], f = r ? r.shortFrac || 0 : 0, st = f < 0.01 ? "running" : f <= THR ? "rationing" : "stopped";
+      return `<div class="srow"><span class="sname"><i style="background:${TILE[k]}"></i>${MINERALS[k].name}</span><div class="sbar"><i style="width:${Math.min(100, (m.reserveDoC / 120) * 100)}%"></i><b style="left:50%"></b></div><span class="sv num">${Math.round(m.reserveDoC)}d</span><span class="state-chip ${st}">${{ running: "OK", rationing: "Ration", stopped: "Stop" }[st]}</span></div>`;
+    }).join("")}<div class="faint">Days of normal use stored · tick = 60 days · status = last quarter's factories</div>`;
+  }
+  function renderChain() {
+    const k = CASES[Math.min(ci, CASES.length - 1)].minerals[0], model = models[k], m = P.you.s.minerals[k], r = lastRep && lastRep.minerals[k];
+    $("chain").innerHTML = `<h2>${MINERALS[k].name} supply chain · your path</h2><div id="chainGraph"></div><div class="faint">Circle = supplier (size = share) · −x% = cut by restrictions · tank = your stockpile${model.synthetic ? " · some figures estimated" : ""}</div>`;
     const net = new NetView($("chainGraph"), model, { plantLabel: "US factories" });
-    const drc = k === "cobalt";
-    let ex = model.nodes.map((n, i) => i).filter((i) => (drc ? model.tier2.some((t) => t.country === "COD" && (t.share || {})[model.nodes[i].id] >= 0.3) : model.nodes[i].chinaLinked));
+    let ex = model.nodes.map((n, i) => i).filter((i) => (k === "cobalt" ? model.tier2.some((t) => t.country === "COD" && (t.share || {})[model.nodes[i].id] >= 0.3) : model.nodes[i].chinaLinked));
     if (!ex.length) ex = model.nodes.map((n, i) => i);
     const exShare = ex.reduce((s, i) => s + model.nodes[i].share, 0) || 1, f = Math.max(0, Math.min(1, 1 - (1 - m.importAvail) / exShare));
     net.setFlows(model.nodes.map((n, i) => (ex.includes(i) ? f : 1)));
-    net.setTank(projected(k));
-    net.setFactory(last && last.downtime > 0.5 ? "stopped" : last && last.drawn > 0.5 ? "strained" : "running", last && last.downtime > 0.5 ? "stopped" : last && last.drawn > 0.5 ? "running on stockpile" : "running");
+    net.setTank(m.reserveDoC);
+    const sf = r ? r.shortFrac || 0 : 0, drawn = r && r.drawn > 0.5;
+    net.setFactory(sf < 0.01 ? (drawn ? "strained" : "running") : sf <= THR ? "rationing" : "stopped", sf < 0.01 ? (drawn ? "running on stockpile" : "running") : sf <= THR ? `rationing −${Math.round(sf * 100)}%` : "stopped");
     net.onTap = () => {};
   }
-  /** Re-render the parts that depend on orders without rebuilding the active slider (keeps drag smooth). */
-  function refreshLive() {
-    const focusId = document.activeElement && document.activeElement.id;
-    renderTable(); renderOrders(); renderDetail(); renderStats();
-    if (focusId && $(focusId)) $(focusId).focus();
-  }
 
-  // ---------- orders panel ----------
-  function renderOrders() {
-    if (state.done) { $("orders").innerHTML = ""; return; }
-    const cost = orderCost(), over = cost > state.budget;
-    const lines = [];
-    for (const k of KEYS) if (orders.buy[k]) lines.push([`Buy ${orders.buy[k]} d ${MINERALS[k].name}`, fmt$(Sim.quoteBuy(state, k, orders.buy[k]))]);
-    for (const k of KEYS) if (orders.release[k]) lines.push([`Release ${orders.release[k]} d ${MINERALS[k].name}`, "—"]);
-    for (const id of orders.offtakes) { const cp = COUNTERPARTIES.find((c) => c.id === id); lines.push([`Offtake: ${cp.name}`, fmt$(cp.upfront)]); }
-    const dSum = KEYS.map((k) => distOf(k, projected(k)) - distOf(k, state.minerals[k].reserveDoC));
-    const weakest = KEYS.map((k) => [distOf(k, projected(k)), k]).sort((a, b) => a[0] - b[0])[0];
-    $("orders").innerHTML = `<h2>Your plan for ${qLabel(state.quarter)}</h2>
-      ${lines.length ? lines.map(([a, b]) => `<div class="order-line"><span>${esc(a)}</span><span class="num">${b}</span></div>`).join("") : `<div class="muted">Nothing planned yet. If you lock in now, you buy nothing and keep your money.</div>`}
-      <div class="order-line order-total"><span>Total</span><span class="num">${fmt$(cost)}</span></div>
-      <div class="order-line"><span class="muted">Budget after</span><span class="num ${over ? "up" : ""}">${fmt$(state.budget - cost)}</span></div>
-      <div style="margin:8px 0">${chips([{ k: "Safety added", delta: dSum.reduce((a, b) => a + b, 0), unit: "×", fmt: (v) => v.toFixed(1) }, { k: `Weakest: ${MINERALS[weakest[1]].name}`, delta: weakest[0], unit: "×", fmt: (v) => v.toFixed(1) }])}</div>
-      <div class="rel"><div class="k">When imports fall short</div>
-        <div class="tabs"><button data-trig="0" aria-pressed="${!state.releaseTrigger}">Release at once</button><button data-trig="0.1" aria-pressed="${!!state.releaseTrigger}">Hold for big shocks</button></div>
-        <div class="k">Who gets stored supply first</div>
-        <div class="tabs">${[["defence", "Defence"], ["even", "Evenly"], ["civilian", "Factories"]].map(([v, l]) => `<button data-pri="${v}" aria-pressed="${state.priority === v}">${l}</button>`).join("")}</div></div>
-      <div class="row2"><button class="ghost" id="btn-off">Sign a supply deal…</button></div>
-      <button class="primary" id="btn-commit" ${over ? "disabled" : ""}>Lock in my plan →</button>
-      <div class="faint" style="margin-top:4px">Then this quarter's real events happen.</div>
-      ${over ? `<div class="err">This plan costs more than the money you have left.</div>` : ""}
-      <div class="row2" style="margin-top:12px"><select id="ff" aria-label="Fast-forward to">${QUARTERS.slice(state.qi + 1).map((q) => `<option value="${q}">${qLabel(q)}</option>`).join("")}<option value="END">End of campaign</option></select><button class="ghost" id="btn-ff">Fast-forward</button></div>
-      <div class="faint">Skip ahead without buying anything.</div>
-      ${readinessPanel()}`;
-    $("orders").querySelectorAll("[data-trig]").forEach((b) => (b.onclick = () => { state.releaseTrigger = +b.dataset.trig; renderOrders(); why(state.releaseTrigger ? `<span class="wk">Rule</span>Small gaps will be <b>rationed</b>; stored supply goes out only when a mineral is 10%+ short.` : `<span class="wk">Rule</span>Stored supply goes out <b>as soon as</b> imports fall short.`, "ore"); }));
-    $("orders").querySelectorAll("[data-pri]").forEach((b) => (b.onclick = () => { state.priority = b.dataset.pri; renderOrders(); why(`<span class="wk">Rule</span>${{ defence: "Defence lines get stored supply first. Defence shortfalls cost twice as much public trust.", even: "Everyone gets the same share of what's available.", civilian: "Commercial factories get stored supply first." }[state.priority]}`, "ore"); }));
-    $("btn-off").onclick = () => showOfftakes(null);
-    $("btn-commit").onclick = commit;
-    $("btn-ff").onclick = () => fastForward($("ff").value);
-    $("orders").querySelectorAll("[data-ready]").forEach((b) => (b.onclick = () => { const k = b.dataset.ready, need = +b.dataset.need; const d = Math.min(Sim.maxBuy(state, k), Math.max(0, Math.ceil(need - state.minerals[k].reserveDoC))); orders.buy[k] = d; sel = k; tick("orders"); refreshLive(); }));
-  }
-  let readyCache = { key: null, rec: null };
-  function readinessPanel() {
-    if (state.qi < QUARTERS.indexOf("2026Q2")) return "";
-    const key = state.qi + "|" + state.offtakes.map((o) => o.id + o.status).join(",");
-    if (readyCache.key !== key) { const probe = Sim.clone(state); probe.qi = QUARTERS.length; const rec = {}; for (const k of KEYS) rec[k] = MonteCarlo.recommend(probe, k, { signal: 0, paths: 200 }); readyCache = { key, rec }; }
-    const rec = readyCache.rec;
-    return `<div class="ready"><h2>Get ready for 2027</h2><div class="faint">${QUARTERS.length - state.qi} turn(s) left before China's pause ends. "Need" = how many days to store so you keep at least 60 days in 9 out of 10 simulated 2027 futures.</div>
-      <table><thead><tr><th>Mineral</th><th>Have</th><th>Need</th><th></th></tr></thead><tbody>
-      ${KEYS.map((k) => { const have = projected(k), need = rec[k]; return `<tr><td>${MINERALS[k].name}</td><td class="num">${have.toFixed(0)}</td><td class="num">${need == null ? ">2000" : need}</td><td>${need != null && have >= need ? '<span class="chip good">ready</span>' : need != null ? `<button data-ready="${k}" data-need="${need}">+${Math.ceil(need - have)}</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>`;
-  }
-
-  // ---------- map ----------
-  function renderMap() {
-    const el = $("mapwrap");
-    if (!el || state.done) return;
-    const t0 = EXT.trade && EXT.trade[mapMineral];
-    let shares = [], year = null;
-    if (t0) { const ys = knownYears(mapMineral).map((r) => r.year); year = ys.length ? ys[ys.length - 1] : Object.keys(t0.sharesByYear || {}).sort()[0]; shares = (t0.sharesByYear && t0.sharesByYear[year]) || t0.shares; }
-    const pins = COUNTERPARTIES.filter((c) => c.mineral === mapMineral).map((c) => ({ country: c.country, label: `${c.name} (${c.country})`, bad: (c.flags || []).length > 0 || c.ownerChina }));
-    el.innerHTML = `<div class="map-head"><h2 style="margin:0">Where US imports come from</h2><div class="tabs">${KEYS.map((k) => `<button data-map="${k}" class="${k === mapMineral ? "on" : ""}">${MINERALS[k].name}</button>`).join("")}</div></div>
-      <div id="mapsvg"></div>
-      <div class="map-legend"><span><i style="background:var(--ore)"></i>share of US imports (${esc(year || "—")}${year && knownYears(mapMineral).length ? "" : ", baseline"})</span><span><i style="border:2px solid var(--danger)"></i>China</span><span><i style="background:var(--info)"></i>offtake candidate</span><span><i style="background:var(--warn)"></i>flagged candidate</span></div>
-      <div class="faint">${t0 ? esc(t0.sourceLabel) : "No cached trade data."}</div>`;
-    el.querySelectorAll("[data-map]").forEach((b) => (b.onclick = () => { mapMineral = b.dataset.map; renderMap(); }));
-    el.querySelector(".map-head h2").textContent = "Where US imports come from";
-    SupplyMap.render($("mapsvg"), { shares, pins, disruptions: EXT.disruptions || [] });
-  }
-
-  // ---------- turn resolution ----------
-  function snapshot() { return { budget: state.budget, d: Object.fromEntries(KEYS.map((k) => [k, distOf(k, state.minerals[k].reserveDoC)])), down: state.downtimeDays, pc: state.politicalCapital }; }
-  function commit() {
-    const before = snapshot(), q = state.quarter;
-    const summary = [...KEYS.filter((k) => orders.buy[k]).map((k) => `+${orders.buy[k]}d ${MINERALS[k].symbol}`), ...KEYS.filter((k) => orders.release[k]).map((k) => `−${orders.release[k]}d ${MINERALS[k].symbol}`), ...orders.offtakes.map((id) => COUNTERPARTIES.find((c) => c.id === id).name)].join(", ") || "Hold";
-    const res = Sim.applyOrders(state, orders);
-    if (!res.ok) { alert(res.errs.join("\n")); return; }
-    lastReport = Sim.resolveQuarter(state); reports.push(lastReport);
-    { const worst = KEYS.map((k) => [lastReport.minerals[k].shortFrac || 0, k]).sort((a, b) => b[0] - a[0])[0];
-      why(`<span class="wk">${qLabel(q)}</span>${lastReport.events.length ? esc(lastReport.events[0].headline) + ". " : "No new restrictions. "}${worst[0] > 0.01 ? `${MINERALS[worst[1]].name} factories ${worst[0] > THR ? "<b>stopped</b>" : "<b>rationed</b>"} (−${Math.round(worst[0] * 100)}%).` : "Every factory kept running."}`, worst[0] > THR ? "bad" : worst[0] > 0.01 ? "ore" : "good"); }
-    const after = snapshot(), idle = shadowReps[QUARTERS.indexOf(q)];
-    ledger.push({ q, label: summary, changes: [{ k: "Factory days lost", delta: lastReport.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "If you'd done nothing", delta: idle.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Money", delta: after.budget - before.budget, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Public trust", delta: after.pc - before.pc, unit: "", fmt: (v) => Math.round(v) }] });
-    orders = { buy: {}, release: {}, offtakes: [] };
-    coachDone = new Set();
-    render();
-    showReveal(lastReport);
-  }
-  function fastForward(target) {
-    const stop = target === "END" ? QUARTERS.length : QUARTERS.indexOf(target);
-    let first = true;
-    while (!state.done && state.qi < stop) {
-      if (first) { const r = Sim.applyOrders(state, orders); if (!r.ok) { alert(r.errs.join("\n")); return; } } else Sim.applyOrders(state, {});
-      const q = state.quarter;
-      lastReport = Sim.resolveQuarter(state); reports.push(lastReport);
-      ledger.push({ q, label: first ? "Orders, then fast-forward" : "Fast-forward (hold)", changes: [{ k: "Downtime", delta: lastReport.downtime, unit: " d", goodIfDown: true, fmt: (v) => Math.round(v) }] });
-      orders = { buy: {}, release: {}, offtakes: [] }; first = false;
-    }
-    coachDone = new Set();
-    render();
-    if (state.done) showEnd();
-  }
-
-  function showReveal(rep) {
-    const qi = QUARTERS.indexOf(rep.quarter), idle = shadowReps[qi];
-    const world = (EXT.responses || []).filter((r) => r.quarter === rep.quarter).slice(0, 4);
-    const verdict = idle.downtime < 0.5 && rep.downtime < 0.5 ? ["info", "No factories stopped this quarter, and none would have even without your stockpile."]
-      : rep.downtime < idle.downtime - 0.5 ? ["good", `Your stockpile saved <b>${Math.round(idle.downtime - rep.downtime)} days</b> of factory stoppages. Without it: ${Math.round(idle.downtime)} days; with it: ${Math.round(rep.downtime)}.`]
-      : ["bad", `Factories stopped for <b>${Math.round(rep.downtime)} days</b> this quarter (without any stockpile: ${Math.round(idle.downtime)}).`];
-    const Q = 91.25;
-    modal(`<div class="modal-head"><div><div class="kicker">What really happened</div><h3>${qLabel(rep.quarter)}</h3></div><button class="ghost" id="btn-x">Close</button></div>
-      ${rep.events.length ? rep.events.map((e) => `<div class="event-card"><div class="meta">${e.date} · ${esc(e.actor)}</div><div class="headline">${esc(e.headline)}</div>
-        <div class="chips">${Object.entries(e.effects).map(([k, f]) => `<span class="chip">${MINERALS[k].name}</span>${f.cut != null ? `<span class="chip bad">${(f.targetFactor ?? 1) < 1 ? "licences now required (slows supply)" : "exports to the US banned"}</span>` : ""}${f.setCut != null ? `<span class="chip warn">replaced by an export quota</span>` : ""}${f.relief != null ? `<span class="chip good">restrictions eased</span>` : ""}${D.REAL_PRICE && D.REAL_PRICE[k] ? `<span class="chip info" title="Prices follow cited real prices; this event's assumed multiplier is not used">price: real ${esc((EXT.prices[k] || {}).series ? "Fastmarkets" : "")} path</span>` : f.priceMult != null ? `<span class="chip ${f.priceSrc === "reported" ? "info" : ""}">price ×${f.priceMult.toFixed(2)} · ${f.priceSrc === "reported" ? "reported" : "assumed"}</span>` : ""}`).join("")}</div>
-        <div class="lesson">${esc(e.lesson)}</div><div class="faint">Sources: ${e.sources.map((s) => `<a href="${esc(s)}" target="_blank" rel="noopener">${esc(domain(s))}</a>`).join(" · ")}</div></div>`).join("") : `<div class="event-card" style="border-left-color:var(--line-2);background:transparent"><div class="headline">No new controls this quarter.</div><div class="lesson">Existing controls still bite while rerouting fills part of the gap.</div></div>`}
-      ${world.length ? `<div class="world-card"><h4>Meanwhile, what real governments did</h4>${world.map((r) => `<div><b>${esc(r.actor)}</b> · ${esc(r.date)}: ${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("")}</div>` : ""}
-      <div class="verdict ${verdict[0]}">${verdict[1]}</div>
-      <h2 style="margin-top:14px">What it did to each mineral</h2>
-      <table class="data"><thead><tr><th>Mineral</th><th>Factories</th><th>Where supply came from</th><th>Price change</th><th>Imports</th><th>From stock</th><th>Substituted</th><th>Output lost</th><th>Stored now</th></tr></thead><tbody>
-      ${KEYS.map((k) => { const r = rep.minerals[k], d = r.priceTo / r.priceFrom - 1, imp = Math.min(Q, r.avail * Q), off = Math.min(Q - imp, r.offtake || 0), dr = Math.min(Q - imp - off, r.drawn || 0), gap = Math.max(0, Q - imp - off - dr);
-        const seg = (v, c) => (v > 0.3 ? `<span style="width:${(v / Q) * 100}%;background:${c}"></span>` : "");
-        const stt = (r.shortFrac || 0) < 0.01 ? "running" : (r.shortFrac || 0) <= THR ? "rationing" : "stopped";
-        return `<tr><td>${MINERALS[k].name}</td><td><span class="state-chip ${stt}">${{ running: "Running", rationing: `Rationing −${Math.round((r.shortFrac || 0) * 100)}%`, stopped: "Stopped" }[stt]}</span></td><td><div class="wf" title="blue imports · green offtakes · orange reserve · red unmet">${seg(imp, "#3987e5")}${seg(off, "#5fc08f")}${seg(dr, "#E08A52")}${seg(gap, "#FF5A4E")}</div></td>
-          <td>${r.priceFrom.toFixed(0)}→${r.priceTo.toFixed(0)} <span class="${d > 0.005 ? "up" : d < -0.005 ? "down" : "faint"}">${d >= 0 ? "+" : ""}${(d * 100).toFixed(0)}%</span></td><td>${pct(r.avail)}</td><td>${r.drawn ? r.drawn.toFixed(0) : "—"}</td>
-          <td>${(r.substituted || 0) > 0.5 ? r.substituted.toFixed(0) : "—"}</td><td class="${r.downtime > 0.5 ? "up" : ""}">${r.downtime > 0.5 ? r.downtime.toFixed(0) : "—"}</td><td>${r.reserve.toFixed(0)}</td></tr>`; }).join("")}
-      </tbody></table>
-      <div class="faint" style="margin-top:6px">Each bar is everything factories needed this quarter: <span style="color:#3987e5">arrived from abroad</span> · <span style="color:#5fc08f">from your deals</span> · <span style="color:#E08A52">taken from your stockpile</span> · <span style="color:#FF5A4E">missing, so factories stopped</span>. Numbers are in days of supply. Storage cost ${fmt$(rep.storage)} · public trust ${rep.pcDelta >= 0 ? "+" : ""}${rep.pcDelta.toFixed(0)}.</div>
-      ${rep.tranche || rep.lapsed ? `<div class="banner" style="margin-top:8px">${rep.lapsed ? `Fiscal year ended: ${fmt$(rep.lapsed)} of unspent money lapsed. ` : ""}${rep.tranche ? `New fiscal year: ${fmt$(rep.tranche)} arrived.` : ""}</div>` : ""}
-      ${rep.offtakeNotes.length ? `<div class="section">${rep.offtakeNotes.map((n) => `<div class="order-line">⇄ ${esc(n)}</div>`).join("")}</div>` : ""}
-      <div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="btn-continue">${state.done && rep === reports[reports.length - 1] ? "See my final results →" : rep === lastReport ? `On to ${qLabel(state.quarter)} →` : "Close"}</button></div>`);
-    $("btn-continue").onclick = closeModal; $("btn-x").onclick = closeModal;
-  }
-
-  function showOfftakes(only) {
-    const signed = new Set([...state.offtakes.map((o) => o.id), ...orders.offtakes]);
-    const list = COUNTERPARTIES.filter((c) => !only || c.mineral === only).sort((a, b) => a.upfront / a.docPerQ - b.upfront / b.docPerQ);
-    modal(`<div class="modal-head"><div><div class="kicker">Supply deals${only ? ` · ${MINERALS[only].name}` : ""}</div><h3>Sign a deal with a real producer</h3></div><button class="ghost" id="btn-x">Close</button></div>
-      <div class="banner">${EXT.vetted ? `Vetted with <b>Sayari</b> (owners, watchlist, risk factors) and <b>Tradeverifyd</b> (entity score), cached ${esc(EXT.vettedFetched || "")}. Flags are findings, not allegations. Deal terms are game calibrations.` : "Illustrative counterparties."}</div>
-      <div class="faint" style="margin-bottom:10px">A deal gives you a fixed delivery every quarter, starting after a delay (projects often run late). Cheapest first. Watch for red flags: a producer owned from China still fails when China cuts supply.</div>
-      ${list.map((cp) => { const flagged = (cp.flags || []).length || cp.ownerChina, v = cp.vetting, taken = signed.has(cp.id);
-        const gainDays = cp.docPerQ, dNow = distOf(cp.mineral, projected(cp.mineral));
-        return `<div class="cp ${flagged ? "flagged" : ""}"><div>
-          <div class="chips" style="align-items:center"><b style="font-size:14px">${esc(cp.name)}</b><span class="chip">${MINERALS[cp.mineral].name}</span><span class="chip">${esc(cp.country)}</span></div>
-          <div class="facts"><span>Owner: ${esc(cp.owner)}</span><span>Upfront ${fmt$(cp.upfront)}</span><span>+${gainDays} days of supply each quarter</span><span>starts in ${cp.lag[0]}–${cp.lag[1]} quarters</span></div>
-          <div class="chips" style="margin-top:6px">${(cp.flags || []).map((f) => `<span class="chip ${["owner", "labour", "sanctions"].includes(f.kind) ? "bad" : "warn"}" title="${esc(f.why || "")}">${esc(f.label)}</span>`).join("") || `<span class="chip good">no flags returned</span>`}</div>
-          ${v ? `<div class="vet">Sayari ${v.sayariId ? `<code>${esc(v.sayariId)}</code>` : "—"} · Tradeverifyd score ${cp.score != null ? esc(cp.score) : "—"}${v.statusNote ? ` · ${esc(v.statusNote)}` : ""}${v.linkCaveat ? ` · Caveat: ${esc(v.linkCaveat)}` : ""}</div>` : ""}
-          <div class="faint" style="margin-top:4px">${cp.ownerChina || cp.upstreamChina ? "Under a China-led shock this deal delivers little or nothing." : `Once delivering, adds ${gainDays} days of supply each quarter (≈ ${Math.round((gainDays / 91.25) * 100)}% of demand). ${MINERALS[cp.mineral].name} is at ${dNow.toFixed(1)}σ today.`}</div></div>
-          <div><button data-cp="${cp.id}" ${taken || cp.upfront > state.budget - orderCost() ? "disabled" : ""}>${taken ? "Signed" : "Add to orders"}</button></div></div>`; }).join("")}`);
-    $("btn-x").onclick = closeModal;
-    $("modal").querySelectorAll("[data-cp]").forEach((b) => (b.onclick = () => {
-      const cp = COUNTERPARTIES.find((c) => c.id === b.dataset.cp);
-      if ((cp.flags || []).length || cp.ownerChina) {
-        const why = [cp.ownerChina ? "• Sayari shows a China-based owner: deliveries are cut when Chinese controls bite." : "", ...(cp.flags || []).map((f) => `• ${f.label}${f.why ? ` (${f.why})` : ""}${f.blockP ? `: ${pct(f.blockP)}/quarter block risk` : ""}${f.pcPenalty ? `, −${f.pcPenalty} political capital` : ""}`)].filter(Boolean).join("\n");
-        if (!confirm(`${cp.name}\n\n${why}\n\nSign anyway?`)) return;
-      }
-      orders.offtakes.push(cp.id); tick("orders"); closeModal(); refreshLive();
-    }));
-  }
-
-  function showLedger() {
-    modal(`<div class="modal-head"><div><div class="kicker">Your decisions</div><h3>What each quarter's choices changed</h3></div><button class="ghost" id="btn-x">Close</button></div>
-      <p class="faint">Each quarter: what you did, and the result compared with doing nothing. Green = better, red = worse.</p>
-      ${ledger.length ? `<ul class="ledger">${ledger.map((e) => `<li><b>${qLabel(e.q)} · ${esc(e.label)}</b> ${chips(e.changes)}</li>`).join("")}</ul>` : "<p>No decisions yet.</p>"}
-      <h2 class="section">Consequences log</h2><div style="max-height:260px;overflow:auto">${[...state.log].reverse().map((r) => `<div class="order-line"><span class="faint num">${r.q}</span><span style="flex:1;margin-left:8px">${esc(r.text)}</span></div>`).join("") || '<div class="faint">Nothing yet.</div>'}</div>`);
-    $("btn-x").onclick = closeModal;
-  }
-
-  function showIntro() {
-    modal(`<div class="kicker">Analyst mode · it's 1 July 2023</div><h3 style="font-size:26px;margin:6px 0 10px">You run America's $12 billion emergency mineral stockpile.</h3>
-      <div class="explain-cards">
-        <div class="xcard"><div class="xk">The problem</div>Six minerals inside cars, chips, batteries and weapons come mostly from <b>China</b> (cobalt from the <b>DRC</b>). From 2023 on, those countries start restricting exports.</div>
-        <div class="xcard"><div class="xk">Your job</div>Buy and store supply <b>before</b> shortages hit, so US factories keep running. But money is limited, and buying pushes prices up.</div>
-        <div class="xcard"><div class="xk">How it plays</div><b>14 turns</b>, each one 3 months of real history (mid-2023 to 2026). Then we test your stockpile against <b>1,000 possible futures</b> after China's pause ends on 10 Jan 2027.</div>
-      </div>
-      <h3 style="font-size:16px;margin:10px 0 4px">Each turn</h3>
-      <ol class="muted" style="line-height:1.8;margin-top:0"><li><b>Read the briefing</b> (left): real news from just before that quarter.</li>
-        <li><b>Click a mineral</b> in the table to see its price, stock and safety margin.</li>
-        <li><b>Drag "Buy more supply"</b>. The box underneath shows the cost and how much safer you get.</li>
-        <li><b>Lock in your plan</b>. The real event for that quarter happens, and you see what it did.</li></ol>
-      <div class="banner">New to this? Click <b>Key terms</b> (top right) for plain-English explanations, or try <a href="../v4/">story mode</a>, a guided 5-minute version with one mineral.</div>
-      <div style="display:flex;justify-content:flex-end;gap:8px"><a class="ghost" href="../v4/" style="text-decoration:none">Try story mode instead</a><button class="primary" id="btn-start">Start turn 1 →</button></div>`);
-    $("btn-start").onclick = closeModal;
-  }
-
-  function showAbout() {
-    const nIntel = EXT.intel ? Object.values(EXT.intel).reduce((a, b) => a + (b.items || []).length, 0) : 0;
-    const li = (ok, t) => `<li><span class="chip ${ok ? "good" : ""}">${ok ? "cached" : "missing"}</span> ${t}</li>`;
-    modal(`<div class="modal-head"><div><div class="kicker">About the data</div><h3>What's real, what's assumed</h3></div><button class="ghost" id="btn-x">Close</button></div>
-      <ul style="line-height:1.7">
-        ${li(!!EXT.intel, `<b>Tavily</b>: ${nIntel} dated news items, from the 90 days before each quarter.`)}
-        ${li(!!EXT.responses, `<b>Tavily</b>: ${(EXT.responses || []).length} real government and industry actions, 2023–26 (DLA buys, DoD price floors, JOGMEC, EU), shown only once they'd happened.`)}
-        ${li(!!EXT.prices, `<b>Tavily</b>: ${Object.values(EXT.prices || {}).reduce((a, p) => a + (p.points || []).length, 0)} cited real price points (Fastmarkets, Argus, Benchmark). <b>History prices follow these real paths</b> (gaps interpolated and flagged); your own buying still moves the price on top. Dysprosium uses the ex-China price a Western reserve pays.`)}
-        ${li(!!EXT.trade, `<b>Tradeverifyd</b>: UN Comtrade US imports (China share, map); <b>Sayari</b> supplier facets.`)}
-        ${li(!!EXT.vetted, `<b>Sayari + Tradeverifyd</b>: ${COUNTERPARTIES.length} real producers vetted for ownership and risk flags.`)}
-        ${li(!!(window.CACHE && window.CACHE.network), `<b>Sayari</b> supply networks: ${Object.keys((window.CACHE || {}).network || {}).join(", ")}. These drive each mineral's distance to disaster; non-antimony networks are illustrative.`)}
-      </ul>
-      <p class="faint">Safety margin = how big a shock a mineral's supply could absorb, compared with a typical bad quarter (for experts: the reverse-stress distance (L + S)/√(1ᵀΣ1)). It's not a probability. Engine assumptions are in <code>site/data.js</code>.</p>${Plain.glossaryHTML()}`);
-    $("btn-x").onclick = closeModal;
-  }
-
-  // ---------- end screen + live forward mode ----------
+  // ---------- end: review, best path, playbook, 2027 ----------
   function showEnd() {
-    const bench = Sim.benchmarks(), you = Sim.score(state, bench.worst);
-    $("game").classList.add("hidden");
-    const el = $("endscreen"); el.classList.remove("hidden");
-    const rows = [["You", state, you, "you"], ...Object.values(bench.scored).map((b) => [b.label, b.state, b.score])].sort((a, b) => b[2].total - a[2].total);
-    const sig0 = EXT.signal ? EXT.signal.value : 0;
-    el.innerHTML = `<div class="panel"><div class="kicker">Campaign complete · Q3 2023 → Q4 2026</div>
-      <div class="hero" style="margin-top:8px"><div><div class="bigscore">${you.total.toFixed(0)}</div><div class="muted">out of 100</div></div>
-        <div class="parts"><div class="part"><div class="k">Stock kept up (40 pts)</div><div class="v">${you.parts.cover.toFixed(1)}</div><div class="faint">your weakest mineral averaged ${you.avgMinDoc.toFixed(0)} of 60 days</div></div>
-          <div class="part"><div class="k">Stoppages avoided (30 pts)</div><div class="v">${you.parts.downtime.toFixed(1)}</div><div class="faint">${Math.round(state.downtimeDays)} factory days lost vs ${Math.round(bench.worst)} with no stockpile</div></div>
-          <div class="part"><div class="k">Value for money (15 pts)</div><div class="v">${you.parts.efficiency.toFixed(1)}</div><div class="faint">${fmt$(state.spent)} spent</div></div>
-          <div class="part"><div class="k">Public trust (15 pts)</div><div class="v">${you.parts.political.toFixed(1)}</div><div class="faint">${Math.round(state.politicalCapital)} / 100</div></div></div></div>
-      <h2 class="section">How you compare (same history, different strategies)</h2>
-      <table class="data"><thead><tr><th>Strategy</th><th>Score</th><th>Stock</th><th>Stoppages</th><th>Value</th><th>Trust</th><th>Factory days lost</th><th>Spent</th></tr></thead><tbody>
-      ${rows.map(([l, st, sc, cls]) => `<tr class="${cls || ""}"><td>${l}</td><td>${sc.total.toFixed(1)}</td><td>${sc.parts.cover.toFixed(1)}</td><td>${sc.parts.downtime.toFixed(1)}</td><td>${sc.parts.efficiency.toFixed(1)}</td><td>${sc.parts.political.toFixed(1)}</td><td>${Math.round(st.downtimeDays)}</td><td>${fmt$(st.spent)}</td></tr>`).join("")}</tbody></table>
-      <div class="section"><button class="ghost" id="btn-led2">Review your decisions</button></div></div>
-      <div class="panel section"><div class="kicker">The 2027 deadline</div><h3 style="font-size:22px;margin:4px 0">What happens after China's pause ends on 10 January 2027?</h3>
-        <p class="muted" style="margin-top:0">China could extend the pause, let its restrictions return, or strike a new deal. We play 2027 out 1,000 times from your final stockpile. Move any slider and it re-runs instantly.</p>
-        <div class="fwd-controls">
-          <label>How tense is the news? (today's real headlines score ${sig0.toFixed(2)}; −1 calm, +1 escalating) <b id="f-sig-v">${sig0.toFixed(2)}</b><input type="range" id="f-sig" min="-1" max="1" step="0.05" value="${sig0}"></label>
-          <label>What if you had stored more of every mineral? <b id="f-extra-v">+0 days</b><input type="range" id="f-extra" min="0" max="120" step="5" value="0"></label>
-          <div><div class="faint">Add a natural disaster near a mine (none were active when we checked):</div><div class="chips">${FORWARD.disruptionRegions.map((d) => `<label class="chip"><input type="checkbox" data-dis="${d.id}"> ${esc(d.label)}</label>`).join("")}</div></div>
-        </div><div id="fwd-out"></div></div>
-      <div style="display:flex;gap:8px;justify-content:center;margin:20px 0"><button class="ghost" id="btn-again">Play again</button><a class="ghost" href="../v4/" style="text-decoration:none">Story mode</a></div>`;
-    $("btn-again").onclick = () => reset(false); $("btn-led2").onclick = showLedger;
-    let t = null; const go = () => { clearTimeout(t); t = setTimeout(runForward, 120); };
-    $("f-sig").oninput = (e) => { $("f-sig-v").textContent = (+e.target.value).toFixed(2); go(); };
-    $("f-extra").oninput = (e) => { $("f-extra-v").textContent = `+${e.target.value} days`; go(); };
-    el.querySelectorAll("[data-dis]").forEach((c) => (c.onchange = go));
-    runForward(); renderStats(); $("coach").innerHTML = ""; renderStrip(); window.scrollTo(0, 0);
-  }
-  let baseFwd = null;
-  function runForward() {
-    const signal = +$("f-sig").value, extra = +$("f-extra").value;
-    const disruptions = [...document.querySelectorAll("[data-dis]:checked")].map((i) => i.dataset.dis);
-    const over = extra ? Object.fromEntries(KEYS.map((k) => [k, state.minerals[k].reserveDoC + extra])) : null;
-    const res = MonteCarlo.run(state, { paths: 1000, signal, disruptions, overrideStart: over });
-    if (!baseFwd) baseFwd = res;
-    const rec = {}; for (const k of KEYS) rec[k] = MonteCarlo.recommend(state, k, { signal, disruptions, paths: 200 });
-    const cw = res.cliffWeights;
-    $("fwd-out").innerHTML = `<div class="chips"><span class="chip">Outcomes: pause extended ${pct(cw.extend)} · restrictions return ${pct(cw.lapse)} · new deal ${pct(cw.deal)}</span>
-        ${chips([{ k: "Average factory days lost in 2027", delta: res.expectedDowntime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "vs your actual stockpile", delta: res.expectedDowntime - baseFwd.expectedDowntime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }])}</div>
-      <div class="fans">${KEYS.map((k) => { const m = res.minerals[k], start = (over ? over[k] : state.minerals[k].reserveDoC), r = rec[k];
-        return `<div class="fan"><div class="mname">${tile(k, true)}<b>${MINERALS[k].name}</b><span class="faint" style="margin-left:auto">starts with ${start.toFixed(0)} days</span></div>${fanSVG(m.fan)}
-          <div class="faint">Drops below 60 days in <b class="${m.pBelow60 > 0.2 ? "up" : ""}">${pct(m.pBelow60)}</b> of futures · below 30 days in <b>${pct(m.pBelow30)}</b></div>
-          <div class="faint">To stay above 60 days in 9 of 10 futures, store <b>${r == null ? "over 2,000" : r} days</b>${r != null && r > start ? ` (${Math.ceil(r - start)} more)` : r != null ? " ✓ you do" : ""}</div></div>`; }).join("")}</div>
-      <div class="faint section">Shaded band = where most futures land, line = the middle one, red dashed line = 60 days. These are simulated futures, not predictions.</div>`;
-  }
-  function fanSVG(fan) {
-    const W = 300, H = 140, L = 30, R = 10, T = 8, B = 18, max = Math.max(90, ...fan.map((f) => f.p90)) * 1.1;
-    const x = (i) => L + (i / (fan.length - 1)) * (W - L - R), y = (v) => T + (1 - v / max) * (H - T - B);
-    const band = fan.map((f, i) => `${x(i)},${y(f.p90)}`).join(" ") + " " + [...fan].reverse().map((f, i) => `${x(fan.length - 1 - i)},${y(f.p10)}`).join(" ");
-    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Fan chart"><line x1="${L}" x2="${W - R}" y1="${y(60)}" y2="${y(60)}" stroke="#FF5A4E" stroke-dasharray="4 3"/><text x="${L - 3}" y="${y(60) + 3}" text-anchor="end">60</text>
-      <polygon points="${band}" fill="rgba(224,138,82,.22)"/><polyline points="${fan.map((f, i) => `${x(i)},${y(f.p50)}`).join(" ")}" fill="none" stroke="#E08A52" stroke-width="2.2"/>
-      ${["Q4 26", "Q1", "Q2", "Q3", "Q4 27"].map((l, i) => `<text x="${x(i)}" y="${H - 4}" text-anchor="middle">${l}</text>`).join("")}</svg>`;
+    $("game").classList.add("hidden"); const el = $("end"); el.classList.remove("hidden");
+    const best = Paths.playAll(CASES, Paths.bestChooser, "Best in hindsight");
+    const paths = [["you", P.you], ["real", P.real], ["idle", P.idle], ["best", best]];
+    const tot = (p) => p.s.spent + Paths.lostValue(p, 0);
+    const sig = EXT.signal ? EXT.signal.value : 0;
+    const fut = Object.fromEntries(paths.map(([k, p]) => [k, MonteCarlo.run(p.s, { paths: 1000, signal: sig })]));
+    const matchedBest = history.filter((h, i) => h.you.id === best.choices[i].option).length, matchedReal = history.filter((h) => h.matchReal).length;
+    const tags = []; for (const ch of best.choices) if (!tags.includes(ch.tag)) tags.push(ch.tag);
+    const disagree = history.map((h, i) => ({ h, b: h.c.options.find((o) => o.id === best.choices[i].option) })).filter((x) => x.b && x.b !== x.h.real);
+    const rec = Object.fromEntries(KEYS.map((k) => [k, MonteCarlo.recommend(P.you.s, k, { signal: sig, paths: 200 })]));
+    const gap = (k) => (rec[k] != null ? Math.max(0, Math.ceil(rec[k] - P.you.s.minerals[k].reserveDoC)) : 0);
+    const recCost = KEYS.reduce((a, k) => a + (gap(k) ? Sim.quoteBuy(P.you.s, k, gap(k)) : 0), 0);
+    el.innerHTML = `<div class="panel">
+        <div class="kicker">Review · ${CASES.length} real decisions, 2023–2026</div>
+        <h2 class="cb-title">You matched the best call in hindsight ${matchedBest} of ${CASES.length} times, and the real US ${matchedReal} times.</h2>
+        <div class="paths4">${paths.map(([k, p]) => `<div class="pcard" style="border-top-color:${COL[k]}"><div class="k">${esc(p.name)}</div><div class="v">${Math.round(cum(p))} days</div><div class="s">factory output lost, 2023–26</div>
+          <div class="row"><span>Money spent</span><b>${fmt$(p.s.spent)}</b></div><div class="row"><span>Total cost</span><b>${fmt$(tot(p))}</b></div><div class="row"><span>2027 average output lost</span><b>${Math.round(fut[k].expectedDowntime)} days</b></div></div>`).join("")}</div>
+        <p class="faint">Total cost = money spent + estimated value of lost output. 2027 = average over 1,000 simulated futures after China's pause ends, starting from each path's final stockpile. <a href="../methods.html" target="_blank" rel="noopener">Methods &amp; sources</a></p>
+      </div>
+      <div class="panel section"><h2>Case by case</h2>
+        <table class="data cases"><thead><tr><th>Case</th><th>You</th><th>Real US</th><th>Best in hindsight</th></tr></thead><tbody>
+        ${history.map((h, i) => { const b = h.c.options.find((o) => o.id === best.choices[i].option); return `<tr><td><b>${esc(h.c.when)}</b><div class="faint">${esc(h.c.title)}</div></td><td class="${h.you === b ? "ok" : ""}">${esc(h.you.label)}${h.you === b ? " ✓" : ""}</td><td>${esc(h.real.label)}</td><td>${esc(b ? b.label : "")}</td></tr>`; }).join("")}</tbody></table></div>
+      <div class="panel section"><h2>The playbook: what worked</h2>
+        <ol class="playbook">${tags.map((t) => `<li>${esc(LESSONS[t])}</li>`).join("")}</ol>
+        ${disagree.length ? `<h3 class="sub">Where hindsight and the real US differed</h3><ul class="facts">${disagree.slice(0, 6).map((x) => `<li><b>${esc(x.h.c.when)}</b>: the US chose "${esc(x.h.real.label)}"; hindsight says "${esc(x.b.label)}".</li>`).join("")}</ul>` : ""}
+        <p class="faint">"Best in hindsight" picks, at each case, the option with the lowest total cost given the choices before it, knowing how 2023–26 actually unfolded. It's a benchmark to learn from, not a forecast.</p></div>
+      <div class="panel section"><h2>The best way forward: 2027</h2>
+        <p class="muted" style="margin-top:0">Hindsight rewards what worked in 2023–26; the future may differ. Here each path's final stockpile is tested against 1,000 possible futures after 10 January 2027 (pause extended, restrictions return, or a new deal, weighted by this week's headlines).</p>
+        <table class="data"><thead><tr><th>Mineral</th>${paths.map(([k, p]) => `<th style="color:${COL[k]}">${esc(p.name)}</th>`).join("")}<th>To be safe, hold</th></tr></thead><tbody>
+        ${KEYS.map((k) => `<tr><td>${MINERALS[k].name}</td>${paths.map(([pk]) => `<td>${pct(1 - fut[pk].minerals[k].pBelow60)}</td>`).join("")}<td><b>${rec[k] == null ? "—" : `${rec[k]} days`}</b>${gap(k) ? ` <span class="faint">(+${gap(k)})</span>` : rec[k] != null ? " ✓" : ""}</td></tr>`).join("")}</tbody></table>
+        <p class="faint">Percentages = share of simulated futures in which that stockpile stays above 60 days all year. "To be safe" = days to hold so it stays above 60 days in 9 of 10 futures (≈${fmt$(recCost)} to reach from your position at today's prices).</p></div>
+      <div class="end-actions"><button class="primary" id="again">Play the cases again</button><button class="ghost" id="print">Print this review</button><a class="ghost" href="../methods.html">Methods &amp; sources</a><a class="ghost" href="../v4/">Story mode</a></div>`;
+    $("again").onclick = () => reset(false); $("print").onclick = () => window.print();
+    renderProgress(); renderScore();
+    why(`<span class="wk">Done</span>Output lost: you <b>${Math.round(cum(P.you))} days</b>, real US <b>${Math.round(cum(P.real))}</b>, best in hindsight <b>${Math.round(cum(best))}</b>.`, cum(P.you) <= cum(P.real) ? "good" : "ore");
+    window.scrollTo(0, 0);
   }
 
-  // ---------- modal plumbing + keys ----------
-  function modal(html) { $("modal").innerHTML = html; $("overlay").classList.remove("hidden"); $("modal").scrollTop = 0; const f = $("modal").querySelector(".primary, button"); if (f) f.focus(); }
-  function closeModal() { $("overlay").classList.add("hidden"); if (state.done && $("endscreen").classList.contains("hidden")) showEnd(); }
+  // ---------- modals ----------
+  function modal(html) { $("modal").innerHTML = html; $("overlay").classList.remove("hidden"); const b = $("modal").querySelector(".primary, button"); if (b) b.focus(); }
+  function closeModal() { $("overlay").classList.add("hidden"); }
   $("overlay").addEventListener("click", (e) => { if (e.target.id === "overlay") closeModal(); });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeModal();
-    const inField = e.target.closest("input, select, textarea");
-    if (e.key === "Enter" && !inField && !e.target.closest("button, a, tr")) {
-      const btn = $("overlay").classList.contains("hidden") ? $("btn-commit") : ($("btn-continue") || $("btn-start"));
-      if (btn && !btn.disabled) { e.preventDefault(); btn.click(); }
-    }
-    if ((e.key === "ArrowDown" || e.key === "ArrowUp") && e.target.closest("tr.row")) {
-      e.preventDefault(); const i = KEYS.indexOf(sel) + (e.key === "ArrowDown" ? 1 : -1); sel = KEYS[(i + KEYS.length) % KEYS.length]; mapMineral = sel; renderTable(); renderDetail(); renderMap();
-      const tr = document.querySelector(`tr.row[data-k="${sel}"]`); if (tr) tr.focus();
-    }
-  });
-  $("btn-about").onclick = showAbout;
-  const showGloss = () => { modal(`<div class="modal-head"><div class="kicker">Plain English</div><button class="ghost" id="btn-x">Close</button></div>${Plain.glossaryHTML()}`); $("btn-x").onclick = closeModal; };
-  $("btn-gloss").onclick = showGloss;
-  document.addEventListener("click", (e) => { if (e.target && e.target.id === "btn-gloss2") showGloss(); });
-  $("btn-ledger").onclick = showLedger;
-  $("btn-reset").onclick = () => { if (confirm("Restart the campaign from Q3 2023?")) { baseFwd = null; reset(false); } };
+  function showIntro() {
+    modal(`<div class="kicker">Analyst casebook</div><h3 style="font-size:24px;margin:6px 0 10px">${CASES.length} real decisions, 2023 to 2026.</h3>
+      <ol class="muted" style="line-height:1.8;margin:0 0 10px;padding-left:20px"><li>Read what officials knew at the time.</li><li>Make the call yourself.</li><li>See what the US actually did, and what <b>every</b> option would have led to.</li></ol>
+      <p class="muted">Three paths run side by side through the real events: <b style="color:${COL.you}">you</b>, the <b style="color:${COL.real}">real US</b> and <b style="color:${COL.idle}">no action</b>. At the end: the best path in hindsight, a playbook, and a test of the way forward for 2027.</p>
+      <div class="banner">You have Project Vault-sized money ($12B, arriving each fiscal year) from 2023, three years before the real Vault existed. That's the "what if" being tested.</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px"><a class="ghost" href="../methods.html" style="text-decoration:none">Methods &amp; sources</a><button class="primary" id="go">Start case 1 →</button></div>`);
+    $("go").onclick = closeModal;
+  }
+  function showMethod() {
+    modal(`<div class="modal-head"><h3>How the comparison works</h3><button class="ghost" id="x">Close</button></div>
+      <ul class="muted" style="line-height:1.7"><li>Every option is simulated from <b>your position just before this case</b>, through the real events to the end of 2026, with no later decisions. Same engine, same random seed: the only difference is the choice.</li>
+      <li><b>Output lost</b> = factory days lost for this case's minerals, after imports, substitutes, deals and your stockpile.</li>
+      <li><b>Money spent</b> = purchases, deals, grants and storage from now on. Stock targets are topped up each quarter, at most 45 days a quarter.</li>
+      <li><b>Total cost</b> = money spent + value of output lost across all six minerals: estimated $M per lost day (${KEYS.map((k) => `${MINERALS[k].symbol} ${Paths.VALUE[k]}`).join(", ")}) × the slider.</li></ul>
+      <p><a href="../methods.html" target="_blank" rel="noopener">Full methods &amp; sources →</a></p>`);
+    $("x").onclick = closeModal;
+  }
+  $("btn-gloss").onclick = () => { modal(`<div class="modal-head"><div class="kicker">Plain English</div><button class="ghost" id="x">Close</button></div>${Plain.glossaryHTML()}`); $("x").onclick = closeModal; };
+  $("btn-reset").onclick = () => { if (confirm("Restart the casebook from case 1?")) reset(false); };
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-  const syncTop = () => document.documentElement.style.setProperty("--top-h", `${document.querySelector(".topbar").offsetHeight}px`);
-  addEventListener("resize", syncTop); syncTop();
-  reset(!/ff=/.test(location.hash));
-  const ff = (location.hash.match(/ff=([0-9Q]+|END)/) || [])[1];
-  if (ff) fastForward(ff);
+  reset(!/nointro/.test(location.hash));
 })();

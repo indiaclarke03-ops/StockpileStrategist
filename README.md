@@ -90,12 +90,15 @@ The **live supply chain panel** stays beside the step and reacts to what you do.
   - It shows **what governments and industry actually did** that quarter (DLA awards, DoD price floors, JOGMEC, EU).
 - **Decision ledger.** Every choice is listed with its measured effect (Δσ, Δ$, Δ runtime, Δ downtime).
 
-**Analyst mode** ([`site/classic/`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/)) runs all six minerals quarter by quarter. It has:
-- the same coach bar and a clickable 14-quarter history strip;
-- a mineral detail panel with the real price path against cited points;
-- sliders with a live impact preview, including distance to disaster from each mineral's supply network;
-- a supply-mix breakdown and real-world counterparts after every commit;
-- a live forward mode at the end.
+**Analyst casebook** ([`site/classic/`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/)) works through 11 real US decisions from August 2023 to September 2026. Examples: the gallium licences, the December 2024 ban, the MP Materials deal, the DLA's first stockpile buys, Project Vault.
+
+- **Each case** shows what officials could know at the time. You choose, then see what the US actually did, with sources, and what *every* option would have led to through 2026.
+- **Same simulation for every option:** each runs from your position, with the same engine and random seed.
+- **Three paths in lockstep:** you, the real US, and no action.
+- **The review** gives the best path in hindsight, a playbook of what worked, and a 2027 test of every path against 1,000 futures, with how much to hold to be safe.
+- **A slider** sets how much a lost factory day is worth, to show how conclusions shift.
+
+[**Methods & sources**](https://indiaclarke03-ops.github.io/StockpileStrategist/site/methods.html) covers the reverse-stress maths, the engine, assumptions, datasets, known limits and every cited reference. It's generated from the cached data.
 
 Shortcuts: [`#ff=2024Q4`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=2024Q4) · [`#ff=END`](https://indiaclarke03-ops.github.io/StockpileStrategist/site/classic/index.html#ff=END).
 
@@ -144,7 +147,8 @@ node tests/rst.test.js          # reverse-stress engine: atlas example, sum-to-L
 | Path | What it holds |
 |---|---|
 | `site/v4/` | Story mode: `guide.js` (coach bar, ledger, impact chips), `acts.js` (router, HUD, Acts 0–3), `rst.js` (reverse-stress engine), `missions.js` (missions + network models), `network.js` (graph and morph), `globe.js`, `replay.js` (Act 4), `futures.js` (Act 5), `share.js`, `v4.css` |
-| `site/classic/` | Analyst mode: the six-mineral dashboard, redesigned (coach, history strip, detail panel, live previews, ledger) |
+| `site/classic/` | Analyst casebook: `cases.js` (11 real decisions, cited), `paths.js` (path engine and counterfactuals), `app.js` |
+| `site/methods.html` | Methods & sources page |
 | `site/data.js`, `integrate.js`, `sim.js`, `montecarlo.js`, `data_cache.js` | Shared data and engines. `montecarlo.js` gained an optional per-path `track` output; its maths is unchanged |
 | `data/` | Cached tool results; `data/network/` holds the v4 supply networks |
 | `tests/rst.test.js` | Node tests for the reverse-stress engine |

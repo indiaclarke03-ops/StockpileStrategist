@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Stockpile Strategist · Analyst</title>
-  <meta name="description" content="Analyst mode: run all six critical minerals quarter by quarter through real 2023–26 history, with live impact previews." />
+  <title>Stockpile Strategist · Analyst casebook</title>
+  <meta name="description" content="Eleven real US critical-mineral decisions, 2023–2026. Make each call, see what really happened, and what every option would have led to." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -12,35 +12,29 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="../v4/" title="Back to story mode"><span class="logo" aria-hidden="true">◆</span><span><b>Stockpile Strategist</b><span class="sub">Analyst mode · manage all six minerals</span></span></a>
-    <div class="stats" id="stats"></div>
+    <a class="brand" href="../v4/" title="Story mode"><span class="logo" aria-hidden="true">◆</span><span><b>Stockpile Strategist</b><span class="sub">Analyst casebook · real decisions, 2023–26</span></span></a>
+    <div class="cb-progress" id="progress"></div>
+    <div class="stats" id="score"></div>
     <div class="top-actions">
       <button class="ghost" id="btn-gloss">Key terms</button>
-      <button class="ghost" id="btn-ledger" title="Every quarter's choices and what they changed">Your decisions <b id="ledger-n">0</b></button>
-      <button class="ghost" id="btn-about">About the data</button>
+      <a class="ghost" href="../methods.html">Methods &amp; sources</a>
       <button class="ghost" id="btn-reset">Restart</button>
     </div>
   </header>
 
-  <nav class="coach" id="coach" aria-label="This quarter"></nav>
-  <div class="strip-label">Your history · each box is 3 months · <b style="color:#ff8f86">red</b> = factories stopped · click a past box to review it</div>
-  <nav class="timeline-strip" id="tstrip" aria-label="Quarters"></nav>
-
-  <main id="game" class="layout">
-    <aside class="panel intel" id="intel" aria-label="Intel briefing"></aside>
-    <section class="board" aria-label="Minerals">
-      <div class="panel table-panel" id="table"></div>
-      <div class="panel detail" id="detail" aria-live="polite"></div>
-    </section>
-    <aside class="panel orders" id="orders" aria-label="Orders"></aside>
+  <main class="cb-layout" id="game">
+    <section class="panel cb-case" id="case" aria-live="polite"></section>
+    <aside class="cb-side">
+      <div class="panel" id="chart"></div>
+      <div class="panel" id="stocks"></div>
+      <div class="panel" id="chain"></div>
+    </aside>
   </main>
+  <main class="end hidden" id="end"></main>
 
-  <main id="endscreen" class="end hidden"></main>
   <div class="whyline hidden" id="whyline" aria-live="polite"></div>
   <div class="overlay hidden" id="overlay"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
   <script src="../data.js"></script>
   <script src="../data_cache.js"></script>
   <script src="../integrate.js"></script>
@@ -51,7 +45,8 @@
   <script src="../v4/plain.js"></script>
   <script src="../v4/tour.js"></script>
   <script src="../v4/network.js"></script>
-  <script src="map.js"></script>
+  <script src="cases.js"></script>
+  <script src="paths.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
