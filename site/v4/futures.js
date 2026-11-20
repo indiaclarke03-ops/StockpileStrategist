@@ -15,7 +15,7 @@
     const res = run(G), survived = res.paths.filter((p) => p.failQ < 0).length;
     G.futures = { res, survived, signal: sig };
     const counts = { extend: 0, lapse: 0, deal: 0 }; res.paths.forEach((p) => counts[p.branch]++);
-    U.$("s-futures").innerHTML = `<div class="step-k">Step 12 · After 10 January 2027</div>
+    U.$("s-futures").innerHTML = `<div class="step-k">Step 13 · After 10 January 2027</div>
       <h2>In <span class="num" id="surv">0</span> of 1,000 possible futures, your factory keeps running.</h2>
       <p class="lead">China may extend its pause, bring restrictions back, or strike a new deal. Each line is one possible 2027.</p>
       <div class="fan-wrap"><canvas id="fan" aria-label="1,000 possible futures of your stockpile"></canvas>
@@ -92,15 +92,16 @@
       const r = missionRun(st.fn, k), mc = MonteCarlo.run(r.s, { paths: 400, signal: f.signal, track: k, failAt: G.threshold, seed: 2027 });
       return { label: st.label, down: r.down, spent: r.s.spent, surv: mc.paths.filter((p) => p.failQ < 0).length / 400 };
     });
-    U.$("s-report").innerHTML = `<div class="step-k">Step 13 · Your report</div>
+    U.$("s-report").innerHTML = `<div class="step-k">Step 14 · Your report</div>
       <div class="report-grid"><div><div class="grade">${grade}</div><div class="faint" style="text-align:center">${Math.round(score)} / 100</div></div>
-        <div class="kpis" style="margin:0">${U.kpi("Weak spots found", `${G.guessHits || 0} of 2`, "")}${U.kpi("Safety margin", Plain.margin(dFinal), Plain.zone(dFinal).label)}${U.kpi("2023–26 stoppage", `${Math.round(h.yours)} days`, `no stockpile: ${Math.round(h.ghost)}`, h.yours < h.ghost ? "good" : "bad")}${U.kpi("2027 futures OK", `${f.survived} / 1,000`, "")}</div></div>
+        <div class="kpis" style="margin:0">${U.kpi("Weak spots found", `${G.guessHits || 0} of 2`, "")}${U.kpi("Safety margin", Plain.margin(dFinal), Plain.zone(dFinal).label)}${U.kpi("2023–26 output lost", `${Math.round(h.yours)} days`, `no stockpile: ${Math.round(h.ghost)}`, h.yours < h.ghost ? "good" : "bad")}${U.kpi("2027 futures OK", `${f.survived} / 1,000`, "")}</div></div>
       <h3 style="margin-top:18px">Other strategies, same events</h3>
-      <table class="bench"><thead><tr><th>Strategy</th><th>Days stopped</th><th>Spent</th><th>2027 futures OK</th></tr></thead><tbody>
+      <table class="bench"><thead><tr><th>Strategy</th><th>Output days lost</th><th>Spent</th><th>2027 futures OK</th></tr></thead><tbody>
         <tr class="you"><td>You</td><td>${Math.round(h.yours)}</td><td>${U.fmt$(h.state.spent)}</td><td>${Math.round(f.survived / 10)}%</td></tr>
         ${benches.map((b) => `<tr><td>${U.esc(b.label)}</td><td>${Math.round(b.down)}</td><td>${U.fmt$(b.spent)}</td><td>${Math.round(b.surv * 100)}%</td></tr>`).join("")}</tbody></table>
-      <div class="front-actions" style="margin-top:18px"><button class="ghost" id="btn-share">Save result as image</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Analyst mode: all six minerals</a></div>`;
+      <div class="front-actions" style="margin-top:18px"><button class="primary" id="btn-brief">Open policy briefing (print / PDF)</button><button class="ghost" id="btn-share">Save as image</button><a class="ghost" href="../classic/" style="text-decoration:none;color:inherit">Analyst mode: all six minerals</a></div>`;
     U.$("btn-share").onclick = () => Share.card(G);
+    U.$("btn-brief").onclick = () => Share.brief(G);
   }
 
   root.Futures = { start, report };

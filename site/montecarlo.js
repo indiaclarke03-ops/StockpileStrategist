@@ -62,7 +62,10 @@
           const x = r(); const branch = x < cw.extend ? "extend" : x < cw.extend + cw.lapse ? "lapse" : "deal";
           cliffCount[branch]++; branchOf = branch;
           if (branch === "lapse") {
-            ms.dysprosium.cut = clamp(ms.dysprosium.cut + uni(r, [0.05, 0.2]), 0, 1);
+            // The suspended October 2025 controls return ON TOP of the April 2025 heavy-REE controls
+            // (still in force), closing workaround routes: Dy cut rises and rerouting restarts.
+            ms.dysprosium.cut = clamp(Math.max(ms.dysprosium.cut, 0.8 * MINERALS.dysprosium.exposure.china) + uni(r, [0.05, 0.2]) * MINERALS.dysprosium.exposure.china, 0, 1);
+            ms.dysprosium.q = 0;
             for (const k of ["gallium", "germanium", "antimony"]) { ms[k].cut = clamp(ms[k].cut * 2, 0, 1); ms[k].q = 0; }
           } else if (branch === "deal") {
             for (const k of KEYS) ms[k].cut *= 0.5;
@@ -95,7 +98,8 @@
           }
           if (supply > 100) { m.doc += (supply - 100) / U; supply = 100; }
           let short = 100 - supply;
-          const drawn = Math.min(m.doc, short / U);
+          if (m.cut > 0.02) short = Math.max(0, short - 100 * (p.subCap || 0) * Math.min(1, m.q / 2)); // substitution
+          const drawn = short / 100 > (state.releaseTrigger || 0) ? Math.min(m.doc, short / U) : 0;
           m.doc -= drawn; short -= drawn * U;
           dt += Math.max(0, short) * p.criticality * 0.9;
           if (k === track && failQ < 0 && short > failAt * 100 + 1e-9) failQ = t;

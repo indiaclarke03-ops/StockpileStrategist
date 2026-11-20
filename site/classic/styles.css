@@ -236,3 +236,15 @@ details summary { cursor: pointer; color: var(--ink-2); }
 #chainGraph svg { width: 100%; height: auto; max-height: 420px; display: block; }
 .linkbtn { background: none; border: 0; color: var(--info); padding: 0; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .intel-item.news { font-size: 13px; }
+
+/* v5 */
+.table-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.kpis3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+.rel { margin-top: 10px; display: grid; gap: 4px; } .rel .k { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
+.rel .tabs { margin: 0; }
+.state-chip { display: inline-flex; font: 700 11px var(--mono); text-transform: uppercase; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+.state-chip.running { color: var(--ok); background: var(--ok-soft); } .state-chip.rationing { color: var(--warn); background: var(--warn-soft); } .state-chip.stopped { color: #ff8f86; background: var(--danger-soft); }
+.whyline { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 30; max-width: min(760px, 92vw); background: rgba(18,26,41,.97); border: 1px solid var(--line-2); border-left: 3px solid var(--info); border-radius: 10px; padding: 8px 14px; font-size: 13.5px; color: var(--ink-2); box-shadow: 0 8px 30px rgba(0,0,0,.45); transition: opacity .6s; }
+.whyline b { color: var(--ink); } .whyline.bad { border-left-color: var(--danger); } .whyline.good { border-left-color: var(--ok); } .whyline.ore { border-left-color: var(--ore); }
+.whyline .wk { font: 700 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-right: 8px; } .whyline.fade { opacity: .45; }
+.layout { padding-bottom: 90px; }

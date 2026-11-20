@@ -1,0 +1,3606 @@
+{
+ "fetched": "2026-11-20",
+ "source": "UN Comtrade public API (preview), reporter USA (842), flow M (imports), all partners",
+ "method": "https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode=842&period={year}&cmdCode={hs}&flowCode=M",
+ "minerals": {
+  "gallium": {
+   "hs": [
+    "811292"
+   ],
+   "years": {
+    "2023": {
+     "total": 228504762.0,
+     "chinaShare": 0.1435,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 87556841.0,
+       "share": 0.3832
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 32791847.0,
+       "share": 0.1435
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 32576010.0,
+       "share": 0.1426
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 15910850.0,
+       "share": 0.0696
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 12337869.0,
+       "share": 0.054
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 10170729.0,
+       "share": 0.0445
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 9942156.0,
+       "share": 0.0435
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 7756113.0,
+       "share": 0.0339
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 6959131.0,
+       "share": 0.0305
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 4461928.0,
+       "share": 0.0195
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 3690173.0,
+       "share": 0.0161
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 1466832.0,
+       "share": 0.0064
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 1214508.0,
+       "share": 0.0053
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 336048.0,
+       "share": 0.0015
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 267851.0,
+       "share": 0.0012
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 241500.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 229747.0,
+       "share": 0.001
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 229453.0,
+       "share": 0.001
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 138678.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 115974.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 57385.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 27139.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "442",
+       "country": "442",
+       "value": 26000.0,
+       "share": 0.0001
+      }
+     ]
+    },
+    "2024": {
+     "total": 274927348.0,
+     "chinaShare": 0.1978,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 98972769.0,
+       "share": 0.36
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 53325054.0,
+       "share": 0.194
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 18303634.0,
+       "share": 0.0666
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 17879717.0,
+       "share": 0.065
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 16149124.0,
+       "share": 0.0587
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 15867305.0,
+       "share": 0.0577
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 12886627.0,
+       "share": 0.0469
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 12336171.0,
+       "share": 0.0449
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 11494722.0,
+       "share": 0.0418
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 9084039.0,
+       "share": 0.033
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 2283145.0,
+       "share": 0.0083
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 2045391.0,
+       "share": 0.0074
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 1055328.0,
+       "share": 0.0038
+      },
+      {
+       "iso": "BOL",
+       "country": "Bolivia",
+       "value": 697327.0,
+       "share": 0.0025
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 617602.0,
+       "share": 0.0022
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 558765.0,
+       "share": 0.002
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 291965.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 286220.0,
+       "share": 0.001
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 181194.0,
+       "share": 0.0007
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 165663.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 146549.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 145683.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 68006.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 47508.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 27115.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 5250.0,
+       "share": 0.0
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 3040.0,
+       "share": 0.0
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 2435.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 208883040.0,
+     "chinaShare": 0.0755,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 64630750.0,
+       "share": 0.3094
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 20865703.0,
+       "share": 0.0999
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 19836079.0,
+       "share": 0.095
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 18513415.0,
+       "share": 0.0886
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 17194727.0,
+       "share": 0.0823
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 15776202.0,
+       "share": 0.0755
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 14945626.0,
+       "share": 0.0716
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 13982700.0,
+       "share": 0.0669
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 5478793.0,
+       "share": 0.0262
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 5419407.0,
+       "share": 0.0259
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 2982391.0,
+       "share": 0.0143
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 2831106.0,
+       "share": 0.0136
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 2369078.0,
+       "share": 0.0113
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 657881.0,
+       "share": 0.0031
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 552402.0,
+       "share": 0.0026
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 495356.0,
+       "share": 0.0024
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 435525.0,
+       "share": 0.0021
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 398081.0,
+       "share": 0.0019
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 328547.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "UKR",
+       "country": "Ukraine",
+       "value": 292690.0,
+       "share": 0.0014
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 279614.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 276531.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 128633.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 120030.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "COL",
+       "country": "Colombia",
+       "value": 48120.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 23518.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 10858.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 5935.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 3342.0,
+       "share": 0.0
+      }
+     ]
+    }
+   },
+   "note": "Gallium and germanium share basket code 811292 (also indium, niobium), so their shares are proxies."
+  },
+  "germanium": {
+   "hs": [
+    "811292"
+   ],
+   "years": {
+    "2023": {
+     "total": 228504762.0,
+     "chinaShare": 0.1435,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 87556841.0,
+       "share": 0.3832
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 32791847.0,
+       "share": 0.1435
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 32576010.0,
+       "share": 0.1426
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 15910850.0,
+       "share": 0.0696
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 12337869.0,
+       "share": 0.054
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 10170729.0,
+       "share": 0.0445
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 9942156.0,
+       "share": 0.0435
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 7756113.0,
+       "share": 0.0339
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 6959131.0,
+       "share": 0.0305
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 4461928.0,
+       "share": 0.0195
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 3690173.0,
+       "share": 0.0161
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 1466832.0,
+       "share": 0.0064
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 1214508.0,
+       "share": 0.0053
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 336048.0,
+       "share": 0.0015
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 267851.0,
+       "share": 0.0012
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 241500.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 229747.0,
+       "share": 0.001
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 229453.0,
+       "share": 0.001
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 138678.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 115974.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 57385.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 27139.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "442",
+       "country": "442",
+       "value": 26000.0,
+       "share": 0.0001
+      }
+     ]
+    },
+    "2024": {
+     "total": 274927348.0,
+     "chinaShare": 0.1978,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 98972769.0,
+       "share": 0.36
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 53325054.0,
+       "share": 0.194
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 18303634.0,
+       "share": 0.0666
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 17879717.0,
+       "share": 0.065
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 16149124.0,
+       "share": 0.0587
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 15867305.0,
+       "share": 0.0577
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 12886627.0,
+       "share": 0.0469
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 12336171.0,
+       "share": 0.0449
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 11494722.0,
+       "share": 0.0418
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 9084039.0,
+       "share": 0.033
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 2283145.0,
+       "share": 0.0083
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 2045391.0,
+       "share": 0.0074
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 1055328.0,
+       "share": 0.0038
+      },
+      {
+       "iso": "BOL",
+       "country": "Bolivia",
+       "value": 697327.0,
+       "share": 0.0025
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 617602.0,
+       "share": 0.0022
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 558765.0,
+       "share": 0.002
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 291965.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 286220.0,
+       "share": 0.001
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 181194.0,
+       "share": 0.0007
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 165663.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 146549.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 145683.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 68006.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 47508.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 27115.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 5250.0,
+       "share": 0.0
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 3040.0,
+       "share": 0.0
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 2435.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 208883040.0,
+     "chinaShare": 0.0755,
+     "partners": [
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 64630750.0,
+       "share": 0.3094
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 20865703.0,
+       "share": 0.0999
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 19836079.0,
+       "share": 0.095
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 18513415.0,
+       "share": 0.0886
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 17194727.0,
+       "share": 0.0823
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 15776202.0,
+       "share": 0.0755
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 14945626.0,
+       "share": 0.0716
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 13982700.0,
+       "share": 0.0669
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 5478793.0,
+       "share": 0.0262
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 5419407.0,
+       "share": 0.0259
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 2982391.0,
+       "share": 0.0143
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 2831106.0,
+       "share": 0.0136
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 2369078.0,
+       "share": 0.0113
+      },
+      {
+       "iso": "KAZ",
+       "country": "Kazakhstan",
+       "value": 657881.0,
+       "share": 0.0031
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 552402.0,
+       "share": 0.0026
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 495356.0,
+       "share": 0.0024
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 435525.0,
+       "share": 0.0021
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 398081.0,
+       "share": 0.0019
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 328547.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "UKR",
+       "country": "Ukraine",
+       "value": 292690.0,
+       "share": 0.0014
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 279614.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 276531.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 128633.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 120030.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "COL",
+       "country": "Colombia",
+       "value": 48120.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 23518.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 10858.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 5935.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 3342.0,
+       "share": 0.0
+      }
+     ]
+    }
+   },
+   "note": "Gallium and germanium share basket code 811292 (also indium, niobium), so their shares are proxies."
+  },
+  "antimony": {
+   "hs": [
+    "811010"
+   ],
+   "years": {
+    "2023": {
+     "total": 70987368.0,
+     "chinaShare": 0.1284,
+     "partners": [
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 15826425.0,
+       "share": 0.2229
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 14536851.0,
+       "share": 0.2048
+      },
+      {
+       "iso": "OMN",
+       "country": "Oman",
+       "value": 10629022.0,
+       "share": 0.1497
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 9549205.0,
+       "share": 0.1345
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 9115172.0,
+       "share": 0.1284
+      },
+      {
+       "iso": "MMR",
+       "country": "Myanmar",
+       "value": 4307109.0,
+       "share": 0.0607
+      },
+      {
+       "iso": "DOM",
+       "country": "Dominican Rep.",
+       "value": 2144005.0,
+       "share": 0.0302
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1959022.0,
+       "share": 0.0276
+      },
+      {
+       "iso": "BOL",
+       "country": "Bolivia",
+       "value": 1184841.0,
+       "share": 0.0167
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 378723.0,
+       "share": 0.0053
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 375089.0,
+       "share": 0.0053
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 345198.0,
+       "share": 0.0049
+      },
+      {
+       "iso": "PHL",
+       "country": "Philippines",
+       "value": 323560.0,
+       "share": 0.0046
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 160735.0,
+       "share": 0.0023
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 134500.0,
+       "share": 0.0019
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 17911.0,
+       "share": 0.0003
+      }
+     ]
+    },
+    "2024": {
+     "total": 89186781.0,
+     "chinaShare": 0.1165,
+     "partners": [
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 30178779.0,
+       "share": 0.3384
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 14586938.0,
+       "share": 0.1636
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 13497901.0,
+       "share": 0.1513
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 10393429.0,
+       "share": 0.1165
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 6529065.0,
+       "share": 0.0732
+      },
+      {
+       "iso": "762",
+       "country": "762",
+       "value": 3459498.0,
+       "share": 0.0388
+      },
+      {
+       "iso": "DOM",
+       "country": "Dominican Rep.",
+       "value": 2386901.0,
+       "share": 0.0268
+      },
+      {
+       "iso": "MMR",
+       "country": "Myanmar",
+       "value": 2228745.0,
+       "share": 0.025
+      },
+      {
+       "iso": "OMN",
+       "country": "Oman",
+       "value": 1834362.0,
+       "share": 0.0206
+      },
+      {
+       "iso": "BOL",
+       "country": "Bolivia",
+       "value": 1269035.0,
+       "share": 0.0142
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 888623.0,
+       "share": 0.01
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 783077.0,
+       "share": 0.0088
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 332132.0,
+       "share": 0.0037
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 328769.0,
+       "share": 0.0037
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 207866.0,
+       "share": 0.0023
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 116163.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 101819.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 33676.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 23715.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 3986.0,
+       "share": 0.0
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 2302.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 156488962.0,
+     "chinaShare": 0.0205,
+     "partners": [
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 74319060.0,
+       "share": 0.4749
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 40177670.0,
+       "share": 0.2567
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 10988141.0,
+       "share": 0.0702
+      },
+      {
+       "iso": "MMR",
+       "country": "Myanmar",
+       "value": 5524207.0,
+       "share": 0.0353
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 4754852.0,
+       "share": 0.0304
+      },
+      {
+       "iso": "DOM",
+       "country": "Dominican Rep.",
+       "value": 3295921.0,
+       "share": 0.0211
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 3260337.0,
+       "share": 0.0208
+      },
+      {
+       "iso": "PER",
+       "country": "Peru",
+       "value": 3221150.0,
+       "share": 0.0206
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 3203030.0,
+       "share": 0.0205
+      },
+      {
+       "iso": "BOL",
+       "country": "Bolivia",
+       "value": 2189185.0,
+       "share": 0.014
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1805623.0,
+       "share": 0.0115
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 1391453.0,
+       "share": 0.0089
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 663354.0,
+       "share": 0.0042
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 348738.0,
+       "share": 0.0022
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 291060.0,
+       "share": 0.0019
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 289501.0,
+       "share": 0.0018
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 272300.0,
+       "share": 0.0017
+      },
+      {
+       "iso": "417",
+       "country": "417",
+       "value": 255592.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 177227.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 60561.0,
+       "share": 0.0004
+      }
+     ]
+    }
+   },
+   "note": ""
+  },
+  "graphite": {
+   "hs": [
+    "250410",
+    "380110"
+   ],
+   "years": {
+    "2023": {
+     "total": 609659828.0,
+     "chinaShare": 0.672,
+     "partners": [
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 409483881.0,
+       "share": 0.6717
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 24810917.0,
+       "share": 0.0407
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 21560695.0,
+       "share": 0.0354
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 19345133.0,
+       "share": 0.0317
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 19064594.0,
+       "share": 0.0313
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 17880725.0,
+       "share": 0.0293
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 17612281.0,
+       "share": 0.0289
+      },
+      {
+       "iso": "MOZ",
+       "country": "Mozambique",
+       "value": 16735766.0,
+       "share": 0.0275
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 12996337.0,
+       "share": 0.0213
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 12493939.0,
+       "share": 0.0205
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 12088581.0,
+       "share": 0.0198
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 9799749.0,
+       "share": 0.0161
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 6429716.0,
+       "share": 0.0105
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 4817928.0,
+       "share": 0.0079
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 1025566.0,
+       "share": 0.0017
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 943106.0,
+       "share": 0.0015
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 525999.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 412373.0,
+       "share": 0.0007
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 354429.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "LKA",
+       "country": "Sri Lanka",
+       "value": 231147.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 228454.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 218300.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 131304.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 128505.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 109220.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "ARE",
+       "country": "UAE",
+       "value": 63967.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 53122.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 37490.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 26583.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ARG",
+       "country": "Argentina",
+       "value": 23651.0,
+       "share": 0.0
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 18918.0,
+       "share": 0.0
+      },
+      {
+       "iso": "DNK",
+       "country": "Denmark",
+       "value": 4702.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 2750.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2024": {
+     "total": 572648973.0,
+     "chinaShare": 0.6589,
+     "partners": [
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 377130468.0,
+       "share": 0.6586
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 38291074.0,
+       "share": 0.0669
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 31500229.0,
+       "share": 0.055
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 21963461.0,
+       "share": 0.0384
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 21477027.0,
+       "share": 0.0375
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 14042464.0,
+       "share": 0.0245
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 11914299.0,
+       "share": 0.0208
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 9522219.0,
+       "share": 0.0166
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 8634080.0,
+       "share": 0.0151
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 8565863.0,
+       "share": 0.015
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 7687765.0,
+       "share": 0.0134
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 7008191.0,
+       "share": 0.0122
+      },
+      {
+       "iso": "MOZ",
+       "country": "Mozambique",
+       "value": 6122933.0,
+       "share": 0.0107
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 2970459.0,
+       "share": 0.0052
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1418378.0,
+       "share": 0.0025
+      },
+      {
+       "iso": "LKA",
+       "country": "Sri Lanka",
+       "value": 622351.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 609060.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 538237.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 439770.0,
+       "share": 0.0008
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 419800.0,
+       "share": 0.0007
+      },
+      {
+       "iso": "KEN",
+       "country": "KEN",
+       "value": 396653.0,
+       "share": 0.0007
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 336166.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 209100.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 199681.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 161438.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 142424.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 98741.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 74873.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 46509.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 25629.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ARG",
+       "country": "Argentina",
+       "value": 22269.0,
+       "share": 0.0
+      },
+      {
+       "iso": "EGY",
+       "country": "EGY",
+       "value": 17095.0,
+       "share": 0.0
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 9097.0,
+       "share": 0.0
+      },
+      {
+       "iso": "442",
+       "country": "442",
+       "value": 8523.0,
+       "share": 0.0
+      },
+      {
+       "iso": "GRC",
+       "country": "GRC",
+       "value": 8006.0,
+       "share": 0.0
+      },
+      {
+       "iso": "IRL",
+       "country": "Ireland",
+       "value": 7757.0,
+       "share": 0.0
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 6884.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 682328532.0,
+     "chinaShare": 0.2773,
+     "partners": [
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 218824109.0,
+       "share": 0.3207
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 189229898.0,
+       "share": 0.2773
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 47503981.0,
+       "share": 0.0696
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 41929897.0,
+       "share": 0.0615
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 39598056.0,
+       "share": 0.058
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 24418724.0,
+       "share": 0.0358
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 22895289.0,
+       "share": 0.0336
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 18352204.0,
+       "share": 0.0269
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 15820958.0,
+       "share": 0.0232
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 15774612.0,
+       "share": 0.0231
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 13967630.0,
+       "share": 0.0205
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 12244341.0,
+       "share": 0.0179
+      },
+      {
+       "iso": "MOZ",
+       "country": "Mozambique",
+       "value": 9392922.0,
+       "share": 0.0138
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 8280592.0,
+       "share": 0.0121
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1094025.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 672933.0,
+       "share": 0.001
+      },
+      {
+       "iso": "LKA",
+       "country": "Sri Lanka",
+       "value": 616933.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 399628.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 348136.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 252098.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 193622.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 127316.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 82200.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 50063.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 44418.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 40507.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 35650.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 35191.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "ARE",
+       "country": "UAE",
+       "value": 31696.0,
+       "share": 0.0
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 29486.0,
+       "share": 0.0
+      },
+      {
+       "iso": "UKR",
+       "country": "Ukraine",
+       "value": 19639.0,
+       "share": 0.0
+      },
+      {
+       "iso": "COL",
+       "country": "Colombia",
+       "value": 18528.0,
+       "share": 0.0
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 3250.0,
+       "share": 0.0
+      }
+     ]
+    }
+   },
+   "note": ""
+  },
+  "dysprosium": {
+   "hs": [
+    "280530",
+    "284690",
+    "850511"
+   ],
+   "years": {
+    "2023": {
+     "total": 741512677.0,
+     "chinaShare": 0.7764,
+     "partners": [
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 575676146.0,
+       "share": 0.7764
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 36648970.0,
+       "share": 0.0494
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 23188593.0,
+       "share": 0.0313
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 17442961.0,
+       "share": 0.0235
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 7225214.0,
+       "share": 0.0097
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 7142965.0,
+       "share": 0.0096
+      },
+      {
+       "iso": "PHL",
+       "country": "Philippines",
+       "value": 7110328.0,
+       "share": 0.0096
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 6465944.0,
+       "share": 0.0087
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 6188862.0,
+       "share": 0.0083
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 5815164.0,
+       "share": 0.0078
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 5813089.0,
+       "share": 0.0078
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 5760048.0,
+       "share": 0.0078
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 5235876.0,
+       "share": 0.0071
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 5021583.0,
+       "share": 0.0068
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 4499240.0,
+       "share": 0.0061
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 3321253.0,
+       "share": 0.0045
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 3293701.0,
+       "share": 0.0044
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1893079.0,
+       "share": 0.0026
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 1775219.0,
+       "share": 0.0024
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 1767370.0,
+       "share": 0.0024
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 1559815.0,
+       "share": 0.0021
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 1245336.0,
+       "share": 0.0017
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 1240615.0,
+       "share": 0.0017
+      },
+      {
+       "iso": "LVA",
+       "country": "LVA",
+       "value": 1108499.0,
+       "share": 0.0015
+      },
+      {
+       "iso": "SVN",
+       "country": "Slovenia",
+       "value": 794099.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 705301.0,
+       "share": 0.001
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 668353.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "BGR",
+       "country": "BGR",
+       "value": 646208.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 317982.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "DNK",
+       "country": "Denmark",
+       "value": 305842.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 260298.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "HUN",
+       "country": "Hungary",
+       "value": 202859.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 167934.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "BGD",
+       "country": "BGD",
+       "value": 155084.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 149129.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 108871.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 78954.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 69254.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 61512.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "KHM",
+       "country": "KHM",
+       "value": 58090.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 50627.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 43445.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "ARG",
+       "country": "Argentina",
+       "value": 29631.0,
+       "share": 0.0
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 28344.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PRT",
+       "country": "Portugal",
+       "value": 27514.0,
+       "share": 0.0
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 24549.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PAK",
+       "country": "PAK",
+       "value": 23937.0,
+       "share": 0.0
+      },
+      {
+       "iso": "NZL",
+       "country": "New Zealand",
+       "value": 17407.0,
+       "share": 0.0
+      },
+      {
+       "iso": "422",
+       "country": "422",
+       "value": 16983.0,
+       "share": 0.0
+      },
+      {
+       "iso": "LTU",
+       "country": "LTU",
+       "value": 15674.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PER",
+       "country": "Peru",
+       "value": 8894.0,
+       "share": 0.0
+      },
+      {
+       "iso": "COL",
+       "country": "Colombia",
+       "value": 8489.0,
+       "share": 0.0
+      },
+      {
+       "iso": "HRV",
+       "country": "HRV",
+       "value": 6515.0,
+       "share": 0.0
+      },
+      {
+       "iso": "188",
+       "country": "188",
+       "value": 5404.0,
+       "share": 0.0
+      },
+      {
+       "iso": "520",
+       "country": "520",
+       "value": 4195.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ARE",
+       "country": "UAE",
+       "value": 3213.0,
+       "share": 0.0
+      },
+      {
+       "iso": "IRL",
+       "country": "Ireland",
+       "value": 3201.0,
+       "share": 0.0
+      },
+      {
+       "iso": "SRB",
+       "country": "SRB",
+       "value": 2843.0,
+       "share": 0.0
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 2172.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2024": {
+     "total": 633899809.0,
+     "chinaShare": 0.7511,
+     "partners": [
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 476047558.0,
+       "share": 0.751
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 27442818.0,
+       "share": 0.0433
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 17972961.0,
+       "share": 0.0284
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 13257405.0,
+       "share": 0.0209
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 12083440.0,
+       "share": 0.0191
+      },
+      {
+       "iso": "PHL",
+       "country": "Philippines",
+       "value": 9128331.0,
+       "share": 0.0144
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 7971020.0,
+       "share": 0.0126
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 7740212.0,
+       "share": 0.0122
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 7211337.0,
+       "share": 0.0114
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 6630456.0,
+       "share": 0.0105
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 6566269.0,
+       "share": 0.0104
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 5562477.0,
+       "share": 0.0088
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 5168920.0,
+       "share": 0.0082
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 4360420.0,
+       "share": 0.0069
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 3134744.0,
+       "share": 0.0049
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 3111207.0,
+       "share": 0.0049
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 2812466.0,
+       "share": 0.0044
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 2533159.0,
+       "share": 0.004
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 1950825.0,
+       "share": 0.0031
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 1776477.0,
+       "share": 0.0028
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 1680555.0,
+       "share": 0.0027
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 1634166.0,
+       "share": 0.0026
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 1199202.0,
+       "share": 0.0019
+      },
+      {
+       "iso": "LVA",
+       "country": "LVA",
+       "value": 1016425.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 870282.0,
+       "share": 0.0014
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 812710.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "BGR",
+       "country": "BGR",
+       "value": 654212.0,
+       "share": 0.001
+      },
+      {
+       "iso": "SVN",
+       "country": "Slovenia",
+       "value": 569118.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 329940.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 328000.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "DNK",
+       "country": "Denmark",
+       "value": 295975.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 281755.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "BGD",
+       "country": "BGD",
+       "value": 278987.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "KHM",
+       "country": "KHM",
+       "value": 238678.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 194005.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 167889.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "HUN",
+       "country": "Hungary",
+       "value": 151768.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 108452.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 93111.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 77092.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 67255.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "DOM",
+       "country": "Dominican Rep.",
+       "value": 56201.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "LTU",
+       "country": "LTU",
+       "value": 53727.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 41794.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "IRL",
+       "country": "Ireland",
+       "value": 40931.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 39519.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 32949.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "PRT",
+       "country": "Portugal",
+       "value": 24651.0,
+       "share": 0.0
+      },
+      {
+       "iso": "NZL",
+       "country": "New Zealand",
+       "value": 20187.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PAK",
+       "country": "PAK",
+       "value": 15764.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ARE",
+       "country": "UAE",
+       "value": 12203.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PER",
+       "country": "Peru",
+       "value": 12118.0,
+       "share": 0.0
+      },
+      {
+       "iso": "352",
+       "country": "352",
+       "value": 9919.0,
+       "share": 0.0
+      },
+      {
+       "iso": "COL",
+       "country": "Colombia",
+       "value": 9711.0,
+       "share": 0.0
+      },
+      {
+       "iso": "SRB",
+       "country": "SRB",
+       "value": 7375.0,
+       "share": 0.0
+      },
+      {
+       "iso": "442",
+       "country": "442",
+       "value": 5125.0,
+       "share": 0.0
+      },
+      {
+       "iso": "HRV",
+       "country": "HRV",
+       "value": 3038.0,
+       "share": 0.0
+      },
+      {
+       "iso": "188",
+       "country": "188",
+       "value": 2518.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 596016185.0,
+     "chinaShare": 0.6859,
+     "partners": [
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 408806053.0,
+       "share": 0.6859
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 36063377.0,
+       "share": 0.0605
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 28898348.0,
+       "share": 0.0485
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 23939992.0,
+       "share": 0.0402
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 9463059.0,
+       "share": 0.0159
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 8597659.0,
+       "share": 0.0144
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 8403516.0,
+       "share": 0.0141
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 8098281.0,
+       "share": 0.0136
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 6084082.0,
+       "share": 0.0102
+      },
+      {
+       "iso": "PHL",
+       "country": "Philippines",
+       "value": 5365938.0,
+       "share": 0.009
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 5117862.0,
+       "share": 0.0086
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 5047669.0,
+       "share": 0.0085
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 4301916.0,
+       "share": 0.0072
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 4175723.0,
+       "share": 0.007
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 4039071.0,
+       "share": 0.0068
+      },
+      {
+       "iso": "VNM",
+       "country": "Vietnam",
+       "value": 3812993.0,
+       "share": 0.0064
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 3714153.0,
+       "share": 0.0062
+      },
+      {
+       "iso": "MYS",
+       "country": "Malaysia",
+       "value": 3566537.0,
+       "share": 0.006
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 3331816.0,
+       "share": 0.0056
+      },
+      {
+       "iso": "EST",
+       "country": "Estonia",
+       "value": 2727257.0,
+       "share": 0.0046
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 2547817.0,
+       "share": 0.0043
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 1324550.0,
+       "share": 0.0022
+      },
+      {
+       "iso": "THA",
+       "country": "Thailand",
+       "value": 938742.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 810838.0,
+       "share": 0.0014
+      },
+      {
+       "iso": "BGR",
+       "country": "BGR",
+       "value": 779326.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "SVN",
+       "country": "Slovenia",
+       "value": 664042.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "KHM",
+       "country": "KHM",
+       "value": 585074.0,
+       "share": 0.001
+      },
+      {
+       "iso": "SVK",
+       "country": "Slovakia",
+       "value": 557716.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "LVA",
+       "country": "LVA",
+       "value": 524879.0,
+       "share": 0.0009
+      },
+      {
+       "iso": "SGP",
+       "country": "Singapore",
+       "value": 492387.0,
+       "share": 0.0008
+      },
+      {
+       "iso": "DNK",
+       "country": "Denmark",
+       "value": 468669.0,
+       "share": 0.0008
+      },
+      {
+       "iso": "BRA",
+       "country": "Brazil",
+       "value": 338813.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "SWE",
+       "country": "Sweden",
+       "value": 284428.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "BGD",
+       "country": "BGD",
+       "value": 274657.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 256792.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "51",
+       "country": "51",
+       "value": 249385.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "POL",
+       "country": "Poland",
+       "value": 242670.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "ISR",
+       "country": "Israel",
+       "value": 175110.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 151924.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 127569.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "HUN",
+       "country": "Hungary",
+       "value": 110272.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 101969.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "PRT",
+       "country": "Portugal",
+       "value": 98600.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "188",
+       "country": "188",
+       "value": 56232.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 51130.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "CHL",
+       "country": "Chile",
+       "value": 47266.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "196",
+       "country": "196",
+       "value": 47256.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "LTU",
+       "country": "LTU",
+       "value": 45441.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "IRL",
+       "country": "Ireland",
+       "value": 40291.0,
+       "share": 0.0001
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 23038.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ROU",
+       "country": "Romania",
+       "value": 20020.0,
+       "share": 0.0
+      },
+      {
+       "iso": "PER",
+       "country": "Peru",
+       "value": 8274.0,
+       "share": 0.0
+      },
+      {
+       "iso": "DOM",
+       "country": "Dominican Rep.",
+       "value": 5204.0,
+       "share": 0.0
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 4391.0,
+       "share": 0.0
+      },
+      {
+       "iso": "120",
+       "country": "120",
+       "value": 4006.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ARE",
+       "country": "UAE",
+       "value": 2105.0,
+       "share": 0.0
+      }
+     ]
+    }
+   },
+   "note": ""
+  },
+  "cobalt": {
+   "hs": [
+    "260500",
+    "810520",
+    "282200"
+   ],
+   "years": {
+    "2023": {
+     "total": 348941505.0,
+     "chinaShare": 0.0064,
+     "partners": [
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 88666097.0,
+       "share": 0.2541
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 70111124.0,
+       "share": 0.2009
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 61140881.0,
+       "share": 0.1752
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 34077958.0,
+       "share": 0.0977
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 32938628.0,
+       "share": 0.0944
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 21549664.0,
+       "share": 0.0618
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 11922605.0,
+       "share": 0.0342
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 7301611.0,
+       "share": 0.0209
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 5685546.0,
+       "share": 0.0163
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 2252194.0,
+       "share": 0.0065
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 2236903.0,
+       "share": 0.0064
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 2236174.0,
+       "share": 0.0064
+      },
+      {
+       "iso": "ZMB",
+       "country": "Zambia",
+       "value": 2134777.0,
+       "share": 0.0061
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 1856119.0,
+       "share": 0.0053
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 1489273.0,
+       "share": 0.0043
+      },
+      {
+       "iso": "MEX",
+       "country": "Mexico",
+       "value": 1094061.0,
+       "share": 0.0031
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 596300.0,
+       "share": 0.0017
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 381875.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 376619.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 292301.0,
+       "share": 0.0008
+      },
+      {
+       "iso": "PHL",
+       "country": "Philippines",
+       "value": 175680.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 163299.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 153281.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 87145.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 8001.0,
+       "share": 0.0
+      },
+      {
+       "iso": "8",
+       "country": "8",
+       "value": 5021.0,
+       "share": 0.0
+      },
+      {
+       "iso": "IRL",
+       "country": "Ireland",
+       "value": 3512.0,
+       "share": 0.0
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 2700.0,
+       "share": 0.0
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 2156.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2024": {
+     "total": 344751784.0,
+     "chinaShare": 0.0093,
+     "partners": [
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 85404426.0,
+       "share": 0.2477
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 58818270.0,
+       "share": 0.1706
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 52167693.0,
+       "share": 0.1513
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 47807493.0,
+       "share": 0.1387
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 26629618.0,
+       "share": 0.0772
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 26538698.0,
+       "share": 0.077
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 11174033.0,
+       "share": 0.0324
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 9382788.0,
+       "share": 0.0272
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 5041698.0,
+       "share": 0.0146
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 3625256.0,
+       "share": 0.0105
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 3477387.0,
+       "share": 0.0101
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 3136061.0,
+       "share": 0.0091
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 3067247.0,
+       "share": 0.0089
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 3050771.0,
+       "share": 0.0088
+      },
+      {
+       "iso": "RUS",
+       "country": "Russia",
+       "value": 1456127.0,
+       "share": 0.0042
+      },
+      {
+       "iso": "ZMB",
+       "country": "Zambia",
+       "value": 1144403.0,
+       "share": 0.0033
+      },
+      {
+       "iso": "TWN",
+       "country": "Taiwan",
+       "value": 1096300.0,
+       "share": 0.0032
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 375250.0,
+       "share": 0.0011
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 287661.0,
+       "share": 0.0008
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 202678.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 181004.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 180824.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 174706.0,
+       "share": 0.0005
+      },
+      {
+       "iso": "HKG",
+       "country": "Hong Kong",
+       "value": 135935.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 105352.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 78560.0,
+       "share": 0.0002
+      },
+      {
+       "iso": "682",
+       "country": "682",
+       "value": 9401.0,
+       "share": 0.0
+      },
+      {
+       "iso": "UKR",
+       "country": "Ukraine",
+       "value": 2144.0,
+       "share": 0.0
+      }
+     ]
+    },
+    "2025": {
+     "total": 437915526.0,
+     "chinaShare": 0.0059,
+     "partners": [
+      {
+       "iso": "NOR",
+       "country": "Norway",
+       "value": 74798402.0,
+       "share": 0.1708
+      },
+      {
+       "iso": "CAN",
+       "country": "Canada",
+       "value": 71735287.0,
+       "share": 0.1638
+      },
+      {
+       "iso": "IDN",
+       "country": "Indonesia",
+       "value": 61652163.0,
+       "share": 0.1408
+      },
+      {
+       "iso": "JPN",
+       "country": "Japan",
+       "value": 60197057.0,
+       "share": 0.1375
+      },
+      {
+       "iso": "MDG",
+       "country": "Madagascar",
+       "value": 43700502.0,
+       "share": 0.0998
+      },
+      {
+       "iso": "FIN",
+       "country": "Finland",
+       "value": 29680446.0,
+       "share": 0.0678
+      },
+      {
+       "iso": "GBR",
+       "country": "United Kingdom",
+       "value": 25241580.0,
+       "share": 0.0576
+      },
+      {
+       "iso": "AUS",
+       "country": "Australia",
+       "value": 24123500.0,
+       "share": 0.0551
+      },
+      {
+       "iso": "BEL",
+       "country": "Belgium",
+       "value": 15645786.0,
+       "share": 0.0357
+      },
+      {
+       "iso": "DEU",
+       "country": "Germany",
+       "value": 11868492.0,
+       "share": 0.0271
+      },
+      {
+       "iso": "MAR",
+       "country": "Morocco",
+       "value": 5991040.0,
+       "share": 0.0137
+      },
+      {
+       "iso": "FRA",
+       "country": "France",
+       "value": 4860788.0,
+       "share": 0.0111
+      },
+      {
+       "iso": "ZAF",
+       "country": "South Africa",
+       "value": 2840264.0,
+       "share": 0.0065
+      },
+      {
+       "iso": "CHN",
+       "country": "China",
+       "value": 2569175.0,
+       "share": 0.0059
+      },
+      {
+       "iso": "IND",
+       "country": "India",
+       "value": 1045014.0,
+       "share": 0.0024
+      },
+      {
+       "iso": "TUR",
+       "country": "Turkey",
+       "value": 697017.0,
+       "share": 0.0016
+      },
+      {
+       "iso": "NLD",
+       "country": "Netherlands",
+       "value": 558563.0,
+       "share": 0.0013
+      },
+      {
+       "iso": "CZE",
+       "country": "Czechia",
+       "value": 266261.0,
+       "share": 0.0006
+      },
+      {
+       "iso": "CHE",
+       "country": "Switzerland",
+       "value": 193382.0,
+       "share": 0.0004
+      },
+      {
+       "iso": "AUT",
+       "country": "Austria",
+       "value": 122452.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "ITA",
+       "country": "Italy",
+       "value": 113900.0,
+       "share": 0.0003
+      },
+      {
+       "iso": "ESP",
+       "country": "Spain",
+       "value": 9355.0,
+       "share": 0.0
+      },
+      {
+       "iso": "KOR",
+       "country": "South Korea",
+       "value": 5100.0,
+       "share": 0.0
+      }
+     ]
+    }
+   },
+   "note": ""
+  }
+ }
+}

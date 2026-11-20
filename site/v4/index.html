@@ -24,6 +24,7 @@
     </div>
     <div class="hud-actions">
       <button class="ghost small" id="btn-ledger" title="Every choice you've made and what it changed">Decisions <b id="ledger-n">0</b></button>
+      <button class="ghost small" id="btn-showme" title="Point out what's on this screen">Show me</button>
       <button class="ghost small" id="btn-gloss">Key terms</button>
       <button class="icon-btn" id="btn-about" aria-label="About the data">ⓘ</button>
     </div>
@@ -61,6 +62,7 @@
       <section class="step" data-step="hidden"><div class="card" id="s-hidden"></div></section>
       <section class="step" data-step="store"><div class="card" id="s-store"></div></section>
       <section class="step" data-step="deals"><div class="card" id="s-deals"></div></section>
+      <section class="step" data-step="release"><div class="card" id="s-release"></div></section>
       <section class="step" data-step="check"><div class="card" id="s-check"></div></section>
       <section class="step" data-step="history"><div class="card" id="s-history"></div></section>
       <section class="step" data-step="results"><div class="card wide" id="s-results"></div></section>
@@ -68,7 +70,8 @@
       <section class="step" data-step="report"><div class="card wide" id="s-report"></div></section>
     </div>
     <aside class="live hidden" id="live" aria-label="Live supply chain">
-      <div class="live-head"><div class="live-title" id="liveTitle">Live supply chain</div><button class="badge-illus hidden" id="liveBadge">Some figures estimated</button></div>
+      <div class="live-head"><div class="live-title" id="liveTitle">Live supply chain</div><div style="display:flex;gap:6px;align-items:center"><button class="ghost small" id="btn-globe" title="See the real trade routes on the globe">Globe</button><button class="badge-illus hidden" id="liveBadge">Some figures estimated</button></div></div>
+      <div class="globe-cap hidden" id="globeCap"></div>
       <div class="live-status" id="liveStatus"></div>
       <div class="live-graph" id="liveGraph"></div>
       <div class="live-legend" id="liveLegend"></div>
@@ -76,6 +79,7 @@
     </aside>
   </main>
 
+  <div class="whyline hidden" id="whyline" aria-live="polite"></div>
   <nav class="dock hidden" id="dock" aria-label="Navigation">
     <button class="ghost" id="btn-back">← Back</button>
     <div class="dock-hint" id="dock-hint"></div>
@@ -98,6 +102,7 @@
   <script src="rst.js"></script>
   <script src="plain.js"></script>
   <script src="guide.js"></script>
+  <script src="tour.js"></script>
   <script src="missions.js"></script>
   <script src="globe.js"></script>
   <script src="network.js"></script>

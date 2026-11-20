@@ -55,6 +55,41 @@
     }
   }
 
+  // ---- All-partner US imports (UN Comtrade public API, scripts/fetch_comtrade.py) ----
+  // Replaces the four-corridor view for every display (cards, map, globe, teaching networks).
+  if (C.comtradeAll && C.comtradeAll.minerals && EXT.trade) {
+    for (const [k, t] of Object.entries(C.comtradeAll.minerals)) {
+      const e = EXT.trade[k]; if (!e) continue;
+      const ys = Object.keys(t.years || {}).sort(); if (!ys.length) continue;
+      e.chinaByYear = ys.map((y) => ({ year: y, share: t.years[y].chinaShare, total: t.years[y].total }));
+      e.sharesByYear = Object.fromEntries(ys.map((y) => [y, t.years[y].partners.map((p) => ({ country: p.country, iso: p.iso, value: p.value, share: p.share }))]));
+      e.shares = e.sharesByYear[ys[ys.length - 1]];
+      e.year = ys[ys.length - 1];
+      e.allPartners = true;
+      // Minerals without a supply network (graphite): exposure = all-partner China share in 2023 (pre-controls).
+      // Gallium/germanium share a basket HS code with indium/niobium, so they keep network-based exposure.
+      if (!(C.network && C.network[k]) && !["gallium", "germanium"].includes(k)) { D.MINERALS[k].exposure.china = t.years[ys[0]].chinaShare; D.MINERALS[k].exposureSource = `China's share of all US imports in ${ys[0]} (UN Comtrade, all partners)`; }
+      e.sourceLabel = `US imports from all partner countries, UN Comtrade (HS ${(t.hs || []).join("/")})${t.note ? ". " + t.note : ""}`;
+    }
+    EXT.comtradeFetched = C.comtradeAll.fetched;
+  }
+
+  // ---- Exposure from the reverse-stress networks ----
+  // A shortage lands on every China-linked supplier (direct, or via ownership/feedstock), not just
+  // direct Chinese imports, so the engine's exposure uses each network's China-linked share; for
+  // cobalt, the DRC-fed share. This ties the simulation to the same evidence as the weak-spot analysis.
+  if (C.network) {
+    for (const [k, net] of Object.entries(C.network)) {
+      if (!D.MINERALS[k] || !Array.isArray(net.tier1)) continue;
+      const mean = (n) => (n.meanVolume != null ? n.meanVolume : (() => { const v = Object.values(n.volumes || {}).map(Number).filter((x) => !isNaN(x)); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0; })());
+      const tot = net.tier1.reduce((a, n) => a + mean(n), 0) || 1;
+      const linked = net.tier1.filter((n) => n.chinaLinked || n.country === "CHN").reduce((a, n) => a + mean(n), 0) / tot;
+      const drcFeed = net.tier1.reduce((a, n) => a + (mean(n) / tot) * Math.max(0, ...(net.tier2 || []).filter((t) => t.country === "COD").map((t) => (t.share || {})[n.id] || 0)), 0);
+      if (linked > 0) { D.MINERALS[k].exposure.china = +linked.toFixed(3); D.MINERALS[k].exposureSource = `China-linked share of US supply in the ${net.synthetic ? "structured" : "measured"} supply network (direct + via ownership/feedstock)`; }
+      if (k === "cobalt" && drcFeed > 0) D.MINERALS[k].exposure.drc = +drcFeed.toFixed(3);
+    }
+  }
+
   // ---- Live: copper benchmark + disruptions (Tradeverifyd) ----
   if (C.live) {
     EXT.liveFetched = C.live.fetched;
@@ -126,6 +161,13 @@
     const qOf = (d) => { const y = String(d).slice(0, 4), m = +String(d).slice(5, 7) || 1; return `${y}Q${Math.floor((m - 1) / 3) + 1}`; };
     EXT.responses = C.responses.items.filter((r) => r && r.summary && r.source).map((r) => ({ ...r, quarter: r.quarter || qOf(r.date), minerals: (r.minerals || []).map((m) => (/rare|magnet|ree|terbium/i.test(m) ? "dysprosium" : String(m).toLowerCase())) }));
     EXT.responsesFetched = C.responses.fetched;
+    // Allied (non-US) purchases / offtakes / equity deals per quarter and mineral → competition for supply.
+    D.ALLIED = {};
+    for (const r of EXT.responses) {
+      if (!r.quarter || /^(USA|US)$/i.test(r.country || "") || /^US\b/.test(r.actor || "")) continue;
+      if (!/stockpile|offtake|deal|equity|loan|price-floor/.test(r.type || "")) continue;
+      for (const m of r.minerals || []) { const q = (D.ALLIED[r.quarter] = D.ALLIED[r.quarter] || {}); (q[m] = q[m] || []).push(r); }
+    }
   }
 
   // ---- Forward signal: Tavily lexicon score ----

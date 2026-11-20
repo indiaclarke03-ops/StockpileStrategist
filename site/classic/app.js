@@ -44,6 +44,8 @@
   }).join("")}</span>`;
   const tile = (k, small) => `<span class="tile" style="--tile:${TILE[k]}${small ? ";width:30px;height:30px;font-size:12px" : ""}">${small ? "" : `<small>${MINERALS[k].symbol === "C" ? 6 : ""}</small>`}${MINERALS[k].symbol}</span>`;
 
+  const why = (html, kind) => (window.Tour ? Tour.why(html, kind) : null);
+
   // ---------- render ----------
   function render() { renderStats(); renderCoach(); renderStrip(); renderIntel(); renderTable(); renderDetail(); renderOrders(); renderMap(); }
 
@@ -53,7 +55,7 @@
     const c = EXT.copper;
     $("stats").innerHTML = `
       <div class="stat"><div class="k">Quarter</div><div class="v">${state.done ? "Done" : qLabel(state.quarter)}</div><div class="s">turn ${Math.min(state.qi + 1, 14)} of 14</div></div>
-      <div class="stat"><div class="k">Money left</div><div class="v">${fmt$(state.budget)}</div><div class="s">of $12.00B</div></div>
+      <div class="stat" title="Money arrives each fiscal year (1 October). 25% of money left unspent on 30 September lapses."><div class="k">Money this year</div><div class="v">${fmt$(state.budget)}</div><div class="s">${fmt$(state.received || 0)} received of $12B${state.lapsed > 0.5 ? ` · ${fmt$(state.lapsed)} lapsed` : ""}</div></div>
       <div class="stat" title="How much the public and Congress trust your handling of the reserve. Falls when factories stop or after questionable deals."><div class="k">Public trust</div><div class="v">${Math.round(state.politicalCapital)}</div><div class="pcbar"><i style="width:${state.politicalCapital}%;background:${state.politicalCapital < 40 ? "var(--danger)" : state.politicalCapital < 70 ? "var(--warn)" : "var(--ok)"}"></i></div></div>
       <div class="stat" title="Total days US factories were stopped by shortages, across all six minerals"><div class="k">Factory days lost</div><div class="v">${Math.round(state.downtimeDays)} days</div><div class="s">${Math.round(idle)} if you'd done nothing</div></div>
       ${c && c.value != null ? `<div class="stat" title="Tradeverifyd tia_commodity_price"><div class="k">Copper</div><div class="v" style="font-size:13px">${esc(Number(c.value).toFixed(2))} ${esc(c.unit || "")}</div><div class="s">Tradeverifyd · ${esc(c.date || "")}</div></div>` : ""}
@@ -111,28 +113,34 @@
     if ($("btn-lastq")) $("btn-lastq").onclick = () => showReveal(lastReport);
   }
 
+  let showAllCols = false, sortRisk = false;
   function renderTable() {
     if (state.done) { $("table").innerHTML = ""; return; }
     const hit = new Set(lastReport ? lastReport.events.flatMap((e) => Object.keys(e.effects)) : []);
-    $("table").innerHTML = `<h2>Your six minerals · click one to manage it</h2>
+    const keys = sortRisk ? [...KEYS].sort((a, b) => distOf(a, projected(a)) - distOf(b, projected(b))) : KEYS;
+    const extra = showAllCols;
+    $("table").innerHTML = `<div class="table-head"><h2 style="margin:0">Your six minerals · click one to manage it</h2>
+        <div class="tabs" style="margin:0"><button aria-pressed="${sortRisk}" id="t-sort">${sortRisk ? "✓ " : ""}Riskiest first</button><button aria-pressed="${extra}" id="t-cols">${extra ? "Fewer columns" : "More columns"}</button></div></div>
       <div class="help">Aim for a <b>Safe</b> safety margin on every mineral. <button class="linkbtn" id="btn-gloss2">What do the columns mean?</button></div>
-      <table class="mtable"><thead><tr><th>Mineral</th><th>Stored (days)</th><th>Price</th><th>Imports arriving</th><th>Share from China</th><th title="How big a shock this mineral's supply could absorb before factories stop (25% shortage). Not a probability.">Safety margin</th><th>Your plan</th></tr></thead><tbody>
-      ${KEYS.map((k) => {
+      <table class="mtable"><thead><tr><th>Mineral</th><th>Stored</th><th title="How big a shock this mineral's supply could absorb before factories stop (25% shortage). Not a probability.">Safety margin</th>${extra ? "<th>Price</th><th>Imports</th><th>From China</th>" : ""}<th>Your plan</th></tr></thead><tbody>
+      ${keys.map((k) => {
         const m = state.minerals[k], p = MINERALS[k], proj = projected(k), d = distOf(k, proj), d0 = distOf(k, m.reserveDoC);
         const prev = m.hist.price[m.hist.price.length - 2], dp = prev ? m.priceIdx / prev - 1 : 0;
         const ys = knownYears(k), cs = ys.length ? ys[ys.length - 1] : null;
         const o = [orders.buy[k] ? `<span class="chip warn">buy ${orders.buy[k]} days</span>` : "", orders.release[k] ? `<span class="chip info">release ${orders.release[k]} days</span>` : "", ...orders.offtakes.filter((id) => COUNTERPARTIES.find((c) => c.id === id).mineral === k).map(() => `<span class="chip good">deal</span>`)].join(" ");
         return `<tr class="row ${k === sel ? "sel" : ""} ${hit.has(k) ? "hit" : ""}" data-k="${k}" tabindex="0" aria-label="${p.name}">
-          <td><div class="mname">${tile(k)}<div><b>${p.name}</b><span>${esc(p.uses.split(",")[0])}</span></div></div></td>
-          <td><div class="cell-big">${proj.toFixed(0)}${proj !== m.reserveDoC ? ` <span class="faint">(now ${m.reserveDoC.toFixed(0)})</span>` : ""}</div><div class="docbar"><i class="${proj !== m.reserveDoC ? "proj" : ""}" style="width:${Math.min(100, (proj / 120) * 100)}%"></i><b style="left:50%" title="60 days"></b></div></td>
-          <td><span class="cell-big">${m.priceIdx.toFixed(0)}</span> <span class="${dp > 0.005 ? "up" : dp < -0.005 ? "down" : "faint"}">${dp ? (dp > 0 ? "▲" : "▼") + Math.abs(dp * 100).toFixed(0) + "%" : ""}</span></td>
-          <td class="${m.importAvail < 0.85 ? "up" : ""}"><span class="cell-big">${pct(m.importAvail)}</span>${m.cutNet > 0.02 ? `<div class="faint">${m.importAvail < 0.98 ? "restricted" : "restricted, but rerouted"}</div>` : ""}</td>
-          <td>${cs ? `<span class="cell-big">${pct(cs.share)}</span><div class="faint">in ${cs.year}</div>` : `<span class="faint">—</span>`}</td>
+          <td><div class="mname">${tile(k)}<div><b>${p.name}</b><span>${esc(p.uses.split(",")[0])}${m.cutNet > 0.02 ? ` · <span class="up">restricted</span>` : ""}</span></div></div></td>
+          <td><div class="cell-big">${proj.toFixed(0)} days${proj !== m.reserveDoC ? ` <span class="faint">(now ${m.reserveDoC.toFixed(0)})</span>` : ""}</div><div class="docbar"><i class="${proj !== m.reserveDoC ? "proj" : ""}" style="width:${Math.min(100, (proj / 120) * 100)}%"></i><b style="left:50%" title="60 days"></b></div></td>
           <td><span class="cell-big">${Plain.margin(d)}</span> ${Plain.zoneTag(d)}${Math.abs(d - d0) > 0.01 ? `<div class="faint">${d > d0 ? "+" : ""}${(d - d0).toFixed(1)}× from your plan</div>` : ""}</td>
+          ${extra ? `<td><span class="cell-big">${m.priceIdx.toFixed(0)}</span> <span class="${dp > 0.005 ? "up" : dp < -0.005 ? "down" : "faint"}">${dp ? (dp > 0 ? "▲" : "▼") + Math.abs(dp * 100).toFixed(0) + "%" : ""}</span></td>
+          <td class="${m.importAvail < 0.85 ? "up" : ""}"><span class="cell-big">${pct(m.importAvail)}</span></td>
+          <td>${cs ? `<span class="cell-big">${pct(cs.share)}</span><div class="faint">${cs.year}</div>` : `<span class="faint">—</span>`}</td>` : ""}
           <td>${o || '<span class="faint">—</span>'}</td></tr>`;
       }).join("")}</tbody></table>`;
+    $("t-sort").onclick = () => { sortRisk = !sortRisk; renderTable(); };
+    $("t-cols").onclick = () => { showAllCols = !showAllCols; renderTable(); };
     $("table").querySelectorAll("tr.row").forEach((tr) => {
-      const go = () => { sel = tr.dataset.k; mapMineral = sel; tick("pick"); renderTable(); renderDetail(); renderMap(); };
+      const go = () => { sel = tr.dataset.k; mapMineral = sel; tick("pick"); renderTable(); renderDetail(); renderMap(); const k = sel, d = distOf(k, projected(k)); why(`<span class="wk">Selected</span><b>${MINERALS[k].name}</b>: ${Math.round(projected(k))} days stored, safety ${Plain.margin(d)} (${Plain.zone(d).label}).`); };
       tr.onclick = go; tr.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
     });
   }
@@ -193,7 +201,12 @@
     const d0 = distOf(k, m.reserveDoC), d1 = distOf(k, proj);
     const priceImpact = ((p.eta * buy) / p.marketDepth) * 100;
     const deals = state.offtakes.filter((o) => o.mineral === k);
-    body.innerHTML = `<div class="detail-grid">
+    const h = m.hist.price, trend = h.length > 2 ? h[h.length - 1] / h[h.length - 3] - 1 : 0;
+    const altN = models[k].nodes.filter((n) => !n.chinaLinked).length + state.offtakes.filter((o) => o.mineral === k && o.status === "delivering").length;
+    const allied = Sim.alliedCount(state, k);
+    body.innerHTML = `<div class="kpis3"><div class="ls"><div class="k">Imports stored</div><div class="v">${(m.reserveDoC / 30.4).toFixed(1)} months</div></div><div class="ls ${trend > 0.1 ? "bad" : ""}"><div class="k">Price, last 6 months</div><div class="v">${trend >= 0 ? "+" : ""}${Math.round(trend * 100)}%</div></div><div class="ls"><div class="k">Non-China suppliers</div><div class="v">${altN}</div></div></div>
+      ${allied ? `<div class="banner warn" style="margin:8px 0">Allies (${esc(D.ALLIED[state.quarter][k].map((r) => r.actor).slice(0, 2).join(", "))}) are buying ${p.name.toLowerCase()} too: you can buy ${Math.round(Math.min(45, allied * 15))}% less this quarter.</div>` : ""}
+      <div class="detail-grid">
       <div>
         <div class="ctrl"><label for="buy">Buy this quarter <b>${buy} days</b></label><input type="range" id="buy" min="0" max="${max}" step="1" value="${buy}" ${max ? "" : "disabled"}>
           <div class="presets"><button data-to="60">Up to 60 days</button><button data-to="90">Up to 90 days</button><button data-to="max">Max (${max})</button><button data-to="0">Clear</button></div></div>
@@ -207,7 +220,7 @@
         <div class="row"><span>Safety margin</span><b>${Plain.margin(d0)} → ${Plain.margin(d1)} ${Plain.zoneTag(d1)}</b></div>
         <div class="row"><span>Money left</span><b class="${orderCost() > state.budget ? "up" : ""}">${fmt$(state.budget - orderCost())}</b></div>
       </div></div>`;
-    const setBuy = (v) => { orders.buy[k] = Math.max(0, Math.min(max, v)); tick("orders"); refreshLive(); };
+    const setBuy = (v) => { orders.buy[k] = Math.max(0, Math.min(max, v)); tick("orders"); refreshLive(); const d = distOf(k, projected(k)); why(`<span class="wk">Plan</span>Buy <b>${orders.buy[k]} days</b> of ${p.name.toLowerCase()} for ${fmt$(Sim.quoteBuy(state, k, orders.buy[k]))}: safety ${Plain.margin(distOf(k, m.reserveDoC))} → <b>${Plain.margin(d)}</b>. Your buying pushes its price up ${(((p.eta * orders.buy[k]) / p.marketDepth) * 100).toFixed(0)}%.`, "ore"); };
     $("buy").oninput = (e) => setBuy(+e.target.value);
     $("rel").oninput = (e) => { orders.release[k] = +e.target.value; tick("orders"); refreshLive(); };
     body.querySelectorAll("[data-to]").forEach((b) => (b.onclick = () => {
@@ -254,7 +267,10 @@
       <div class="order-line order-total"><span>Total</span><span class="num">${fmt$(cost)}</span></div>
       <div class="order-line"><span class="muted">Budget after</span><span class="num ${over ? "up" : ""}">${fmt$(state.budget - cost)}</span></div>
       <div style="margin:8px 0">${chips([{ k: "Safety added", delta: dSum.reduce((a, b) => a + b, 0), unit: "×", fmt: (v) => v.toFixed(1) }, { k: `Weakest: ${MINERALS[weakest[1]].name}`, delta: weakest[0], unit: "×", fmt: (v) => v.toFixed(1) }])}</div>
-      <label class="toggle"><input type="checkbox" id="auto" ${state.autoRelease ? "checked" : ""}/> Automatically send stored supply to factories when imports fall short</label>
+      <div class="rel"><div class="k">When imports fall short</div>
+        <div class="tabs"><button data-trig="0" aria-pressed="${!state.releaseTrigger}">Release at once</button><button data-trig="0.1" aria-pressed="${!!state.releaseTrigger}">Hold for big shocks</button></div>
+        <div class="k">Who gets stored supply first</div>
+        <div class="tabs">${[["defence", "Defence"], ["even", "Evenly"], ["civilian", "Factories"]].map(([v, l]) => `<button data-pri="${v}" aria-pressed="${state.priority === v}">${l}</button>`).join("")}</div></div>
       <div class="row2"><button class="ghost" id="btn-off">Sign a supply deal…</button></div>
       <button class="primary" id="btn-commit" ${over ? "disabled" : ""}>Lock in my plan →</button>
       <div class="faint" style="margin-top:4px">Then this quarter's real events happen.</div>
@@ -262,7 +278,8 @@
       <div class="row2" style="margin-top:12px"><select id="ff" aria-label="Fast-forward to">${QUARTERS.slice(state.qi + 1).map((q) => `<option value="${q}">${qLabel(q)}</option>`).join("")}<option value="END">End of campaign</option></select><button class="ghost" id="btn-ff">Fast-forward</button></div>
       <div class="faint">Skip ahead without buying anything.</div>
       ${readinessPanel()}`;
-    $("auto").onchange = (e) => { state.autoRelease = e.target.checked; };
+    $("orders").querySelectorAll("[data-trig]").forEach((b) => (b.onclick = () => { state.releaseTrigger = +b.dataset.trig; renderOrders(); why(state.releaseTrigger ? `<span class="wk">Rule</span>Small gaps will be <b>rationed</b>; stored supply goes out only when a mineral is 10%+ short.` : `<span class="wk">Rule</span>Stored supply goes out <b>as soon as</b> imports fall short.`, "ore"); }));
+    $("orders").querySelectorAll("[data-pri]").forEach((b) => (b.onclick = () => { state.priority = b.dataset.pri; renderOrders(); why(`<span class="wk">Rule</span>${{ defence: "Defence lines get stored supply first. Defence shortfalls cost twice as much public trust.", even: "Everyone gets the same share of what's available.", civilian: "Commercial factories get stored supply first." }[state.priority]}`, "ore"); }));
     $("btn-off").onclick = () => showOfftakes(null);
     $("btn-commit").onclick = commit;
     $("btn-ff").onclick = () => fastForward($("ff").value);
@@ -304,6 +321,8 @@
     const res = Sim.applyOrders(state, orders);
     if (!res.ok) { alert(res.errs.join("\n")); return; }
     lastReport = Sim.resolveQuarter(state); reports.push(lastReport);
+    { const worst = KEYS.map((k) => [lastReport.minerals[k].shortFrac || 0, k]).sort((a, b) => b[0] - a[0])[0];
+      why(`<span class="wk">${qLabel(q)}</span>${lastReport.events.length ? esc(lastReport.events[0].headline) + ". " : "No new restrictions. "}${worst[0] > 0.01 ? `${MINERALS[worst[1]].name} factories ${worst[0] > THR ? "<b>stopped</b>" : "<b>rationed</b>"} (−${Math.round(worst[0] * 100)}%).` : "Every factory kept running."}`, worst[0] > THR ? "bad" : worst[0] > 0.01 ? "ore" : "good"); }
     const after = snapshot(), idle = shadowReps[QUARTERS.indexOf(q)];
     ledger.push({ q, label: summary, changes: [{ k: "Factory days lost", delta: lastReport.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "If you'd done nothing", delta: idle.downtime, unit: "", goodIfDown: true, fmt: (v) => Math.round(v) }, { k: "Money", delta: after.budget - before.budget, unit: "M", fmt: (v) => `$${Math.round(v)}` }, { k: "Public trust", delta: after.pc - before.pc, unit: "", fmt: (v) => Math.round(v) }] });
     orders = { buy: {}, release: {}, offtakes: [] };
@@ -340,14 +359,16 @@
       ${world.length ? `<div class="world-card"><h4>Meanwhile, what real governments did</h4>${world.map((r) => `<div><b>${esc(r.actor)}</b> · ${esc(r.date)}: ${esc(r.summary)} ${r.amountUSD ? `<span class="chip">${fmt$(r.amountUSD / 1e6)}</span>` : ""} <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc(domain(r.source))}</a></div>`).join("")}</div>` : ""}
       <div class="verdict ${verdict[0]}">${verdict[1]}</div>
       <h2 style="margin-top:14px">What it did to each mineral</h2>
-      <table class="data"><thead><tr><th>Mineral</th><th>Where supply came from</th><th>Price change</th><th>Imports</th><th>Used from stock</th><th>Missing</th><th>Factory days lost</th><th>Stored now</th></tr></thead><tbody>
+      <table class="data"><thead><tr><th>Mineral</th><th>Factories</th><th>Where supply came from</th><th>Price change</th><th>Imports</th><th>From stock</th><th>Substituted</th><th>Output lost</th><th>Stored now</th></tr></thead><tbody>
       ${KEYS.map((k) => { const r = rep.minerals[k], d = r.priceTo / r.priceFrom - 1, imp = Math.min(Q, r.avail * Q), off = Math.min(Q - imp, r.offtake || 0), dr = Math.min(Q - imp - off, r.drawn || 0), gap = Math.max(0, Q - imp - off - dr);
         const seg = (v, c) => (v > 0.3 ? `<span style="width:${(v / Q) * 100}%;background:${c}"></span>` : "");
-        return `<tr><td>${MINERALS[k].name}</td><td><div class="wf" title="blue imports · green offtakes · orange reserve · red unmet">${seg(imp, "#3987e5")}${seg(off, "#5fc08f")}${seg(dr, "#E08A52")}${seg(gap, "#FF5A4E")}</div></td>
+        const stt = (r.shortFrac || 0) < 0.01 ? "running" : (r.shortFrac || 0) <= THR ? "rationing" : "stopped";
+        return `<tr><td>${MINERALS[k].name}</td><td><span class="state-chip ${stt}">${{ running: "Running", rationing: `Rationing −${Math.round((r.shortFrac || 0) * 100)}%`, stopped: "Stopped" }[stt]}</span></td><td><div class="wf" title="blue imports · green offtakes · orange reserve · red unmet">${seg(imp, "#3987e5")}${seg(off, "#5fc08f")}${seg(dr, "#E08A52")}${seg(gap, "#FF5A4E")}</div></td>
           <td>${r.priceFrom.toFixed(0)}→${r.priceTo.toFixed(0)} <span class="${d > 0.005 ? "up" : d < -0.005 ? "down" : "faint"}">${d >= 0 ? "+" : ""}${(d * 100).toFixed(0)}%</span></td><td>${pct(r.avail)}</td><td>${r.drawn ? r.drawn.toFixed(0) : "—"}</td>
-          <td class="${r.shortfallDays > 0.5 ? "up" : ""}">${r.shortfallDays > 0.5 ? r.shortfallDays.toFixed(0) : "—"}</td><td class="${r.downtime > 0.5 ? "up" : ""}">${r.downtime > 0.5 ? r.downtime.toFixed(0) : "—"}</td><td>${r.reserve.toFixed(0)}</td></tr>`; }).join("")}
+          <td>${(r.substituted || 0) > 0.5 ? r.substituted.toFixed(0) : "—"}</td><td class="${r.downtime > 0.5 ? "up" : ""}">${r.downtime > 0.5 ? r.downtime.toFixed(0) : "—"}</td><td>${r.reserve.toFixed(0)}</td></tr>`; }).join("")}
       </tbody></table>
       <div class="faint" style="margin-top:6px">Each bar is everything factories needed this quarter: <span style="color:#3987e5">arrived from abroad</span> · <span style="color:#5fc08f">from your deals</span> · <span style="color:#E08A52">taken from your stockpile</span> · <span style="color:#FF5A4E">missing, so factories stopped</span>. Numbers are in days of supply. Storage cost ${fmt$(rep.storage)} · public trust ${rep.pcDelta >= 0 ? "+" : ""}${rep.pcDelta.toFixed(0)}.</div>
+      ${rep.tranche || rep.lapsed ? `<div class="banner" style="margin-top:8px">${rep.lapsed ? `Fiscal year ended: ${fmt$(rep.lapsed)} of unspent money lapsed. ` : ""}${rep.tranche ? `New fiscal year: ${fmt$(rep.tranche)} arrived.` : ""}</div>` : ""}
       ${rep.offtakeNotes.length ? `<div class="section">${rep.offtakeNotes.map((n) => `<div class="order-line">⇄ ${esc(n)}</div>`).join("")}</div>` : ""}
       <div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="btn-continue">${state.done && rep === reports[reports.length - 1] ? "See my final results →" : rep === lastReport ? `On to ${qLabel(state.quarter)} →` : "Close"}</button></div>`);
     $("btn-continue").onclick = closeModal; $("btn-x").onclick = closeModal;

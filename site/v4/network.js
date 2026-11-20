@@ -65,6 +65,7 @@
         <g class="links">${links.map((l) => { const i = l.i, j = l.j; if (!P[i] || !P[j]) return ""; const mx = (P[i].x + P[j].x) / 2, my = Math.min(P[i].y, P[j].y) - 70 - Math.abs(P[i].x - P[j].x) * 0.08; return `<path class="n-link${l.on ? " on" : ""}" data-a="${i}" data-b="${j}" d="M${P[i].x},${P[i].y} Q${mx},${my} ${P[j].x},${P[j].y}"><title>${esc(l.reason || "structural link")}</title></path>`; }).join("")}</g>
         <path class="tank-flow" d="M${TANK.x - 40},${TANK.y} L${PLANT.x + 92},${PLANT.y}"/>
         <g class="plant n-plant ${this.factory || ""}" transform="translate(${PLANT.x},${PLANT.y})"><circle r="70" fill="url(#glow)"/><rect x="-92" y="-26" width="184" height="52" rx="10"/><text y="-2">${esc(this.opts.plantLabel || "Your US factory")}</text><text class="plant-status" y="16">${esc(this.factoryLabel || "running")}</text><circle class="lamp" cx="-74" cy="0" r="6"/></g>
+        <g class="ghost-plant ${this.ghost ? "" : "off"} ${this.ghost || ""}" transform="translate(${PLANT.x - 250},${PLANT.y})"><rect x="-78" y="-24" width="156" height="48" rx="10"/><text y="-3">Without a stockpile</text><text class="plant-status" y="14">${esc(this.ghostLabel || "")}</text><circle class="lamp" cx="-64" cy="0" r="5"/></g>
         <g class="tank" transform="translate(${TANK.x},${TANK.y})"><text class="tank-k" y="-66" x="0">STOCKPILE</text><rect class="tank-shell" x="-34" y="-56" width="68" height="100" rx="10"/><rect class="tank-fill" x="-30" y="${40 - 92 * Math.min(1, (this.tankDays || 0) / (this.tankMax || 180))}" width="60" height="${92 * Math.min(1, (this.tankDays || 0) / (this.tankMax || 180))}" rx="7"/><text class="tank-v" y="2">${Math.round(this.tankDays || 0)}</text><text class="tank-u" y="18">days</text></g>
         <g class="nodes">${N.map((nd, i) => `<g class="n-node${nd.chinaLinked ? " cn" : ""}${nd.isNew ? " new" : ""}" data-i="${i}" transform="translate(${P[i].x},${P[i].y})" tabindex="0" role="button" aria-pressed="false" aria-label="${esc(nd.label)}, ${Math.round(nd.share * 100)}% of supply">
           <circle class="halo h90" r="0"/><circle class="halo h10" r="0"/>
@@ -229,8 +230,16 @@
     setFactory(state, label) {
       this.factory = state; this.factoryLabel = label || state;
       const g = this.svg && this.svg.querySelector(".n-plant"); if (!g) return;
-      g.classList.remove("running", "stopped", "strained"); g.classList.add(state);
+      g.classList.remove("running", "stopped", "strained", "rationing"); g.classList.add(state);
       g.querySelector(".plant-status").textContent = this.factoryLabel;
+    }
+    /** Side-by-side: the same events hitting a factory with no stockpile. state: running|rationing|stopped, or null to hide. */
+    setGhost(state, label) {
+      this.ghost = state; this.ghostLabel = label || state;
+      const g = this.svg && this.svg.querySelector(".ghost-plant"); if (!g) return;
+      g.classList.toggle("off", !state);
+      g.classList.remove("running", "rationing", "stopped"); if (state) g.classList.add(state);
+      g.querySelector(".plant-status").textContent = this.ghostLabel || "";
     }
     /** Live supply flows: factors[i] in [0,1] = share of supplier i's normal flow still arriving. */
     setFlows(factors, labels = []) {

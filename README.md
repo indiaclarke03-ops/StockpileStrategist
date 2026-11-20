@@ -21,7 +21,31 @@ To play locally, open `site/v4/index.html` in a browser. There's no build step, 
 | **4 · History strikes** | The real 2023–26 events replay against your defences, with a do-nothing ghost and four decision pauses. A validation card reports Match / Partial / Miss honestly | Unchanged `sim.js` engine · cited events · Tavily intel |
 | **5 · The cliff** | 1,000 simulated futures draw in, split by cliff branch. Then a report card, benchmarks and a shareable PNG | Unchanged `montecarlo.js` · Tavily news signal |
 
-### Story mode in 13 short steps
+### How the simulation mirrors a real shortage
+
+The **reverse stress test** (start from the shortage you can't afford, work back to its most likely cause) finds the weak spots. The same networks now drive the history replay too: each mineral's exposure is the China-linked share of its supply network (direct, or via ownership and feedstock), and for cobalt the DRC-fed share.
+
+- **Factories ration before they stop.** Substitutes cover part of a gap as alternatives ramp up over about two quarters, for example ferrite magnets or LFP batteries. A gap below your threshold means *rationing*; above it, the line *stops*.
+- **Release rules matter as much as size.** You choose when stored supply goes out (at once, or held for big shocks) and who gets it first (defence, evenly, or factories). Defence shortfalls cost twice as much public trust.
+- **Deals run late.** Delivery shows "promised vs actual" when a deal starts.
+- **Money follows the fiscal year.** It arrives in tranches each October, and 25% of anything unspent lapses on 30 September.
+- **Allies compete for supply.** When Japan or the EU make real purchases or deals (from the Tavily-sourced actions dataset), you can buy less that quarter.
+- **Officials' look-back.** Each decision shows months of imports stored, the six-month price trend, and how many non-China suppliers are producing.
+- **The 2027 dysprosium outlook is fixed.** If the pause ends, the suspended October 2025 controls now return on top of the April 2025 heavy-rare-earth controls.
+- **Trade data covers all partner countries.** UN Comtrade public API (`scripts/fetch_comtrade.py`), not just four corridors. China's real share of US antimony imports, for example, was about 13% in 2023, not the 93% the corridor data implied.
+- **The data refreshes weekly.** A GitHub Action re-runs the news signal (if a `TAVILY_API_KEY` secret is set) and Comtrade.
+
+### Clarity aids
+
+- A one-line **"what changed and why"** note after every action, always in the same place.
+- **First-run pointers** that appear once; **Show me** replays them.
+- A **globe intro** to the real trade routes on the supply-chain step.
+- A **no-stockpile twin factory** running beside yours during the replay.
+- A **20-second animated recap** on the results step.
+- A one-page **policy briefing** to print or save as PDF.
+- Analyst mode shows two columns by default, with **Riskiest first** and **More columns** toggles.
+
+### Story mode in 14 short steps
 
 Each screen has one idea and one action, with Back/Next in the same place every time:
 
@@ -33,11 +57,12 @@ Each screen has one idea and one action, with Back/Next in the same place every 
 6. The hidden weak point
 7. Build a stockpile
 8. Supply deals
-9. Check your plan
-10. Live through 2023–26
-11. Your results
-12. The 2027 deadline
-13. Your report
+9. Plan how you'll use it
+10. Check your plan
+11. Live through 2023–26
+12. Your results
+13. The 2027 deadline
+14. Your report
 
 The **live supply chain panel** stays beside the step and reacts to what you do. Your stockpile tank fills as you buy. In the 2023–26 replay, supply lines thin with "−x%" when restrictions hit, the tank drains as stored supply keeps the factory running, the factory lamp turns red when the line stops, and deals light up once they deliver. Analyst mode shows the same graph for any mineral in its "Supply chain" tab.
 

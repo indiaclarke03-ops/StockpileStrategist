@@ -16,7 +16,9 @@
   const CV_NEW = 0.25;         // variability of a new supplier's deliveries (assumed)
 
   const G = (window.G = { stepIdx: -1, mission: null, model: null, net: null, netFor: null, threshold: 0.25, L: 25,
-    guess: [], faults: [], a: null, guessHits: 0, stockDays: 0, signed: [], investigated: new Set(), investCost: 0, dStart: null, dNow: null, historyDone: false });
+    guess: [], faults: [], a: null, guessHits: 0, stockDays: 0, signed: [], investigated: new Set(), investCost: 0, dStart: null, dNow: null, historyDone: false,
+    releaseTrigger: 0, priority: "even" });
+  const B0 = D.CONFIG.tranches ? D.CONFIG.tranches[D.QUARTERS[0]] : D.CONFIG.budget; // this fiscal year's money
 
   // ---------- small UI helpers ----------
   function fx(make, ms = 1200) { if (!gsap || reduced()) return; const tw = make(); setTimeout(() => tw && tw.progress(1), ms); }
@@ -60,9 +62,9 @@
     return { cost, quarters: q };
   }
   function budgetLeft() {
-    if (!G.mission) return D.CONFIG.budget;
+    if (!G.mission) return B0;
     const up = G.signed.reduce((s, id) => s + COUNTERPARTIES.find((c) => c.id === id).upfront, 0);
-    return D.CONFIG.budget - stockCost(G.stockDays).cost - up - G.investCost;
+    return B0 - stockCost(G.stockDays).cost - up - G.investCost;
   }
   const zoneBar = (d, d0) => { const x = (v) => Math.min(98, (v / 5) * 100); return `<div class="zonebar">${d0 != null ? `<b style="left:${x(d0)}%" title="where you started"></b>` : ""}<i style="left:${x(d)}%"></i></div><div class="zonelabels"><span>Danger</span><span>At risk</span><span>Safe</span><span>Very safe</span></div>`; };
 
@@ -76,13 +78,28 @@
     { id: "hidden", title: "The hidden weak point", enter: stepHidden, live: true },
     { id: "store", title: "Build a stockpile", enter: stepStore, live: true },
     { id: "deals", title: "Supply deals", enter: stepDeals, live: true },
+    { id: "release", title: "Plan how you'll use it", enter: stepRelease, live: true },
     { id: "check", title: "Check your plan", enter: stepCheck, live: true, next: "Start: July 2023 →" },
     { id: "history", title: "Live through 2023–26", enter: () => Replay.start(G), live: true, can: () => G.historyDone, next: "See the results", noBack: true },
-    { id: "results", title: "Your results", enter: () => Replay.results(G), next: "Face 2027 →", noBack: true },
+    { id: "results", title: "Your results", enter: () => Replay.results(G), live: true, next: "Face 2027 →", noBack: true },
     { id: "futures", title: "The 2027 deadline", enter: () => Futures.start(G), next: "See my report", noBack: true },
     { id: "report", title: "Your report", enter: () => Futures.report(G), last: true, noBack: true },
   ];
   const idx = (id) => STEPS.findIndex((s) => s.id === id);
+  // First-run pointers (shown once; "Show me" replays them).
+  const TIPS = {
+    pick: [{ key: "pick", sel: ".missions", text: "Each card is a real mineral. Pick one to protect." }],
+    map: [{ key: "map-node", sel: "#liveGraph .n-node", text: "Each circle is a supplier. Bigger means it supplies more of America's needs. Tap one to see who it is." },
+      { key: "map-t2", sel: "#liveGraph .n-t2", text: "The top row is where suppliers get their own raw material." },
+      { key: "map-plant", sel: "#liveGraph .n-plant", text: "Everything flows to your factory. The tank beside it will hold your stockpile." }],
+    quiz: [{ key: "quiz", sel: "#liveGraph .nodes", text: "Tap two circles: the suppliers you think would cause most of a shortage." }],
+    store: [{ key: "store-tank", sel: "#liveGraph .tank", text: "This tank is your stockpile. It fills as you buy." },
+      { key: "store-margin", sel: "#storeK .kpi:last-child", text: "Safety margin: how big a shock you can absorb. Aim for Safe." }],
+    release: [{ key: "release", sel: "#s-release .opt-group", text: "Real reserves decide when to release and who gets supply first. It changes who keeps running." }],
+    history: [{ key: "hist-cut", sel: "#liveGraph .nodes", text: "When restrictions hit, these supply lines thin and show how much was cut." },
+      { key: "hist-ghost", sel: "#liveGraph .ghost-plant", text: "This shows the same events hitting a factory with no stockpile." },
+      { key: "hist-strip", sel: "#liveExtra", text: "Each box is 3 months. Green = running, amber = rationing, red = stopped." }],
+  };
 
   function go(i) {
     i = Math.max(0, Math.min(STEPS.length - 1, i));
@@ -95,7 +112,10 @@
     $("live").classList.toggle("hidden", !st.live);
     if (st.live) ensureNet();
     $("liveExtra").innerHTML = "";
+    $("live").classList.remove("globe"); $("stage").classList.remove("show"); $("globeCap").classList.add("hidden");
+    Tour.clearWhy();
     st.enter();
+    setTimeout(() => Tour.tips(TIPS[st.id] || []), $("live").classList.contains("globe") ? (reduced() ? 900 : 4300) : 700);
     hud(); nav();
     window.scrollTo(0, 0);
     const card = document.querySelector(".step.on .card");
@@ -120,6 +140,7 @@
   function hud() {
     const m = G.mission, st = STEPS[G.stepIdx];
     $("hud-mission").innerHTML = m ? `${tile(m, "sm")}<div><div class="t">${esc(m.name)}</div><div class="s">${esc(m.mustNot)}</div></div>` : "";
+    document.documentElement.style.setProperty("--nsteps", STEPS.length);
     $("hud-progress").innerHTML = `<div class="lab"><span>Step ${G.stepIdx + 1} of ${STEPS.length} · <b>${esc(st.title)}</b></span></div><div class="bar">${STEPS.map((s, i) => `<i class="${i < G.stepIdx ? "done" : i === G.stepIdx ? "on" : ""}" title="${esc(s.title)}"></i>`).join("")}</div>`;
     if (G.liveMoney == null) $("hud-money").textContent = fmt$(G.history ? G.history.state.budget : budgetLeft());
     $("hud-countdown").textContent = `${daysToCliff()} days`;
@@ -202,7 +223,7 @@
       $("thrK").innerHTML = kpi("Missing supply that stops it", `${Math.round(G.threshold * 91.25)} days`, "in a 3-month period") + kpi("Starting safety margin", `${Plain.margin(d)}`, `${Plain.zone(d).label}, with nothing stored`, d < 1.5 ? "bad" : "");
     };
     $("thr").oninput = (e) => { G.threshold = +e.target.value / 100; G.L = G.threshold * 100; $("thrv").textContent = `${e.target.value}%`; upd(); };
-    $("thr").onchange = () => Guide.log(2, `Factory limit: ${Math.round(G.threshold * 100)}% shortage`, []);
+    $("thr").onchange = () => { Guide.log(2, `Factory limit: ${Math.round(G.threshold * 100)}% shortage`, []); Tour.why(`<span class="wk">Changed</span>Above a <b>${Math.round(G.threshold * 100)}%</b> shortage the factory stops; below it, it rations. ${G.threshold < 0.2 ? "A fragile factory is harder to protect." : ""}`); };
     upd(); factoryDemo();
   }
   function factoryDemo() {
@@ -239,6 +260,16 @@
       <div class="kpis">${kpi("Biggest supplier", esc(shortName(top.label)), `${pct(top.share)} of supply`)}${kpi("China-linked", pct(cn), "of supply")}</div>
       <p class="faint">${G.model.synthetic ? "Supplier shares are real; some other figures are estimated." : `Measured from ${G.model.points} quarters of real shipping records.`} <button class="linkbtn" id="ev-map">Sources</button></p>`;
     $("ev-map").onclick = evidence;
+    if (!G._globeShown || G._globeShown !== G.mission.id) { G._globeShown = G.mission.id; globeIntro(); }
+  }
+  /** Show the real trade routes on the globe, then fold them into the network view. */
+  const POV = { dysprosium: { lat: 28, lng: 115, altitude: 2.1 }, gallium: { lat: 32, lng: 110, altitude: 2.2 }, antimony: { lat: 18, lng: 85, altitude: 2.2 }, cobalt: { lat: 5, lng: 25, altitude: 2.3 } };
+  function globeIntro(ms = 3800) {
+    $("live").classList.add("globe"); $("stage").classList.add("show");
+    Stage.focus(G.mission.id, G.mission.color); Stage.flyTo(POV[G.mission.id] || { lat: 25, lng: 60, altitude: 2.3 }, 1600);
+    const t = (EXT.trade || {})[G.mission.id], top = t && t.shares ? t.shares.slice(0, 3).map((x) => `${x.country} ${pct(x.share)}`).join(" · ") : "";
+    $("globeCap").innerHTML = `Real shipments of ${esc(G.mission.name.toLowerCase())} into the US${t ? ` in ${t.year}` : ""}${top ? `: ${esc(top)}` : ""}`; $("globeCap").classList.remove("hidden");
+    clearTimeout(G._globeT); G._globeT = setTimeout(() => { $("live").classList.remove("globe"); $("stage").classList.remove("show"); $("globeCap").classList.add("hidden"); Tour.why(`<span class="wk">Now</span>The same routes, as a supply chain: <b>bigger circle = more supply</b>.`); }, reduced() ? 600 : ms);
   }
 
   // ---------- Step 4: quiz ----------
@@ -253,7 +284,7 @@
     };
     $("s-quiz").innerHTML = `<div class="step-k">Step 4 · Quiz</div><h2>A shortage hits. Which 2 suppliers would cause most of it?</h2>
       <p class="lead"><b>Tap two circles</b> on the map.</p><div class="kpis" id="quizPicked"></div>`;
-    G.onTap = (i) => { if (i >= G.model.nodes.length) return; G.guess = G.net.toggleSelect(i, 2); render(); };
+    G.onTap = (i) => { if (i >= G.model.nodes.length) return; G.guess = G.net.toggleSelect(i, 2); render(); if (G.guess.includes(i)) Tour.why(`<span class="wk">Picked</span><b>${esc(shortName(G.model.nodes[i].label))}</b>: ${pct(G.model.nodes[i].share)} of supply${G.model.nodes[i].chinaLinked ? ", China-linked" : ""}.`); };
     render();
   }
 
@@ -281,6 +312,7 @@
     countUp($("a-sup"), sup * 100, { format: (v) => `${Math.round(v)}%` });
     countUp($("a-risk"), risk * 100, { format: (v) => `${Math.round(v)}%`, duration: 1.4 });
     $("ev-ans").onclick = evidence;
+    Tour.why(`<span class="wk">Why</span>Circles resized to each supplier's <b>share of a shortage</b>. Suppliers that fail together count for more than their size.`, "bad");
     if (first) Guide.log(5, `Quiz: found ${hits} of 2 weak spots`, [{ k: "Weak spots' share of a shortage", delta: risk * 100, unit: "%", fmt: (v) => Math.round(v) }], names.join(" + "));
   }
 
@@ -300,6 +332,7 @@
       ${spof ? `<div class="kpis">${kpi(tot > 0 ? "Risk from 'non-Chinese' suppliers that traces here" : "Risk that traces here", `<span class="num">${pct(share)}</span>`, "", "bad")}</div>
       <p class="lead">It all flows back to <b>${esc(spof.label)}</b>. You never buy from it, but your suppliers do.</p>` : `<p class="lead">No single upstream source dominates for this mineral.</p>`}
       <p class="faint">Red lines on the map trace the risk up to where suppliers get their raw material. Some upstream shares are estimates. <button class="linkbtn" id="alt">How certain is this?</button></p>`;
+    if (spof) Tour.why(`<span class="wk">Traced</span>Red lines follow the risk upstream to <b>${esc(spof.label)}</b>.`, "bad");
     $("alt").onclick = () => { const q = RST.alternatives(G.model.stressS, G.L, G.model.nodes.map((n) => n.mean), { samples: 1000, seed: 42 }).map((x) => ({ p10: x.p10 / G.L, p90: x.p90 / G.L })); G.net.halos(q); toast("The faint rings show the range across 1,000 slightly different ways the same shortage could unfold. Bigger rings = less certain.", "good"); };
   }
 
@@ -324,7 +357,8 @@
       hud();
     };
     $("stock").oninput = (e) => { G.stockDays = +e.target.value; upd(); };
-    $("stock").onchange = () => logChange(7, `Stockpile: ${G.stockDays} days`);
+    $("stock").onchange = () => { const a = G._snap ? G._snap.d : dNow(); logChange(7, `Stockpile: ${G.stockDays} days`); const b = dNow();
+      Tour.why(`<span class="wk">Changed</span>Stockpile <b>${G.stockDays} days</b>: the tank holds ${Math.round(G.stockDays / G.threshold)} days of shortage cover. Safety ${Plain.margin(a)} → <b>${Plain.margin(b)}</b>, because a bigger buffer absorbs bigger shocks.`, b > a ? "good" : "ore"); };
     upd();
   }
   function snapshot() { return { d: dNow(), budget: budgetLeft(), runtime: G.stockDays / G.threshold }; }
@@ -362,6 +396,7 @@
     G.investigated.add(id); G.investCost += INVESTIGATE_COST;
     toast(isLinked(cp) ? `<b style="color:var(--danger)">${esc(cp.name)} is tied to China.</b> ${cp.ownerChina ? "Records show a China-based owner." : "It relies on Chinese raw material."} It would fail at the same time as China.` : `<b>${esc(cp.name)}</b>: no ties to China found in Sayari's records.`, isLinked(cp) ? "" : "good");
     logChange(8, `Checked owner: ${cp.name}`, isLinked(cp) ? "Tied to China" : "No China ties");
+    Tour.why(isLinked(cp) ? `<span class="wk">Found</span><b>${esc(cp.name)}</b> is tied to China, so it would fail at the same time. −$25M for the check.` : `<span class="wk">Found</span><b>${esc(cp.name)}</b>: no China ties in Sayari's records. −$25M for the check.`, isLinked(cp) ? "bad" : "good");
     stepDeals();
   }
   function signDeal(id) {
@@ -371,10 +406,38 @@
     const after = dNow();
     toast(isLinked(cp) ? `<b style="color:var(--danger)">That was a trap.</b> ${esc(cp.name)} is tied to China, so a red line now links it to China on the map. Safety ${Plain.margin(before)} → ${Plain.margin(after)}.` : `<b>Deal signed.</b> Deliveries start in ${cp.lag[0]}–${cp.lag[1]} quarters. Safety ${Plain.margin(before)} → ${Plain.margin(after)}.`, isLinked(cp) ? "" : "good");
     logChange(8, `Signed: ${cp.name}`, isLinked(cp) ? "Trap: tied to China" : `Starts in ${cp.lag[0]}–${cp.lag[1]} quarters`);
+    Tour.why(`<span class="wk">Signed</span>${esc(cp.name)}: safety ${Plain.margin(before)} → <b>${Plain.margin(after)}</b>. ${isLinked(cp) ? "Tied to China, so it adds little: it fails together with China." : `A new, independent source, delivering from ${cp.lag[0]}–${cp.lag[1]} quarters (deals often slip).`}`, isLinked(cp) ? "bad" : "good");
     stepDeals();
   }
 
-  // ---------- Step 9: check ----------
+  // ---------- Step 9: release plan ----------
+  /** When stored supply goes out, and who gets it first. Arithmetic preview for a year of your shortage. */
+  function stepRelease() {
+    G.net.setFaults(G.faults); G.net.showLinks(true); G.net.setTank(G.stockDays); legend("risk");
+    const p = MINERALS[G.mission.id], ds = p.defenceShare || 0;
+    const when = [["0", "At the first shortfall", "Release as soon as imports fall short"], ["0.1", "Hold for big shocks", "Ration small gaps; release when supply is 10%+ short"]];
+    const who = [["defence", "Defence first", "Military needs are met before factories"], ["even", "Share evenly", "Everyone gets the same share"], ["civilian", "Factories first", "Keep commercial lines running"]];
+    $("s-release").innerHTML = `<div class="step-k">Step 9</div><h2>Plan how you'll use the stockpile</h2>
+      <p class="lead">In a shortage, a stockpile is only as good as the rules for releasing it.</p>
+      <div class="opt-group"><div class="k">When to release</div><div class="opts">${when.map(([v, b, sub]) => `<button class="opt" data-when="${v}" aria-pressed="${String(G.releaseTrigger) === v}"><b>${b}</b><span>${sub}</span></button>`).join("")}</div></div>
+      <div class="opt-group"><div class="k">Who gets it first</div><div class="opts">${who.map(([v, b, sub]) => `<button class="opt" data-who="${v}" aria-pressed="${G.priority === v}"><b>${b}</b><span>${sub}</span></button>`).join("")}</div></div>
+      <h3>If your ${Math.round(G.threshold * 100)}% shortage lasted a year</h3><div class="sectors" id="sectors"></div>
+      <p class="faint">${Math.round(ds * 100)}% of US ${esc(G.mission.name.toLowerCase())} demand is defence (estimate). Defence shortfalls cost twice as much public trust.</p>`;
+    const preview = () => {
+      // Year-long shortage of size thr: daily gap = thr; stock covers stockDays of full demand.
+      const gap = G.threshold, stockGapDays = G.stockDays / Math.max(0.01, gap); // days stock can cover the whole gap
+      const sectors = G.priority === "defence" ? [["Defence", Math.min(365, G.stockDays / Math.max(0.001, Math.min(gap, ds)))], ["Factories", Math.min(365, Math.max(0, G.stockDays - Math.min(gap, ds) * 365) / Math.max(0.001, gap - Math.min(gap, ds)))]]
+        : G.priority === "civilian" ? [["Factories", Math.min(365, G.stockDays / Math.max(0.001, Math.min(gap, 1 - ds)))], ["Defence", Math.min(365, Math.max(0, G.stockDays - Math.min(gap, 1 - ds) * 365) / Math.max(0.001, gap - Math.min(gap, 1 - ds)))]]
+        : [["Defence", Math.min(365, stockGapDays)], ["Factories", Math.min(365, stockGapDays)]];
+      $("sectors").innerHTML = sectors.map(([n, d]) => `<div class="sector"><span>${n}</span><div class="bar"><i style="width:${(d / 365) * 100}%"></i></div><span class="r">${d >= 365 ? "full year ✓" : `${Math.round(d)} days`}</span></div>`).join("");
+    };
+    $("s-release").querySelectorAll("[data-when]").forEach((b) => (b.onclick = () => { G.releaseTrigger = +b.dataset.when; stepRelease(); Guide.log(9, `Release: ${b.querySelector("b").textContent}`, []); Tour.why(`<span class="wk">Set</span>${G.releaseTrigger ? "Small gaps will be <b>rationed</b>, saving the stockpile for big shocks." : "The stockpile goes out <b>as soon as</b> imports fall short."}`, "ore"); }));
+    $("s-release").querySelectorAll("[data-who]").forEach((b) => (b.onclick = () => { G.priority = b.dataset.who; stepRelease(); Guide.log(9, `Priority: ${b.querySelector("b").textContent}`, []); Tour.why(`<span class="wk">Set</span>${{ defence: "Defence lines get stored supply first; factories wait.", even: "Every user gets the same share of what's available.", civilian: "Factories get stored supply first; defence waits." }[G.priority]}`, "ore"); }));
+    preview();
+    liveStatus([{ k: "Stockpile", v: `${G.stockDays} days`, cls: G.stockDays ? "ore" : "" }, { k: "Release", v: G.releaseTrigger ? "Big shocks" : "At once", cls: "" }, { k: "Priority", v: { defence: "Defence", even: "Even", civilian: "Factories" }[G.priority], cls: "" }]);
+  }
+
+  // ---------- Step 10: check ----------
   function stepCheck() {
     G.net.setFaults(G.faults); G.net.showLinks(true); riskMorph(false); G.net.setTank(G.stockDays); legend("risk");
     const d = dNow(); G.dNow = d;
@@ -386,7 +449,7 @@
       { k: `Supply drops ${Math.round(Math.min(1, 2 * G.threshold) * 100)}%`, need: Math.min(1, 2 * G.threshold) * 91.25, have: all },
       { k: "All China-linked supply stops", s: `${pct(cn)} of supply`, need: cn * 91.25, have: clean },
     ];
-    $("s-check").innerHTML = `<div class="step-k">Step 9</div><h2>Is your plan ready?</h2>
+    $("s-check").innerHTML = `<div class="step-k">Step 10</div><h2>Is your plan ready?</h2>
       <div class="kpis">${kpi("Safety margin", Plain.margin(d), Plain.zone(d).label, d < 1.5 ? "bad" : d >= 2.5 ? "good" : "ore")}${kpi("Stored", `${G.stockDays} days`, "")}${kpi("Money left", fmt$(budgetLeft()), "")}</div>
       <h3 style="margin-top:14px">If this happened for a year, your factory would run…</h3>
       <div class="tests">${tests.map((t) => { const gap = Math.max(0, t.need - t.have) / 91.25, runs = gap <= 1e-9 ? Infinity : G.stockDays / gap, ok = runs >= 365;
@@ -420,6 +483,8 @@
     <p class="faint">Adapted from the Ethical Tech CoLab Resilience Atlas (teaching material, not a validated product).</p>
     <p><a href="../classic/">Analyst mode</a>: manage all six minerals, quarter by quarter.</p>`;
   $("btn-about").onclick = () => drawer(aboutHTML());
+  $("btn-showme").onclick = () => Tour.replay();
+  $("btn-globe").onclick = () => globeIntro(5000);
   $("btn-gloss").onclick = $("btn-gloss0").onclick = () => drawer(Plain.glossaryHTML());
   $("btn-ledger").onclick = () => Guide.showLedger();
 

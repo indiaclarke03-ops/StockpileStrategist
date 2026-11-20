@@ -25,7 +25,8 @@
     }
     return {
       qi: 0, quarter: QUARTERS[0], done: false,
-      budget: CONFIG.budget, spent: 0, politicalCapital: CONFIG.politicalCapital,
+      budget: CONFIG.tranches ? CONFIG.tranches[QUARTERS[0]] || CONFIG.budget : CONFIG.budget, spent: 0, lapsed: 0, received: CONFIG.tranches ? CONFIG.tranches[QUARTERS[0]] || CONFIG.budget : CONFIG.budget, politicalCapital: CONFIG.politicalCapital,
+      releaseTrigger: opts.releaseTrigger != null ? opts.releaseTrigger : 0, priority: opts.priority || "even",
       minerals, offtakes: [], autoRelease: opts.autoRelease !== false,
       downtimeDays: 0, downtimeHist: [], minDocByQ: [], log: [], seed: opts.seed || CONFIG.seed,
       rngState: opts.seed || CONFIG.seed, flagUSProducers: false,
@@ -38,7 +39,8 @@
     return state.rngState / 2147483647;
   }
 
-  const maxBuy = (state, k) => Math.floor(CONFIG.maxBuyPerQ * clamp(state.minerals[k].importAvail, 0, 1));
+  const alliedCount = (state, k) => ((D.ALLIED || {})[state.quarter] || {})[k] ? D.ALLIED[state.quarter][k].length : 0;
+  const maxBuy = (state, k) => Math.floor(CONFIG.maxBuyPerQ * clamp(state.minerals[k].importAvail, 0, 1) * (1 - Math.min(0.45, (CONFIG.alliedCut || 0) * alliedCount(state, k))));
 
   function quoteBuy(state, k, doc) {
     if (doc <= 0) return 0;
@@ -75,7 +77,7 @@
     for (const id of orders.offtakes || []) {
       const cp = COUNTERPARTIES.find((c) => c.id === id);
       const lag = cp.lag[0] + Math.floor(draw(state) * (cp.lag[1] - cp.lag[0] + 1));
-      state.offtakes.push({ id, mineral: cp.mineral, startQi: state.qi + lag, signedQi: state.qi, status: "pending", delivered: 0, slips: 0 });
+      state.offtakes.push({ id, mineral: cp.mineral, startQi: state.qi + lag, promisedQi: state.qi + cp.lag[0], signedQi: state.qi, status: "pending", delivered: 0, slips: 0 });
       state.budget -= cp.upfront; state.spent += cp.upfront;
       const pen = cp.flags.reduce((s, f) => s + (f.pcPenalty || 0), 0) + (cp.ownerChina ? 5 : 0);
       if (pen) {
@@ -118,7 +120,9 @@
       if (state.qi < o.startQi) continue;
       if (o.status === "pending") {
         if (draw(state) < CONFIG.slipP) { o.startQi++; o.slips++; report.offtakeNotes.push(`${cp.name} slipped another quarter.`); continue; }
-        o.status = "delivering"; report.offtakeNotes.push(`${cp.name} began deliveries.`);
+        o.status = "delivering"; o.startedQi = state.qi;
+        const late = state.qi - (o.promisedQi != null ? o.promisedQi : state.qi);
+        report.offtakeNotes.push(`${cp.name} began deliveries${late > 0 ? `, ${late} quarter${late > 1 ? "s" : ""} later than promised` : " on time"}.`);
       }
       let blockP = cp.flags.reduce((s, f) => s + (f.blockP || 0), 0);
       if (cp.usProducer && state.flagUSProducers) blockP += 0.08;
@@ -148,17 +152,27 @@
         m.reserveDoC += surplus / UNITS_PER_DOC; supply -= surplus;
       }
       let shortfall = Math.max(0, 100 - supply);
+      const gap0 = shortfall;
+      // Real factories substitute where they can (ramps up over ~2 quarters after a cut).
+      const substituted = Math.min(shortfall, 100 * (p.subCap || 0) * Math.min(1, m.qSinceCut / 2) * (m.cutNet > 0.02 ? 1 : 0));
+      shortfall -= substituted;
+      // Release strategy: stored supply goes out only once the gap passes the trigger ("hold for big shocks").
       let drawn = 0;
-      if (shortfall > 0 && state.autoRelease && m.reserveDoC > 0) {
+      if (shortfall > 0 && state.autoRelease && m.reserveDoC > 0 && shortfall / 100 > (state.releaseTrigger || 0)) {
         drawn = Math.min(m.reserveDoC, shortfall / UNITS_PER_DOC);
         m.reserveDoC -= drawn; shortfall -= drawn * UNITS_PER_DOC;
       }
       shortfall = Math.max(0, shortfall);
-      const downtime = shortfall * p.criticality * 0.9;
+      // Who gets what's left: defence first, commercial first, or shared evenly.
+      const ds = p.defenceShare || 0, dDef = 100 * ds, dCiv = 100 - dDef, avail = 100 - shortfall;
+      let defShort, civShort;
+      if (state.priority === "defence") { defShort = Math.max(0, dDef - avail); civShort = shortfall - defShort; }
+      else if (state.priority === "civilian") { civShort = Math.max(0, dCiv - avail); defShort = shortfall - civShort; }
+      else { defShort = shortfall * ds; civShort = shortfall * (1 - ds); }
+      const downtime = shortfall * p.criticality * 0.9; // lost output, in full-stop-equivalent days
       state.downtimeDays += downtime;
-      // Spec §4.2 uses shortfall × 0.2; v2 weights it by criticality so a graphite gap
-      // costs less public trust than idle car plants (assumed).
-      state.politicalCapital -= shortfall * 0.2 * p.criticality;
+      // Public trust: shortages hurt it, and defence shortfalls hurt twice as much (assumed).
+      state.politicalCapital -= (civShort * 0.2 + defShort * 0.4) * p.criticality;
 
       const prevPrice = m.priceIdx;
       // Real-price mode: history follows cited real prices (Fastmarkets via Tavily, data/prices);
@@ -190,6 +204,8 @@
       report.minerals[k] = {
         priceFrom: prevPrice, priceTo: m.priceIdx, avail: m.importAvail, offtake: offUnits[k] / UNITS_PER_DOC,
         shortfallDays: shortfall / UNITS_PER_DOC, drawn, downtime, reserve: m.reserveDoC, src: touched[k] || (m.buyQ ? "player" : "model"),
+        gapFrac: gap0 / 100, substituted: substituted / UNITS_PER_DOC, shortFrac: shortfall / 100,
+        defShortFrac: ds ? defShort / dDef : 0, civShortFrac: dCiv ? civShort / dCiv : 0, allied: alliedCount(state, k),
       };
       m.hist.price.push(m.priceIdx); m.hist.doc.push(m.reserveDoC); m.hist.avail.push(m.importAvail);
       m.hist.priceSrc.push(touched[k] || "model");
@@ -221,8 +237,13 @@
     for (const n of report.offtakeNotes) state.log.push({ q, kind: "deal", text: n });
     if (report.downtime > 0.5) state.log.push({ q, kind: "damage", text: `${report.downtime.toFixed(0)} days of industry downtime this quarter.` });
 
+    if (CONFIG.tranches && q.endsWith("Q3") && state.qi > 0) {
+      const lapse = Math.max(0, state.budget) * (CONFIG.lapseRate || 0);
+      if (lapse > 0.5) { state.budget -= lapse; state.lapsed += lapse; report.lapsed = lapse; state.log.push({ q, kind: "damage", text: `Fiscal year ended: ${Math.round(lapse)}M of unspent money lapsed.` }); }
+    }
     state.qi++;
     if (state.qi >= QUARTERS.length) state.done = true; else state.quarter = QUARTERS[state.qi];
+    if (CONFIG.tranches && !state.done && CONFIG.tranches[state.quarter]) { const t = CONFIG.tranches[state.quarter]; state.budget += t; state.received += t; report.tranche = t; }
     return report;
   }
 
@@ -310,7 +331,7 @@
     return { value, cost, pnl: value - cost };
   }
 
-  const Sim = { KEYS, UNITS_PER_DOC, rng, clamp, clone, newState, maxBuy, quoteBuy, applyOrders, resolveQuarter, STRATEGIES, runStrategy, score, benchmarks, markToMarket, reserveValue };
+  const Sim = { KEYS, UNITS_PER_DOC, alliedCount, rng, clamp, clone, newState, maxBuy, quoteBuy, applyOrders, resolveQuarter, STRATEGIES, runStrategy, score, benchmarks, markToMarket, reserveValue };
   root.Sim = Sim;
   if (typeof module !== "undefined") module.exports = Sim;
 })(typeof window !== "undefined" ? window : globalThis);

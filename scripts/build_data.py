@@ -20,6 +20,7 @@ FILES = {
     "live": DATA / "live.json",
     "counterparties": DATA / "counterparties.json",
     "prices": DATA / "prices" / "anchors.json",
+    "comtradeAll": DATA / "trade" / "comtrade_all.json",
     "responses": DATA / "responses.json",
 }
 

@@ -1,0 +1,40 @@
+name: Refresh live data (weekly)
+
+# Keeps the 2027 outlook current: re-scores this week's headlines (Tavily) and re-pulls
+# all-partner US import data (UN Comtrade public API), then rebuilds site/data_cache.js.
+# The Tavily step runs only if a TAVILY_API_KEY repository secret is set.
+on:
+  schedule:
+    - cron: "0 7 * * 1"   # Mondays 07:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: News signal (Tavily)
+        if: ${{ env.TAVILY_API_KEY != '' }}
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+        run: python3 scripts/live_signals.py
+      - name: US imports, all partners (UN Comtrade public API)
+        run: python3 scripts/fetch_comtrade.py
+      - name: Rebuild data cache
+        run: python3 scripts/build_data.py
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "stockpile-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data site/data_cache.js
+          git commit -m "Weekly data refresh"
+          git push
+    env:
+      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}

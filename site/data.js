@@ -292,6 +292,23 @@
     seed: 20230701,
   };
 
+  // How a real factory responds to a shortage (assumed, general industry knowledge):
+  //  subCap      = share of demand that can be substituted once alternatives ramp up (≈2 quarters),
+  //                e.g. ferrite / lower-Dy magnet grades, synthetic graphite, LFP batteries for cobalt.
+  //  defenceShare = share of US demand that is defence / critical infrastructure (the rest is commercial).
+  const REALISM = {
+    gallium: { subCap: 0.05, defenceShare: 0.3 }, germanium: { subCap: 0.10, defenceShare: 0.3 },
+    antimony: { subCap: 0.10, defenceShare: 0.55 }, graphite: { subCap: 0.15, defenceShare: 0.05 },
+    dysprosium: { subCap: 0.10, defenceShare: 0.15 }, cobalt: { subCap: 0.20, defenceShare: 0.2 },
+  };
+  for (const [k, v] of Object.entries(REALISM)) Object.assign(MINERALS[k], v);
+  // Money arrives in fiscal-year tranches (US fiscal year starts 1 October); 25% of money left
+  // unspent on 30 September lapses (assumed, mimics "use it or lose it" appropriations). Total $12B.
+  CONFIG.tranches = { "2023Q3": 5000, "2023Q4": 3000, "2024Q4": 2500, "2025Q4": 1500 };
+  CONFIG.lapseRate = 0.25;
+  // Allied buyers (Japan, EU…) competing for the same thin market cut what you can buy (assumed 15% per action, max 45%).
+  CONFIG.alliedCut = 0.15;
+
   root.GAME_DATA = { QUARTERS, MINERALS, EVENTS, BACKGROUND, COUNTERPARTIES, FORWARD, CONFIG, DY_SPREAD };
   if (typeof module !== "undefined") module.exports = root.GAME_DATA;
 })(typeof window !== "undefined" ? window : globalThis);
